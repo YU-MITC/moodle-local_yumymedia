@@ -3,7 +3,7 @@ YU Kaltura Media Gallery for Moodle
 ------
 
 This plugin provides libraries and APIs and power other "YU Video Package" plugins.
-This plugin is updated with stable releases. To follow active development on GitHub, click [here](https://github.com/YU-MITC/moodle-local_yukaltura/).
+This plugin is updated with stable releases. To follow active development on GitHub, click [here](https://github.com/YU-MITC/moodle-local_yumymedia/).
 
 Requirements
 ------

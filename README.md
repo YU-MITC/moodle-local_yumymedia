@@ -1,4 +1,4 @@
-# moodle-local_yumymedia
+# YU Video Package for Kaltura
 YU Kaltura Media Gallery for Moodle
 ------
 

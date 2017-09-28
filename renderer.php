@@ -32,6 +32,8 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
+require_login();
+
 /**
  * Renderer class of local_yumymedia
  * @package local_yumymedia
@@ -67,7 +69,6 @@ class local_yumymedia_renderer extends plugin_renderer_base {
      * @return HTML markup
      */
     public function create_medias_table($medialist = array(), $page, $sort, $accesscontrol) {
-        global $OUTPUT;
 
         $output = '';
         $maxcolumns = 3;
@@ -135,7 +136,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
      * @return string - HTML markup for sorting pulldown.
      */
     public function create_sort_option() {
-        global $CFG, $SESSION;
+        global $SESSION;
 
         $recent = null;
         $old = null;
@@ -179,10 +180,9 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function create options table printed at upper of media table.
      * @param string $page - HTML markup of paging bar.
-     * @param string $partnerid - Partner ID of Kaltura server.
      * @return string - HTML markup of options.
      */
-    public function create_options_table_upper($page, $partnerid = '') {
+    public function create_options_table_upper($page) {
         global $USER;
 
         $output = '';
@@ -244,7 +244,6 @@ class local_yumymedia_renderer extends plugin_renderer_base {
      * @return string - HTML markup of options.
      */
     public function create_options_table_lower($page) {
-        global $USER;
 
         $output = '';
 
@@ -330,8 +329,6 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     public function create_media_created_markup($date, $entryid, $views, $plays) {
 
         $output = '';
-        $attr   = array('class' => 'mymedia media created',
-                        'title' => userdate($date));
 
         $content = userdate($date) . '<br>id : ' . $entryid . '<br>plays: ' . $plays . ' / ' . $views;
 
@@ -408,7 +405,6 @@ class local_yumymedia_renderer extends plugin_renderer_base {
      * @return string - HTML markup of media access.
      */
     public function create_media_access_link_markup($entry, $page = 0, $sort = 'recent') {
-                global $CFG;
 
         $output = '';
 
@@ -433,8 +429,6 @@ class local_yumymedia_renderer extends plugin_renderer_base {
      * @return string - HTML markup of media delete.
      */
     public function create_media_delete_link_markup($entry, $page = 0, $sort = 'recent') {
-
-        global $CFG;
 
         $output = '';
 
@@ -583,7 +577,9 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         // Add entry to cache.
         $entries = new KalturaStaticEntries();
-        /** KalturaStaticEntries::add_entry_object($entry); */
+        /**
+         * KalturaStaticEntries::add_entry_object($entry);
+         */
         $entries::add_entry_object($entry);
         return $output;
 

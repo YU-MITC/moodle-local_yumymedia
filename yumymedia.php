@@ -155,14 +155,14 @@ if (local_yukaltura_get_mymedia_permission()) {
                                         new moodle_url('/local/yumymedia/yumymedia.php', array('sort' => $sort)));
 
 
-            echo $renderer->create_options_table_upper($page, $partnerid);
+            echo $renderer->create_options_table_upper($page);
 
             echo $renderer->create_medias_table($medias, $pagenum, $sort, $accesscontrol);
 
             echo $renderer->create_options_table_lower($page);
 
         } else {
-            echo $renderer->create_options_table_upper($page, $partnerid);
+            echo $renderer->create_options_table_upper($page);
 
             echo '<center>'. get_string('no_medias', 'local_yumymedia') . '</center>';
 

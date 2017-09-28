@@ -34,9 +34,6 @@ require_login();
  * @return string - source donwload URL.
  */
 function local_source_url($connection, $entryid) {
-    require_login();
-    global $USER;
-
     $url = '';
 
     $assetarray = $connection->flavorAsset->getByEntryId($entryid);

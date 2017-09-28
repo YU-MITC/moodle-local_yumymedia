@@ -81,7 +81,8 @@ if (!$connection) {  // When connection failed.
     $rootpath = $result['name'];
 
     $output = '';
-    $output .= '<script type="text/javascript" src="' . new moodle_url('/local/yumymedia/js/simple_uploader_2pass.js') . '"></script>';
+    $output .= '<script type="text/javascript" src="' . new moodle_url('/local/yumymedia/js/simple_uploader_2pass.js') . '">';
+    $output .= '</script>';
 
     if ($ks == null || empty($rootpath)) { // Session failed.
         $output .= get_string('session_failed', 'local_yumymedia');

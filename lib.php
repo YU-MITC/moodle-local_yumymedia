@@ -30,6 +30,8 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
+require_login();
+
 define('MYMEDIA_ITEMS_PER_PAGE', '9');
 
 /**
@@ -42,15 +44,14 @@ function local_yumymedia_extend_navigation($navigation) {
     global $USER;
 
     $mymedia = get_string('nav_mymedia', 'local_yumymedia');
-    $upload = get_string('nav_upload', 'local_yumymedia');
 
     $nodehome = $navigation->get('home');
 
     $context = context_user::instance($USER->id);
 
     if ($nodehome && has_capability('local/yumymedia:view', $context, $USER)) {
-        $nodemymedia = $nodehome->add($mymedia, new moodle_url('/local/yumymedia/yumymedia.php'),
-                                        navigation_node::NODETYPE_LEAF, $mymedia, 'mymedia');
+        $nodehome->add($mymedia, new moodle_url('/local/yumymedia/yumymedia.php'),
+                       navigation_node::NODETYPE_LEAF, $mymedia, 'mymedia');
     }
 }
 

@@ -15,12 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Refactored code from the YU Kaltura local plug-in directory. This script
- * has less code and performs an additional check for the media's custom
- * metadata fields.
+ * Media delete script of "My Media".
  *
- * @package    local
- * @subpackage yumymedia
+ * @package    local_yumymedia
  * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -47,7 +44,7 @@ $PAGE->set_pagelayout('frontpage');
 $PAGE->set_title($header);
 $PAGE->set_heading($header);
 $PAGE->add_body_class('yumymedia-index');
-$PAGE->requires->js('/local/yukaltura/js/jquery.js', true);
+$PAGE->requires->js('/local/yukaltura/js/jquery-3.0.0.js', true);
 $PAGE->requires->css('/local/yumymedia/css/yumymedia.css');
 
 $kaltura = new yukaltura_connection();

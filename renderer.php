@@ -15,10 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * YU Kaltura My Media library script
+ * YU Kaltura My Media renderer class.
  *
- * @package    local
- * @subpackage yumymedia
+ * @package    local_yumymedia
  * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -33,6 +32,12 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
+/**
+ * Renderer class of local_yumymedia
+ * @package local_yumymedia
+ * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class local_yumymedia_renderer extends plugin_renderer_base {
 
     public function all_flavors_ready($connection, $entryid) {
@@ -54,7 +59,10 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function outputs a table layout for display medias
      *
-     * @param array - array of Kaltura media entry objects
+     * @param array $medialist - array of Kaltura media entry objects.
+     * @param string $page - HTML markup of paging bar.
+     * @param string $sort - sotring option.
+     * @param object $accesscontrol - Access control objectt of Internal access restriction.
      *
      * @return HTML markup
      */
@@ -123,7 +131,8 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function creates HTML markup used to sort the media listing.
      *
-     * @return HTML Markup for sorting pulldown.
+     * @param none.
+     * @return string - HTML markup for sorting pulldown.
      */
     public function create_sort_option() {
         global $CFG, $SESSION;
@@ -167,6 +176,12 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $sort;
     }
 
+    /**
+     * This function create options table printed at upper of media table.
+     * @param string $page - HTML markup of paging bar.
+     * @param string $partnerid - Partner ID of Kaltura server.
+     * @return string - HTML markup of options.
+     */
     public function create_options_table_upper($page, $partnerid = '') {
         global $USER;
 
@@ -223,6 +238,11 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
+    /**
+     * This function create options table printed at lower of media table.
+     * @param string $page - HTML markup of paging bar.
+     * @return string - HTML markup of options.
+     */
     public function create_options_table_lower($page) {
         global $USER;
 
@@ -250,8 +270,9 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function creates HTML markup used to display the media name
      *
-     * @param string - name of media
-     * @return HTML markup
+     * @param string $name - name of media.
+     * @param object $internal - access control object of internal access only.
+     * @return string - HTML markup of media name.
      */
     public function create_media_name_markup($name, $internal) {
 
@@ -273,10 +294,9 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function creates HTML markup used to display the media thumbnail
      *
-     * @param string - thumbnail URL
-     * @param string - alternate text
-     *
-     * @param HTML markup
+     * @param string - thumbnail URL.
+     * @param string - alternate text.
+     * @return string - HTML markup of thumbnail.
      */
     public function create_media_thumbnail_markup($url, $alt) {
 
@@ -298,6 +318,15 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
+    /**
+     * This function creates HTML markup used to display the media created daytime.
+     *
+     * @param string $date - created date of media.
+     * @param string $entryid - id of media entry.
+     * @param int $views - counter value media entry is viewed.
+     * @param int $plays - counter value media entry is played.
+     * @return string - HTML markup of media created.
+     */
     public function create_media_created_markup($date, $entryid, $views, $plays) {
 
         $output = '';
@@ -311,6 +340,13 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
+    /**
+     * This function creates HTML markup used to display the media id.
+     *
+     * @param string $entryid - id of media entry.
+     * @param int $plays - counter value media entry is played.
+     * @return string - HTML markup of media id.
+     */
     public function create_media_id_markup($entryid, $plays) {
         $output = '';
         $attr = array('class' => 'mymedia media created',
@@ -321,6 +357,12 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
+    /**
+     * This function creates HTML markup used to display the media preview.
+     *
+     * @param none.
+     * @return string - HTML markup of media share.
+     */
     public function create_media_preview_link_markup() {
 
         $output = '';
@@ -337,22 +379,12 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
-    public function create_media_share_link_markup() {
-
-        $output = '';
-
-        $attr = array('class' => 'mymedia media share',
-                      'href' => '#',
-                      'title' => get_string('share_link', 'local_yumymedia')
-                      );
-
-        $output .= html_writer::start_tag('a', $attr);
-        $output .= get_string('share_link', 'local_yumymedia');
-        $output .= html_writer::end_tag('a');
-
-        return $output;
-    }
-
+    /**
+     * This function creates HTML markup used to display the media edit.
+     *
+     * @param none.
+     * @return string - HTML markup of media edit.
+     */
     public function create_media_edit_link_markup() {
 
         $output = '';
@@ -369,27 +401,12 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
-    public function create_media_clip_link_markup() {
-
-        $output = '';
-
-        $attr = array('class' => 'mymedia media clip container');
-        $output .= html_writer::start_tag('span', $attr);
-
-        $attr = array('class' => 'mymedia media clip',
-                      'href' => '#',
-                      );
-
-        $output .= html_writer::start_tag('a', $attr);
-        $output .= get_string('clip_link', 'local_yumymedia');
-        $output .= html_writer::end_tag('a');
-
-        $output .= html_writer::end_tag('span');
-
-        return $output;
-    }
-
-
+    /**
+     * This function creates HTML markup used to display the media access.
+     *
+     * @param none.
+     * @return string - HTML markup of media access.
+     */
     public function create_media_access_link_markup($entry, $page = 0, $sort = 'recent') {
                 global $CFG;
 
@@ -407,6 +424,14 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
+    /**
+     * This function creates HTML markup used to display the media delete.
+     *
+     * @param object $entry - object of Kaltura media entry.
+     * @param int $page - page number which the media is printed.
+     * @param string $sort - sorting option.
+     * @return string - HTML markup of media delete.
+     */
     public function create_media_delete_link_markup($entry, $page = 0, $sort = 'recent') {
 
         global $CFG;
@@ -425,6 +450,12 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
+    /**
+     * This function creates HTML markup used to display the media download.
+     *
+     * @param object $entry - object of Kaltura media entry.
+     * @return string - HTML markup of media delete.
+     */
     public function create_media_download_link_markup($entry) {
 
         $output = '';
@@ -459,9 +490,13 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
 
     /**
-     * This function creates HTML markup for a media entry
+     * This function creates HTML markup for a media entry.
      *
-     * @param obj - Kaltura media object
+     * @param object $entry- Kaltura media object.
+     * @param bool $entryready- true if media entry is ready, otherwise false.
+     * @param $sort string - sorting option.
+     * @param object accesscontrol - object of acecss conrtol (internal only).
+     * @return string - HTML markup of media entry.
      */
     public function create_media_entry_markup($entry, $entryready = true, $page, $sort, $accesscontrol) {
 
@@ -469,8 +504,8 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         $output = '';
 
-        $attr   = array('class' => 'mymedia media entry',
-                        'id' => $entry->id);
+        $attr = array('class' => 'mymedia media entry',
+                      'id' => $entry->id);
 
         $output .= html_writer::start_tag('div', $attr);
 
@@ -554,11 +589,12 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     }
 
     /**
-     * Displays the YUI panel markup used to display embedded media markup
+     * Displays the YUI panel markup used to display embedded media markup.
      *
-     * @return string - HTML markup
+     * @param none.
+     * @return string - HTML markup of media details.
      */
-    public function media_details_markup($courses) {
+    public function media_details_markup() {
         $output = '';
 
         $attr = array('id' => 'id_media_details',
@@ -569,7 +605,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $output .= html_writer::tag('div', get_string('details', 'local_yumymedia'), $attr);
 
         $attr = array('class' => 'bd');
-        $output .= html_writer::tag('div', $this->media_details_tabs_markup($courses), $attr);
+        $output .= html_writer::tag('div', $this->media_details_tabs_markup(), $attr);
 
         $attr = array('id' => 'id_media_details_save',
                       'type' => 'submit',
@@ -587,12 +623,12 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     }
 
     /**
-     * This function returns YUI TabView HTML markup
+     * This function returns YUI TabView HTML markup.
      *
-     * @param none
-     * @return string - HTML markup
+     * @param none.
+     * @return string - HTML markup of YUI TabView.
      */
-    public function media_details_tabs_markup($courses) {
+    public function media_details_tabs_markup() {
 
         $output = '';
 
@@ -633,10 +669,10 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     }
 
     /**
-     * This function outputs the media edit metadata elements
+     * This function outputs the media edit metadata elements.
      *
-     * @param none
-     * @return string - HTML markup
+     * @param none.
+     * @return string - HTML markup of edit metadata.
      */
     public function media_metadata_form() {
         $output = '';
@@ -734,13 +770,24 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
     }
 
+    /**
+     * This function outputs the media embed markup.
+     *
+     * @param none.
+     * @return string - HTML markup of the media embed markup.
+     */
     public function create_embed_markup() {
 
         $output = '';
         return $output;
     }
 
-
+    /**
+     * This function outputs the media embed markup.
+     *
+     * @param none.
+     * @return string - HTML markup of simple dialog.
+     */
     public function create_simple_dialog_markup() {
 
         $attr   = array('id' => 'mymedia_simple_dialog');
@@ -763,24 +810,12 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
-    public function create_kcw_panel_markup() {
-
-        $output = '';
-
-        $attr = array('id' => 'kcw_panel');
-        $output .= html_writer::start_tag('div', $attr);
-
-        $attr = array('class' => 'hd');
-        $output .= html_writer::tag('div', '', $attr);
-
-        $attr = array('class' => 'bd');
-        $output .= html_writer::tag('div', '', $attr);
-
-        $output .= html_writer::end_tag('div');
-
-        return $output;
-    }
-
+    /**
+     * This function outputs the media search.
+     *
+     * @param none.
+     * @return string - HTML markup of media search.
+     */
     public function create_search_markup() {
         global $SESSION;
 
@@ -839,6 +874,12 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
+    /**
+     * This function outputs the media upload.
+     *
+     * @param none.
+     * @return string - HTML markup of media upload.
+     */
     public function create_upload_markup() {
 
         $output = '';
@@ -859,6 +900,12 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
     }
 
+    /**
+     * This function outputs the "now loading" panel.
+     *
+     * @param none.
+     * @return string - HTML markup of "now loading".
+     */
     public function create_loading_screen_markup() {
 
         $attr = array('id' => 'wait');
@@ -876,6 +923,12 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
+    /**
+     * This function outputs HTML markup for media details.
+     *
+     * @param object $entry - Kaltura media entry object.
+     * @return string - HTML markup of media details.
+     */
     public function create_media_details_table_markup($entry) {
 
         $desc = $entry->description;
@@ -938,6 +991,17 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
+    /**
+     * This function outputs HTML markup for hidden input.
+     *
+     * @param object $kalturahost - hostname of Kaltura server.
+     * @param string $ks - Kaltura session string.
+     * @param string $entryid - id of media entyry.
+     * @param int $uiconfid - id of embeded player.
+     * @param string $sort - sorting option.
+     * @param string $url - URL of "My Media".
+     * @return string - HTML markup of hidden input.
+     */
     public function create_hidden_input_markup($kalturahost, $ks, $entryid, $partnerid, $uiconfid,
                                                $sort, $url, $currentcontrolid) {
 
@@ -972,6 +1036,12 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
+    /**
+     * This function outputs HTML markup for media embed.
+     *
+     * @param none.
+     * @return string - HTML markup of embed code.
+     */
     public function create_embed_code_markup() {
         $output = '';
 
@@ -1012,6 +1082,14 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
+    /**
+     * This function outputs HTML markup for media embed.
+     *
+     * @param object $defaultcontrol - object of access control (default setting).
+     * @param object $internalcontrol - object of access control (internal only).
+     * @param object $currentcontrol - object of acecss control (media entry).
+     * @return string - HTML markup of embed code.
+     */
     public function create_access_control_markup($defaultcontrol, $internalcontrol, $currentcontrolid) {
 
         $output = '';
@@ -1058,6 +1136,12 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
+    /**
+     * This function outputs HTML markup for back button in access setting page.
+     *
+     * @param string $url - URL of "My Media".
+     * @return string - HTML markup of back button.
+     */
     public function create_access_back_markup($url) {
         $output = '';
 
@@ -1080,6 +1164,13 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
+    /**
+     * This function outputs HTML markup for delete message.
+     *
+     * @param string $message - delete message string.
+     * @param string $mymediaurl - URL of "My Media".
+     * @return string - HTML markup of delete message.
+     */
     public function create_delete_message_markup($message, $mymediaurl) {
         $output = '';
 
@@ -1092,6 +1183,12 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
+    /**
+     * This function outputs HTML markup for back button in media delete page.
+     *
+     * @param string $mymediaurl - URL of "My Media".
+     * @return string - HTML markup of back button.
+     */
     public function create_delete_back_button_markup($mymediaurl) {
         $output = '';
         $attr = array('type' => 'button', 'name' => 'delete_media_back',
@@ -1102,6 +1199,14 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
+    /**
+     * This function outputs HTML markup for media used table.
+     *
+     * @param string $entryid - id of media entry.
+     * @param string $mymediaurl - URL of "My Media".
+     * @param bool $flag - true if the media can delete, otherwise false.
+     * @return string - HTML markup of back button.
+     */
     public function create_entry_used_table($entryid, $mymediaurl, &$flag) {
         global $DB;
 
@@ -1155,6 +1260,15 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
+    /**
+     * This function outputs HTML markup for delete confirmation.
+     *
+     * @param string $entryid - id of media entry.
+     * @param int $page - page number which the media is printed.
+     * @param string $sort - sorting option.
+     * @param string $mymediaurl - URL of "My Media".
+     * @return string - HTML markup of delete confirmation.
+     */
     public function create_delete_confirm_markup($entryid, $page, $sort, $mymediaurl) {
 
         $output = '';

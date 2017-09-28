@@ -15,12 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Refactored code from the YU Kaltura local plug-in directory. This script
- * has less code and performs an additional check for the media's custom
- * metadata fields.
+ * Conversion check script in "My Media".
  *
- * @package    local
- * @subpackage yumymedia
+ * @package    local_yumymedia
  * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -73,7 +70,7 @@ if (0 == strcmp($widget, 'kdp')) {
         // Create the user Kaltura session.
         $session  = local_yukaltura_generate_kaltura_session(array($entryobj->id));
 
-        $data->markup = local_yukaltura_get_kdp_code($entryobj, $uiconfid, $courseid, $session);
+        $data->markup = local_yukaltura_get_kdp_code($entryobj, $uiconfid, $session);
 
         if (local_yukaltura_has_mobile_flavor_enabled() && local_yukaltura_get_enable_html5()) {
             $data->script = 'kAddedScript = false; kCheckAddScript();';

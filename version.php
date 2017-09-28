@@ -17,8 +17,7 @@
 /**
  * YU Kaltura Media Gallery version file
  *
- * @package     local
- * @sub_package yumymedia
+ * @package     local_yumymedia
  * @copyright   (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

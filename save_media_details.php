@@ -15,10 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Saves information about the YU Kaltura media and returns a status
+ * Saves information about the YU Kaltura media and returns a status.
  *
- * @package    local
- * @subpackage yumymedia
+ * @package    local_yumymedia
  * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

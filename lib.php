@@ -15,10 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * YU Kaltura My Media library script
+ * YU Kaltura "My Media" library script.
  *
- * @package    local
- * @subpackage yumymedia
+ * @package    local_yumymedia
  * @copyright  2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -34,7 +33,9 @@ if (!defined('MOODLE_INTERNAL')) {
 define('MYMEDIA_ITEMS_PER_PAGE', '9');
 
 /**
- * This function adds my media links to the navigation block
+ * This function adds my media links to the navigation block.
+ * @param object $navigation - object of Moodle "Navigation" block.
+ * @return nothing
  */
 function local_yumymedia_extend_navigation($navigation) {
 
@@ -56,8 +57,8 @@ function local_yumymedia_extend_navigation($navigation) {
 /**
  * This function checks for capability across all context levels.
  *
- * @param string $capability The name of capability we are checking.
- * @return boolean true if capability found, false otherwise.
+ * @param string $capability - The name of capability we are checking.
+ * @return boolean - true if capability found, false otherwise.
  */
 function local_yumymedia_check_capability($capability) {
     global $DB, $USER;

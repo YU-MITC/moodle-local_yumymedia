@@ -17,8 +17,7 @@
 /**
  * Unit tests for YU Kaltura mymedia local plugin capabilities
  *
- * @package    local
- * @subpackage yumymedia
+ * @package    local_yumymedia
  * @copyright  (C) 2008-2013 Remote-Learner Inc http://www.remote-learner.net
  * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -28,15 +27,31 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__).'/../lib.php');
 
+/**
+ * Capability testcase class of local_yumymedia
+ * @package local_yukaltura
+ * @copyright  (C) 2008-2013 Remote-Learner Inc http://www.remote-learner.net
+ * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class yumymedia_capability_testcase extends advanced_testcase {
 
+    /**
+     * This function reset attributes.
+     * @access protected
+     * @param none.
+     * @return nothing.
+     */
     protected function setUp() {
         parent::setUp();
         $this->resetAfterTest(true);
     }
 
     /**
-     * Test function that check capability reports found
+     * Test function that check capability reports found.
+     * @access public
+     * @param none.
+     * @return nothing.
      */
     public function test_local_yumymedia_check_capability_found() {
         global $DB;
@@ -62,7 +77,10 @@ class yumymedia_capability_testcase extends advanced_testcase {
     }
 
     /**
-     * Test function that checks capability reports missing
+     * Test function that checks capability reports missing.
+     * @access public
+     * @param none.
+     * @return nothing.
      */
     public function test_local_yumymedia_check_capability_missing() {
         $result = local_yumymedia_check_capability('local/yumymedia:sharecourse');

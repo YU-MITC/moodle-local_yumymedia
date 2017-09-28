@@ -1,15 +1,28 @@
-var createObjectURL
-= window.URL && window.URL.createObjectURL ? function(file) { return window.URL.createObjectURL(file); }
-    : window.webkitURL && window.webkitURL.createObjectURL ? function(file) { return window.webkitURL.createObjectURL(file); }
-        : undefined;
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-var revokeObjectURL
-= window.URL && window.URL.revokeObjectURL ? function(file) { return window.URL.revokeObjectURL(file); }
-    : window.webkitURL && window.webkitURL.revokeObjectURL ? function(file) { return window.webkitURL.revokeObjectURL(file); }
-        : undefined;
+/**
+ * YU Kaltura "My Media" script for acecss restriction setting.
+ *
+ * @package    local_yumymedia
+ * @copyright  (C) 2016-2017 Yamaguchi University (info-cc@ml.cc.yamaguchi-u.ac.jp)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
-var sX_syncerModal = 0;
-var sY_syncerModal = 0;
+var modalX = 0;
+var modalY = 0;
 
 var ENTRY_ERROR_IMPORTING = -2;
 var ENTRY_ERROR_CONVERTING = -1;
@@ -27,20 +40,23 @@ window.onload = function() {
     printHtmlCode();
 };
 
-/*
- *  entry a uload event callback
+/**
+ *  Entry a uload event callback.
  */
 window.unload = function() {
     sessionEnd();
 };
 
-/*
- * if window is resize, call modal window centerize function.
+/**
+ * If window is resize, call modal window centerize function.
  */
 $(window).resize(centeringModalSyncer);
 
-/*
- * this function centerize modal window.
+/**
+ * This function centerize modal window.
+ * @access public
+ * @param none.
+ * @return nothing.
  */
 function centeringModalSyncer(){
 
@@ -56,9 +72,11 @@ function centeringModalSyncer(){
     $("#modal_content").css({"left": ((w - cw) / 2) + "px","top": ((h - ch) / 2) + "px"});
 }
 
-
-/*
- * モーダルウィンドウを表示する関数
+/**
+ * This function print modal window.
+ * @access public
+ * @param none.
+ * @return nothing.
  */
 function fadeInModalWindow() {
     // All contents in web page release focus.
@@ -70,10 +88,10 @@ function fadeInModalWindow() {
 
     // Record current scroll position.
     var dElm = document.documentElement , dBody = document.body;
-    sX_syncerModal = dElm.scrollLeft || dBody.scrollLeft;   // Get x value of current position.
-    sY_syncerModal = dElm.scrollTop || dBody.scrollTop;     // Get y valueion of current position.
+    modalX = dElm.scrollLeft || dBody.scrollLeft; // Get x value of current position.
+    modalY = dElm.scrollTop || dBody.scrollTop; // Get y valueion of current position.
     // Create modal window and a content area.
-    $("body").append('<div id="modal_window"></div>');
+    $("body").append("<div id=\"modal_window\"></div>");
     $("#modal_window").fadeIn("slow");
 
     // Centering content area.
@@ -82,13 +100,15 @@ function fadeInModalWindow() {
     $("#modal_content").fadeIn("slow");
 }
 
-
-/*
+/**
  * This function delete content area and modal window.
+ * @access public
+ * @param none.
+ * @return nothing.
  */
 function fadeOutModalWindow() {
     // Rescore scroll position to web brawser.
-    window.scrollTo( sX_syncerModal , sY_syncerModal );
+    window.scrollTo( modalX , modalY );
 
     // Fade-put content area and modal window.
     $("#modal_content,#modal_window").fadeOut("slow",function(){
@@ -97,34 +117,43 @@ function fadeOutModalWindow() {
     });
 }
 
-/*
- * This function add back buttion to modal window.
+/**
+ * This function add back button to modal window.
+ * @access private
+ * @param {string} - URL of target page.
+ * @return nothing.
  */
 function addBackButton(url) {
-    var content_html = '<input type=button id="backToMymedia" name="backToMymedia" value=Back onclick="handleCancelClick(' + url + ')" />';
+    var content_html = "<input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=Back ";
+    content_html = content_html + "onclick=\"handleCancelClick(" + url + ")\" />";
     $("#modal_content").append(content_html);
 }
 
-
-/*
- * This is callback function when calcel buttion is clicked.
+/**
+ * This is callback function whem cancel button is clicked.
+ * @access public
+ * @param {string} - URL of taget page.
+ * @return nothing.
  */
 function handleCancelClick(url) {
     location.href = url;
 }
 
-/*
- * This is callbacl function when access control setteing is changed.
+/**
+ * This is callback function when access control setting is changed.
+ * @access public
+ * @param none.
+ * @return nothing.
  */
 function selectedControl()
 {
     var selected_control = $("#access_control_select").val();
     var current_control = $("#currentcontrol").val();
 
-    var new_label = 'Access Control';
+    var new_label = "Access Control";
 
     if (selected_control != current_control) {
-        new_label = new_label + ' <font color="red">(Changed)</font>';
+        new_label = new_label + " <font color=\"red\">(Changed)</font>";
         document.getElementById("access_media_save").disabled = false;
     }
     else {
@@ -134,9 +163,11 @@ function selectedControl()
     document.getElementById("access_control_label").innerHTML = new_label;
 }
 
-
-/*
+/**
  * This function update access control id.
+ * @access public
+ * @param none.
+ * @return nothing.
  */
 function updateAccessControlId()
 {
@@ -151,24 +182,24 @@ function updateAccessControlId()
 
     // Create form data.
     var fd = new FormData();
-    fd.append('action', 'update');
-    fd.append('ks', ks);
-    fd.append('entryId', entry_id);
-    fd.append('baseEntry:accessControlId', controlId);
+    fd.append("action", "update");
+    fd.append("ks", ks);
+    fd.append("entryId", entry_id);
+    fd.append("baseEntry:accessControlId", controlId);
 
     // Create data is transmitted.
     var postData = {
-        type : 'POST',
-        data : fd,
-        cache : false,
-        async : true,
+        type: "POST",
+        data: fd,
+        cache: false,
+        async: true,
         contentType: false,
-        scriptCharset: 'utf-8',
-        processData : false,
-        dataType : 'xml'
+        scriptCharset: "utf-8",
+        processData: false,
+        dataType: "xml"
     };
 
-    var serviceURL = server_host + '/api_v3/service/baseEntry/action/update';
+    var serviceURL = server_host + "/api_v3/service/baseEntry/action/update";
 
     // Transmits data.
     $.ajax (
@@ -177,22 +208,22 @@ function updateAccessControlId()
     .done(function(xmlData){
         // When XML data is not received.
         if (xmlData === null || typeof xmlData === undefined) {
-            printErrorMessage('Update failed (Cannot get a XML response)');
+            printErrorMessage("Update failed (Cannot get a XML response)");
             return;
         }
         // Get a tag of error code.
         findData = $(xmlData).find("code");
         // When error code exists.
-        if (findData !== null && typeof findData !== undefined && findData.text() !== '') {
-            printErrorMessage('Update failed (' + findData.text() + ')');
+        if (findData !== null && typeof findData !== undefined && findData.text() !== "") {
+            printErrorMessage("Update failed (" + findData.text() + ")");
             return;
         }
 
         // Get a tag of status.
         findData = $(xmlData).find("status");
         // Where tag of statis not exists.
-        if (findData === null || typeof findData === undefined || findData.text() === '') {
-            printErrorMessage('Update failed (Cannot get a baseEntry)');
+        if (findData === null || typeof findData === undefined || findData.text() === "") {
+            printErrorMessage("Update failed (Cannot get a baseEntry)");
             return;
         }
 
@@ -200,7 +231,7 @@ function updateAccessControlId()
         entryStatus = findData.text();
         // When updating of access control is failed.
         if (entryStatus != ENTRY_READY && entryStatus != ENTRY_PENDING && entryStatus != ENTRY_PRECONVERT) {
-            printErrorMessage('Update failed (status of baseEntry: ' + entryStatus + ')');
+            printErrorMessage("Update failed (status of baseEntry: " + entryStatus + ")");
 
             return;
         }
@@ -208,8 +239,8 @@ function updateAccessControlId()
         // Get a tag of access control.
         findData = $(xmlData).find("accessControlId");
         // When tag of acecss control not exists.
-        if (findData === null || typeof findData === undefined || findData.text() === '') {
-            printErrorMessage('Update failed(Cannot get an accessControlId)');
+        if (findData === null || typeof findData === undefined || findData.text() === "") {
+            printErrorMessage("Update failed(Cannot get an accessControlId)");
             return;
         }
 
@@ -217,7 +248,7 @@ function updateAccessControlId()
         var resultId = findData.text();
         // When updating of access control is failed.
         if (resultId != controlId) {
-            printErrorMessage('Update failed(accessControlId: ' + resultId + ')');
+            printErrorMessage("Update failed(accessControlId: " + resultId + ")");
                 return;
         }
 
@@ -225,13 +256,16 @@ function updateAccessControlId()
         printSuccessMessage(resultId);
     })
     .fail(function(xmlData){
-        printErrorMessage('Update fialed(Cannot connect to contents server)');
+        printErrorMessage("Update fialed(Cannot connect to contents server)");
         return;
     });
 }
 
-/*
- * This function print a success messsage.
+/**
+ * This function print a success message.
+ * @access public
+ * @param {string} - Label of current access control.
+ * @return nothing.
  */
 function printSuccessMessage(current_control)
 {
@@ -257,8 +291,11 @@ function printSuccessMessage(current_control)
     setTimeout(function(){window.location.replace(mymedia);}, 1000);
 }
 
-/*
+/**
  * This function print error message.
+ * @access public
+ * @param {string} - message string.
+ * @return nothing.
  */
 function printErrorMessage(message)
 {
@@ -276,14 +313,17 @@ function printErrorMessage(message)
     sessionEnd();
 }
 
-/*
- * This function close a session between client and kaltura.
+/**
+ * This function close a session between client and kaltura server.
+ * @access public
+ * @param none.
+ * @return nothing.
  */
 function sessionEnd()
 {
     var server_host = $("#kalturahost").val();
     var ks = $("#ks").val();
-    var serviceURL = server_host + '/api_v3/service/session/action/end';
+    var serviceURL = server_host + "/api_v3/service/session/action/end";
 
     // Transmit from data.
     $.ajax ({
@@ -303,9 +343,11 @@ function sessionEnd()
     });
 }
 
-
-/*
+/**
  * This function print embed code for kaltura media.
+ * @access public
+ * @param none.
+ * @return nothing.
  */
 function printHtmlCode()
 {
@@ -315,7 +357,7 @@ function printHtmlCode()
     var uiconf_id = document.getElementById("uiconfid").value;
     var entry_id = document.getElementById("entryid").value;
     var now = Date.now();
-    var str = '';
+    var str = "";
 
     if (selected_id == "0") {
         str = "<iframe src=\"" + kaltura_host + "/p/" + partner_id + "/sp/" + partner_id + "00";

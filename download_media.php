@@ -15,12 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Refactored code from the YU Kaltura local plug-in directory. This script
- * has less code and performs an additional check for the media's custom
- * metadata fields.
+ * Media download script of "My Media".
  *
- * @package    local
- * @subpackage yumymedia
+ * @package    local_yumymedia
  * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -28,6 +25,12 @@
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.php');
 
+/**
+ * This function retrieve source download URL of Kaltura Media entry.
+ * @param object $connection - Kaltura Connection object.
+ * @param string $entryid - id of Kaltura Media entry.
+ * @return string - source donwload URL.
+ */
 function local_source_url($connection, $entryid) {
 
     require_login();

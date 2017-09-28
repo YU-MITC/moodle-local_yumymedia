@@ -17,8 +17,7 @@
 /**
  * Unit tests for YU Kaltura mymedia local plugin renderer functionality
  *
- * @package    local
- * @subpackage yumymedia
+ * @package    local_yumymedia
  * @copyright  (C) 2008-2013 Remote-Learner Inc http://www.remote-learner.net
  * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -32,15 +31,31 @@ require_once(dirname(__FILE__).'/../lib.php');
 require_once(dirname(__FILE__).'/../renderer.php');
 require_once(dirname(__FILE__).'/../../yukaltura/kaltura_entries.class.php');
 
+/**
+ * Renderer testcase class of local_yumymedia.
+ * @package local_yukaltura
+ * @copyright  (C) 2008-2013 Remote-Learner Inc http://www.remote-learner.net
+ * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class yumymedia_renderer_testcase extends advanced_testcase {
 
+    /**
+     * This function reset attributes.
+     * @access protected
+     * @param none.
+     * @return nothing.
+     */
     protected function setUp() {
         parent::setUp();
         $this->resetAfterTest(true);
     }
 
     /**
-     * Test that create_media_entry_markup creates a share link
+     * Test that create_media_entry_markup creates a share link.
+     * @access public
+     * @param none.
+     * @return nothing.
      */
     public function test_create_media_entry_markup_share_link() {
         global $DB, $USER, $PAGE;

@@ -1,34 +1,51 @@
-var createObjectURL
-= window.URL && window.URL.createObjectURL ? function(file) { return window.URL.createObjectURL(file); }
-    : window.webkitURL && window.webkitURL.createObjectURL ? function(file) { return window.webkitURL.createObjectURL(file); }
-        : undefined;
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-var revokeObjectURL
-= window.URL && window.URL.revokeObjectURL ? function(file) { return window.URL.revokeObjectURL(file); }
-    : window.webkitURL && window.webkitURL.revokeObjectURL ? function(file) { return window.webkitURL.revokeObjectURL(file); }
-        : undefined;
-/*
+/**
+ * YU Kaltura "My Media" script for delete media.
+ *
+ * @package    local_yumymedia
+ * @copyright  (C) 2016-2017 Yamaguchi University (info-cc@ml.cc.yamaguchi-u.ac.jp)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+/**
  * Entry unload callback.
  */
 window.unload = function() {
     sessionEnd();
 };
 
-/*
- * This function closed session to kaltura server.
+/**
+ * This function close session between client and kaltura server.
+ * @access public
+ * @param none.
+ * @return nothing.
  */
 function sessionEnd()
 {
     var server_host = $("#kaltura_host").val();
-    var serviceURL = server_host + '/api_v3/service/session/action/end';
+    var serviceURL = server_host + "/api_v3/service/session/action/end";
 
     // Transmits data.
     $.ajax ({
-        type : "GET",
-        url : serviceURL,
-        cache : false
+        type: "GET",
+        url: serviceURL,
+        cache: false
     })
-    .done(function( xmlData ) {
+    .done(function(xmlData) {
         // When format of response is not XML.
         if (xmlData === null) {
             // Do nothing.
@@ -37,7 +54,7 @@ function sessionEnd()
             // Do nothing.
         }
     })
-    .fail(function( xmlData ) {
+    .fail(function(xmlData) {
         // Do nothing.
     });
 }

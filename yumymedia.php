@@ -17,8 +17,7 @@
 /**
  * YU Kaltura My Media Gallery main page
  *
- * @package    local
- * @subpackage yumymedia
+ * @package    local_yumymedia
  * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -56,7 +55,7 @@ $PAGE->set_title($header);
 $PAGE->set_heading($header);
 $PAGE->add_body_class('mymedia-index');
 
-$PAGE->requires->js('/local/yukaltura/js/jquery.js', true);
+$PAGE->requires->js('/local/yukaltura/js/jquery-3.0.0.js', true);
 $PAGE->requires->css('/local/yumymedia/css/yumymedia.css');
 
 // Connect to Kaltura.
@@ -171,9 +170,7 @@ if (local_yukaltura_get_mymedia_permission()) {
         }
 
         // Get Media detail panel markup.
-        $courses = null;
-
-        $mediadetails = $renderer->media_details_markup($courses);
+        $mediadetails = $renderer->media_details_markup();
         $dialog = $renderer->create_simple_dialog_markup();
 
         // Load YUI modules.

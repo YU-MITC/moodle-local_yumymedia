@@ -28,13 +28,10 @@ $string['pluginname'] = 'My Media';
 $string['yumymedia:view'] = 'View My Media page';
 $string['yumymedia:search'] = 'Search for uploaded media';
 $string['yumymedia:editmetadata'] = 'Edit media metadata';
-$string['yumymedia:sharecourse'] = 'Share media with courses';
-$string['yumymedia:sharesite'] = 'Share media with site';
 $string['yumymedia:upload'] = 'Upload a media';
 $string['yumymedia:delete'] = 'Delete uploaded media';
 $string['yumymedia:download'] = 'Download uploaded media';
 $string['yumymedia:clip'] = 'Create a clip of a media';
-$string['yumymedia:screenrecorder'] = 'Screen recorder';
 
 // Navigation block.
 $string['nav_mymedia'] = 'My Media';
@@ -108,11 +105,6 @@ $string['search_text_tooltip'] = 'Enter media name or tags';
 $string['problem_viewing'] = 'There is a problem displaying the page.  Please try again or contact your site administrator';
 $string['no_medias'] = 'No media found';
 $string['permission_disable'] = 'You don\'t have permission to use kaltura media.';
-
-// Screen recording.
-$string['screenrecorder'] = 'Record screen';
-$string['checkingforjava'] = 'Checking for Java';
-$string['javanotenabled'] = 'Failed to detect Java, please make sure you have the latest version of Java installed and enabled and then try again.';
 
 // Sorting.
 $string['sortby'] = 'Sort by';

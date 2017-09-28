@@ -55,31 +55,7 @@ $capabilities = array(
         )
     ),
 
-    'local/yumymedia:sharecourse' => array(
-        'captype' => 'read',
-        'contextlevel' => CONTEXT_USER,
-        'archetypes' => array(
-            'user' => CAP_ALLOW
-        )
-    ),
-
-    'local/yumymedia:sharesite' => array(
-        'captype' => 'read',
-        'contextlevel' => CONTEXT_USER,
-        'archetypes' => array(
-            'user' => CAP_ALLOW
-        )
-    ),
-
     'local/yumymedia:upload' => array(
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_USER,
-        'archetypes' => array(
-            'user' => CAP_ALLOW
-        )
-    ),
-
-    'local/yumymedia:screenrecorder'  => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_USER,
         'archetypes' => array(

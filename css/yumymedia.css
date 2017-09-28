@@ -29,10 +29,6 @@ table#mymedia_media_metadata_table tr {
     padding-right: 5px;
 }
 
-#screenrecorder_btn_container.mymedia.screenrecorder.button.container {
-    float: left;
-}
-
 #simple_search_container input#clear_simple_search_btn {
     margin-left: 5px;
 }

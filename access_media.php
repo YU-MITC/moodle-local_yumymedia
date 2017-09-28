@@ -101,7 +101,7 @@ if ($media == null or $media->status == KalturaEntryStatus::DELETED) {
 
         echo $renderer->create_media_details_table_markup($media);
         echo $renderer->create_hidden_input_markup($kalturahost, $ks, $entryid, $partnerid, $uiconfid,
-                                                   $sort, $url, $currentcontrolid);
+                                                   $url, $currentcontrolid);
         echo $renderer->create_embed_code_markup();
 
         if ($media != null and !is_null($internalcontrol) and !is_null($defaultcontrol)) {

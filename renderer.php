@@ -494,11 +494,11 @@ class local_yumymedia_renderer extends plugin_renderer_base {
      *
      * @param object $entry- Kaltura media object.
      * @param bool $entryready- true if media entry is ready, otherwise false.
-     * @param $sort string - sorting option.
+     * @param string $sort - sorting option.
      * @param object accesscontrol - object of acecss conrtol (internal only).
      * @return string - HTML markup of media entry.
      */
-    public function create_media_entry_markup($entry, $entryready = true, $page, $sort, $accesscontrol) {
+    public function create_media_entry_markup($entry, $entryready, $page, $sort, $accesscontrol) {
 
         global $USER;
 
@@ -583,7 +583,8 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         // Add entry to cache.
         $entries = new KalturaStaticEntries();
-        KalturaStaticEntries::add_entry_object($entry);
+        /** KalturaStaticEntries::add_entry_object($entry); */
+        $entries::add_entry_object($entry);
         return $output;
 
     }
@@ -1003,7 +1004,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
      * @return string - HTML markup of hidden input.
      */
     public function create_hidden_input_markup($kalturahost, $ks, $entryid, $partnerid, $uiconfid,
-                                               $sort, $url, $currentcontrolid) {
+                                               $url, $currentcontrolid) {
 
         $output = '';
 
@@ -1099,7 +1100,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         if ($currentcontrolid == $internalcontrol->id) {
             $selected = $internalcontrol->id;
         } else {
-            $selectd = $defaultcontrol->id;
+            $selected = $defaultcontrol->id;
         }
 
         $attr = array('class' => 'access_control_label',

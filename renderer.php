@@ -576,11 +576,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $output .= html_writer::end_tag('div');
 
         // Add entry to cache.
-        $entries = new KalturaStaticEntries();
-        /**
-         * KalturaStaticEntries::add_entry_object($entry);
-         */
-        $entries::add_entry_object($entry);
+        KalturaStaticEntries::add_entry_object($entry);
         return $output;
 
     }

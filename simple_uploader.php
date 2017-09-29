@@ -32,7 +32,6 @@ if (!defined('MOODLE_INTERNAL')) {
 
 header('Access-Control-Allow-Origin:	*');
 
-require_login();
 global $USER, $SESSION;
 
 $mymedia = get_string('heading_mymedia', 'local_yumymedia');

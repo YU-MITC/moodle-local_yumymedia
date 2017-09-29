@@ -29,7 +29,6 @@ $confirm = required_param('confirm', PARAM_TEXT);
 $page = required_param('page', PARAM_INT);
 $sort = optional_param('sort', 'recent', PARAM_TEXT);
 
-require_login();
 global $USER, $SESSION, $DB;
 
 $mymedia = get_string('heading_mymedia', 'local_yumymedia');

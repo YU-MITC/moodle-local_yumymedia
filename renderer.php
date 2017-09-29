@@ -32,8 +32,6 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
-require_login();
-
 /**
  * Renderer class of local_yumymedia
  * @package local_yumymedia
@@ -66,7 +64,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
      * @param string $sort - sotring option.
      * @param object $accesscontrol - Access control objectt of Internal access restriction.
      *
-     * @return HTML markup
+     * @returnstring  HTML markup
      */
     public function create_medias_table($medialist = array(), $page, $sort, $accesscontrol) {
 

@@ -33,8 +33,6 @@ if (!defined('MOODLE_INTERNAL')) {
 
 header('Access-Control-Allow-Origin: *');
 
-require_login();
-
 global $SESSION, $USER, $COURSE;
 
 $page = optional_param('page', 0, PARAM_INT);
@@ -79,7 +77,7 @@ $courseid = $COURSE->id;
 
 if (local_yukaltura_has_mobile_flavor_enabled() && local_yukaltura_get_enable_html5()) {
     $uiconfid = local_yukaltura_get_player_uiconf('player_resource');
-    $url = new moodle_url(local_yukaltura_htm5_javascript_url($uiconfid));
+    $url = new moodle_url(local_yukaltura_html5_javascript_url($uiconfid));
     $PAGE->requires->js($url, true);
     $url = new moodle_url('/local/yukaltura/js/frameapi.js');
     $PAGE->requires->js($url, true);

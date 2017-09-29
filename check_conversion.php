@@ -33,8 +33,6 @@ $title      = optional_param('media_title', '', PARAM_TEXT);
 $widget     = optional_param('widget', 'kdp', PARAM_TEXT);
 $courseid   = required_param('courseid', PARAM_INT);
 
-require_login();
-
 $thumbnail    = '';
 $data         = '';
 $entryobj    = null;

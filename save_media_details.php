@@ -30,8 +30,6 @@ $name       = required_param('name', PARAM_TEXT);
 $tags       = required_param('tags', PARAM_TEXT);
 $desc       = required_param('desc', PARAM_TEXT);
 
-require_login();
-
 global $USER;
 
 $context = context_user::instance($USER->id);

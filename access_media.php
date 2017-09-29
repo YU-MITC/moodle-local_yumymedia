@@ -37,8 +37,6 @@ $entryid   = required_param('entryid', PARAM_TEXT);
 $page = required_param('page', PARAM_INT);
 $sort = optional_param('sort', 'recent', PARAM_TEXT);
 
-require_login();
-
 $mymedia = get_string('heading_mymedia', 'local_yumymedia');
 $PAGE->set_context(context_system::instance());
 $header  = format_string($SITE->shortname).": $mymedia";

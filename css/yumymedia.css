@@ -60,8 +60,6 @@ div#id_media_details_tab.yui3-tabview-content.yui3-widget-content-expanded {
     background-color: rgb(242, 242, 242);
 }
 
-/* Below is thanks to http://www.pigslipstick.com/index.php?/archives/241-YUI3-TabView-Skinning.html */
-
 .yui3-widget,
 .yui3-tabview .yui3-tabview-content .yui3-tabview-list {
     margin-right: 5px;
@@ -73,7 +71,6 @@ div#id_media_details_tab.yui3-tabview-content.yui3-widget-content-expanded {
 .yui3-skin-sam .yui3-tab-selected .yui3-tab-label:focus,
 .yui3-skin-sam .yui3-tab-selected .yui3-tab-label:hover {
     color: rgb(242, 242, 242);
-    /* background: #2647a0 url(/moodle/local/kaltura/pix/sprite.png) repeat-x scroll left -100px !important; */
     -x-system-font: none;
     font-family: arial, helvetica, clean, sans-serif;
     font-size: 13px;
@@ -108,7 +105,7 @@ div#id_media_details_tab.yui3-tabview-content.yui3-widget-content-expanded {
 }
 
 div.mymedia.media.name {
-    word-wrap: break-word; /* Internet Explorer 5.5+ */
+    word-wrap: break-word;
     word-break: break-all;
     white-space: normal;
 }
@@ -120,7 +117,6 @@ div.mymedia.media.share.container {
     white-space: nowrap;
 }
 
-/* Progress bar */
 #progress_bar_container {
     width: 100%;
     padding-left: 10px;

@@ -51,11 +51,9 @@ table#mymedia_media_metadata_table tr {
 }
 
 table#mymedia_medias {
-
-    border: 0px none black;
-    table-layout:fixed;
-    width:700px
-
+    border: 0 none black;
+    table-layout: fixed;
+    width: 700px;
 }
 
 div#id_media_details_tab.yui3-tabview-content.yui3-widget-content-expanded {
@@ -77,7 +75,7 @@ div#id_media_details_tab.yui3-tabview-content.yui3-widget-content-expanded {
     color: rgb(242, 242, 242);
     background: #2647a0 url(/moodle/local/kaltura/pix/sprite.png) repeat-x scroll left -100px !important;
     -x-system-font: none;
-    font-family: arial,helvetica,clean,sans-serif;
+    font-family: arial, helvetica, clean, sans-serif;
     font-size: 13px;
     font-size-adjust: none;
     font-stretch: normal;
@@ -91,7 +89,7 @@ div#id_media_details_tab.yui3-tabview-content.yui3-widget-content-expanded {
 }
 .yui3-skin-sam .yui3-tab-label {
     -x-system-font: none;
-    font-family: arial,helvetica,clean,sans-serif;
+    font-family: arial, helvetica, clean, sans-serif;
     font-size: 13px;
     font-size-adjust: none;
     font-stretch: normal;
@@ -103,13 +101,13 @@ div#id_media_details_tab.yui3-tabview-content.yui3-widget-content-expanded {
     -webkit-border-top-right-radius: 5px;
     -webkit-border-top-left-radius: 5px;
 }
-.yui3-widget, .yui3-tabview .yui3-tabview-content .yui3-tabview-panel {
+.yui3-widget,
+.yui3-tabview .yui3-tabview-content .yui3-tabview-panel {
     background: rgb(242, 242, 242);
     border-style: none;
 }
 
 div.mymedia.media.name {
-    white-space: pre-wrap; /* css-3 */
     word-wrap: break-word; /* Internet Explorer 5.5+ */
     word-break: break-all;
     white-space: normal;
@@ -142,7 +140,7 @@ div.mymedia.media.share.container {
     float: left;
     height: 18px;
     width: 0%;
-    background: #00FF00;
+    background: #0f0;
 }
 
 #loading_text {
@@ -188,7 +186,7 @@ div.mymedia.media.share.container {
     display: none;
     z-index: 2;
 }
-  
+
 #modal_window {
     z-index: 1;
     display: none;
@@ -197,14 +195,14 @@ div.mymedia.media.share.container {
     left: 0;
     width: 100%;
     height: 120%;
-    background-color: rgba(0, 0, 0, 0.75) ;
+    background-color: rgba(0, 0, 0, 0.75);
 }
 
 .button-link {
     color: #00f;
     text-decoration: underline;
 }
- 
+
 .button-link:hover {
     cursor: pointer;
     color: #f00;

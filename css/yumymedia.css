@@ -1,17 +1,15 @@
 /**
- * YU Mymedia stylesheet
+ * YU Kaltura "My Media" style sheet.
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2017 Yamaguchi University (info-cc@ml.cc.yamaguchi-u.ac.jp)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-#mymedia_media_metadata_table.generaltable,
-tr,
-td.mymedia.column.cell {
-    border-style: none;
-    border-color: transparent;
-    background-color: transparent;
+#mymedia_media_metadata_table.generaltable tr td.mymedia.column.cell {
+    border-style: none !important;
+    border-color: transparent !important;
+    background-color: transparent !important;
 }
 
 
@@ -21,7 +19,7 @@ table#mymedia_media_metadata_table tr {
 
 #simple_search_container {
     float: right;
-    margin-left: 5px;
+    margin-left:5px;
 }
 
 #upload_btn_container.mymedia.upload.button.container {
@@ -29,15 +27,15 @@ table#mymedia_media_metadata_table tr {
     padding-right: 5px;
 }
 
-#simple_search_container input#clear_simple_search_btn {
-    margin-left: 5px;
+#screenrecorder_btn_container.mymedia.screenrecorder.button.container {
+    float: left;
 }
 
-#upload_btn,
-#scr_btn,
-#simple_search_btn,
-#clear_simple_search_btn,
-#uploader_open {
+#simple_search_container input#clear_simple_search_btn {
+    margin-left:5px;
+}
+
+#upload_btn, #scr_btn, #simple_search_btn, #clear_simple_search_btn, #uploader_open {
     font-size: 1.1em;
 }
 
@@ -51,9 +49,9 @@ table#mymedia_media_metadata_table tr {
 
 table#mymedia_medias {
 
-    border: 0 none black;
-    table-layout: fixed;
-    width: 700px;
+    border: 0px none black;
+    table-layout:fixed;
+    width:700px
 
 }
 
@@ -63,28 +61,17 @@ div#id_media_details_tab.yui3-tabview-content.yui3-widget-content-expanded {
 
 /* Below is thanks to http://www.pigslipstick.com/index.php?/archives/241-YUI3-TabView-Skinning.html */
 
-.yui3-widget,
-.yui3-tabview,
-.yui3-tabview-content,
-.yui3-tabview-list {
+.yui3-widget, .yui3-tabview .yui3-tabview-content .yui3-tabview-list {
     margin-right: 5px;
-    border-color: #ddd;
+    border-color: #DDD;
     border-width: 0 0 1px;
 }
 
-.yui3-skin-sam,
-.yui3-tab-selected,
-.yui3-tab-label,
-.yui3-skin-sam,
-.yui3-tab-selected,
-.yui3-tab-label:focus,
-.yui3-skin-sam,
-.yui3-tab-selected,
-.yui3-tab-label:hover {
+.yui3-skin-sam .yui3-tab-selected .yui3-tab-label, .yui3-skin-sam .yui3-tab-selected .yui3-tab-label:focus, .yui3-skin-sam .yui3-tab-selected .yui3-tab-label:hover {
     color: rgb(242, 242, 242);
-    background: #2647a0 url(/moodle/local/kaltura/pix/sprite.png) repeat-x scroll left -100px;
+    background: #2647A0 url(/moodle/local/kaltura/pix/sprite.png) repeat-x scroll left -100px !important;
     -x-system-font: none;
-    font-family: arial, helvetica, clean, sans-serif;
+    font-family: arial,helvetica,clean,sans-serif;
     font-size: 13px;
     font-size-adjust: none;
     font-stretch: normal;
@@ -96,11 +83,9 @@ div#id_media_details_tab.yui3-tabview-content.yui3-widget-content-expanded {
     -webkit-border-top-right-radius: 5px;
     -webkit-border-top-left-radius: 5px;
 }
-
-.yui3-skin-sam,
-.yui3-tab-label {
+.yui3-skin-sam .yui3-tab-label {
     -x-system-font: none;
-    font-family: arial, helvetica, clean, sans-serif;
+    font-family: arial,helvetica,clean,sans-serif;
     font-size: 13px;
     font-size-adjust: none;
     font-stretch: normal;
@@ -112,20 +97,16 @@ div#id_media_details_tab.yui3-tabview-content.yui3-widget-content-expanded {
     -webkit-border-top-right-radius: 5px;
     -webkit-border-top-left-radius: 5px;
 }
-
-.yui3-widget,
-.yui3-tabview,
-.yui3-tabview-content,
-.yui3-tabview-panel {
+.yui3-widget, .yui3-tabview .yui3-tabview-content .yui3-tabview-panel {
     background: rgb(242, 242, 242);
     border-style: none;
 }
 
 div.mymedia.media.name {
-    /** white-space: -moz-pre-wrap; */
-    /** white-space: -pre-wrap;      /* Opera 4-6 */
-    /** white-space: -o-pre-wrap;    /* Opera 7 */
-    /** white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    white-space: pre-wrap;       /* css-3 */
     word-wrap: break-word;       /* Internet Explorer 5.5+ */
     word-break: break-all;
     white-space: normal;
@@ -135,14 +116,14 @@ div.mymedia.media.action.bar,
 div.mymedia.media.preview.container,
 div.mymedia.media.edit.container,
 div.mymedia.media.share.container {
-    white-space: nowrap;
+    white-space: nowrap !important;
 }
 
-/** Progress bar */
+/* Progress bar */
 #progress_bar_container {
     width: 100%;
     padding-left: 10px;
-    padding-right: 10px;
+    padding-right:10px;
     visibility: hidden;
     display: block;
     padding-top: 10px;
@@ -157,8 +138,8 @@ div.mymedia.media.share.container {
 #progress_bar {
     float: left;
     height: 18px;
-    width: 0;
-    background: #0f0;
+    width: 0%;
+    background: #00FF00;
 }
 
 #loading_text {
@@ -174,27 +155,23 @@ div.mymedia.media.share.container {
     overflow: auto;
 }
 
-.yui3-tabview-panel,
-#metadata,
-.yui3-tabview-panel,
-#preview,
-.yui3-tabview-panel,
-#embed {
+.yui3-tabview-panel #metadata,
+.yui3-tabview-panel #preview,
+.yui3-tabview-panel #embed {
     height: 420px;
     width: 490px;
 }
 
-.mymedia,
-.col_0,
-.paging {
+.mymedia .col_0 .paging {
     display: inline;
     margin-left: 2%;
 }
 
 .yui3-widget.yui3-tabview {
-    width: 500px;
-    height: 420px;
+    width: 500px !important;
+    height: 420px !important;
 }
+
 
 #modal_content {
     width: 320px;
@@ -208,7 +185,7 @@ div.mymedia.media.share.container {
     display: none;
     z-index: 2;
 }
-
+  
 #modal_window {
     z-index: 1;
     display: none;
@@ -217,14 +194,14 @@ div.mymedia.media.share.container {
     left: 0;
     width: 100%;
     height: 120%;
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: rgba(0, 0, 0, 0.75) ;
 }
 
 .button-link {
     color: #00f;
     text-decoration: underline;
 }
-
+ 
 .button-link:hover {
     cursor: pointer;
     color: #f00;

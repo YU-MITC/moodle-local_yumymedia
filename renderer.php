@@ -40,6 +40,12 @@ if (!defined('MOODLE_INTERNAL')) {
  */
 class local_yumymedia_renderer extends plugin_renderer_base {
 
+    /**
+     * This function retursn ready status of flavors.
+     * @param object $connection - Kaltura connection object.
+     * @param string $entryid - id of kaltura media entry.
+     * @return bool - If all flavors are ready, return true. Otherwise, return false.
+     */
     public function all_flavors_ready($connection, $entryid) {
         $flag = true;
 
@@ -64,7 +70,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
      * @param string $sort - sotring option.
      * @param object $accesscontrol - Access control objectt of Internal access restriction.
      *
-     * @returnstring  HTML markup
+     * @return string  HTML markup
      */
     public function create_medias_table($medialist = array(), $page, $sort, $accesscontrol) {
 
@@ -130,7 +136,6 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function creates HTML markup used to sort the media listing.
      *
-     * @param none.
      * @return string - HTML markup for sorting pulldown.
      */
     public function create_sort_option() {
@@ -291,8 +296,8 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function creates HTML markup used to display the media thumbnail
      *
-     * @param string - thumbnail URL.
-     * @param string - alternate text.
+     * @param string $url - thumbnail URL.
+     * @param string $alt - alternate text.
      * @return string - HTML markup of thumbnail.
      */
     public function create_media_thumbnail_markup($url, $alt) {
@@ -355,7 +360,6 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function creates HTML markup used to display the media preview.
      *
-     * @param none.
      * @return string - HTML markup of media share.
      */
     public function create_media_preview_link_markup() {
@@ -377,7 +381,6 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function creates HTML markup used to display the media edit.
      *
-     * @param none.
      * @return string - HTML markup of media edit.
      */
     public function create_media_edit_link_markup() {
@@ -398,8 +401,9 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
     /**
      * This function creates HTML markup used to display the media access.
-     *
-     * @param none.
+     * @param object $entry - object of media enytry.
+     * @param int $page - page number which the media is printed.
+     * @param string $sort - sotring option.
      * @return string - HTML markup of media access.
      */
     public function create_media_access_link_markup($entry, $page = 0, $sort = 'recent') {
@@ -484,10 +488,11 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function creates HTML markup for a media entry.
      *
-     * @param object $entry- Kaltura media object.
-     * @param bool $entryready- true if media entry is ready, otherwise false.
+     * @param object $entry - Kaltura media object.
+     * @param bool $entryready - true if media entry is ready, otherwise false.
+     * @param int $page - page number which the media is printed.
      * @param string $sort - sorting option.
-     * @param object accesscontrol - object of acecss conrtol (internal only).
+     * @param object $accesscontrol - object of acecss conrtol (internal only).
      * @return string - HTML markup of media entry.
      */
     public function create_media_entry_markup($entry, $entryready, $page, $sort, $accesscontrol) {
@@ -582,7 +587,6 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * Displays the YUI panel markup used to display embedded media markup.
      *
-     * @param none.
      * @return string - HTML markup of media details.
      */
     public function media_details_markup() {
@@ -616,7 +620,6 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function returns YUI TabView HTML markup.
      *
-     * @param none.
      * @return string - HTML markup of YUI TabView.
      */
     public function media_details_tabs_markup() {
@@ -662,7 +665,6 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function outputs the media edit metadata elements.
      *
-     * @param none.
      * @return string - HTML markup of edit metadata.
      */
     public function media_metadata_form() {
@@ -764,7 +766,6 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function outputs the media embed markup.
      *
-     * @param none.
      * @return string - HTML markup of the media embed markup.
      */
     public function create_embed_markup() {
@@ -776,7 +777,6 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function outputs the media embed markup.
      *
-     * @param none.
      * @return string - HTML markup of simple dialog.
      */
     public function create_simple_dialog_markup() {
@@ -804,7 +804,6 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function outputs the media search.
      *
-     * @param none.
      * @return string - HTML markup of media search.
      */
     public function create_search_markup() {
@@ -868,7 +867,6 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function outputs the media upload.
      *
-     * @param none.
      * @return string - HTML markup of media upload.
      */
     public function create_upload_markup() {
@@ -894,7 +892,6 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function outputs the "now loading" panel.
      *
-     * @param none.
      * @return string - HTML markup of "now loading".
      */
     public function create_loading_screen_markup() {
@@ -988,9 +985,10 @@ class local_yumymedia_renderer extends plugin_renderer_base {
      * @param object $kalturahost - hostname of Kaltura server.
      * @param string $ks - Kaltura session string.
      * @param string $entryid - id of media entyry.
+     * @param int $partnerid - id of partner (kaltura user).
      * @param int $uiconfid - id of embeded player.
-     * @param string $sort - sorting option.
      * @param string $url - URL of "My Media".
+     * @param int $currentcontrolid - current controlid of the media.
      * @return string - HTML markup of hidden input.
      */
     public function create_hidden_input_markup($kalturahost, $ks, $entryid, $partnerid, $uiconfid,
@@ -1030,7 +1028,6 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function outputs HTML markup for media embed.
      *
-     * @param none.
      * @return string - HTML markup of embed code.
      */
     public function create_embed_code_markup() {
@@ -1078,7 +1075,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
      *
      * @param object $defaultcontrol - object of access control (default setting).
      * @param object $internalcontrol - object of access control (internal only).
-     * @param object $currentcontrol - object of acecss control (media entry).
+     * @param int $currentcontrolid - id of current access control.
      * @return string - HTML markup of embed code.
      */
     public function create_access_control_markup($defaultcontrol, $internalcontrol, $currentcontrolid) {

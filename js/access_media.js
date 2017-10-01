@@ -50,16 +50,12 @@ window.unload = function() {
     sessionEnd();
 };
 
-/**
- * If window is resize, call modal window centerize function.
- */
+// If window is resize, call modal window centerize function.
 $(window).resize(centeringModalSyncer);
 
 /**
  * This function centerize modal window.
  * @access public
- * @param none.
- * @return nothing.
  */
 function centeringModalSyncer(){
 
@@ -78,8 +74,6 @@ function centeringModalSyncer(){
 /**
  * This function print modal window.
  * @access public
- * @param none.
- * @return nothing.
  */
 function fadeInModalWindow() {
     // All contents in web page release focus.
@@ -107,7 +101,6 @@ function fadeInModalWindow() {
  * This function delete content area and modal window.
  * @access public
  * @param none.
- * @return nothing.
  */
 function fadeOutModalWindow() {
     // Rescore scroll position to web brawser.
@@ -124,7 +117,6 @@ function fadeOutModalWindow() {
  * This function add back button to modal window.
  * @access private
  * @param {string} - URL of target page.
- * @return nothing.
  */
 function addBackButton(url) {
     var content_html = "<input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=Back ";
@@ -136,7 +128,6 @@ function addBackButton(url) {
  * This is callback function whem cancel button is clicked.
  * @access public
  * @param {string} - URL of taget page.
- * @return nothing.
  */
 function handleCancelClick(url) {
     location.href = url;
@@ -146,7 +137,6 @@ function handleCancelClick(url) {
  * This is callback function when access control setting is changed.
  * @access public
  * @param none.
- * @return nothing.
  */
 function selectedControl()
 {
@@ -170,7 +160,6 @@ function selectedControl()
  * This function update access control id.
  * @access public
  * @param none.
- * @return nothing.
  */
 function updateAccessControlId()
 {
@@ -268,7 +257,6 @@ function updateAccessControlId()
  * This function print a success message.
  * @access public
  * @param {string} - Label of current access control.
- * @return nothing.
  */
 function printSuccessMessage(current_control)
 {
@@ -298,7 +286,6 @@ function printSuccessMessage(current_control)
  * This function print error message.
  * @access public
  * @param {string} - message string.
- * @return nothing.
  */
 function printErrorMessage(message)
 {
@@ -320,7 +307,6 @@ function printErrorMessage(message)
  * This function close a session between client and kaltura server.
  * @access public
  * @param none.
- * @return nothing.
  */
 function sessionEnd()
 {
@@ -350,7 +336,6 @@ function sessionEnd()
  * This function print embed code for kaltura media.
  * @access public
  * @param none.
- * @return nothing.
  */
 function printHtmlCode()
 {

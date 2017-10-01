@@ -53,50 +53,25 @@ var file_size = 0;
 
 var SHORTEST_TIME = 20000;
 
-/**
- * This function execute when window is loaded.
- * @access public
- * @param none.
- * @return nothing.
- */
+// This function execute when window is loaded.
 window.onload = function(){
     checkForm();
 };
 
-/**
- * This function execute when window is chagned.
- * @access public
- * @param none.
- * @return nothing.
- */
+// This function execute when window is chagned.
 window.onchange = function(){
     checkForm();
 };
 
-/**
- * This function execute when window is uloaded.
- * @access public
- * @param none.
- * @return nothing.
- */
+// This function execute when window is uloaded.
 window.unload = function() {
     sessionEnd();
 };
 
-/**
- * This function execute when window is resized.
- * @access public
- * @param function - callback function.
- * @return nothing.
- */
+// This function execute when window is resized.
 $(window).resize(centeringModalSyncer);
 
-/**
- * This function centerizes a modal window.
- * @access public
- * @param none.
- * @return nothing.
- */
+// This function centerizes a modal window.
 function centeringModalSyncer(){
 
     // Get width and height of window.
@@ -114,8 +89,6 @@ function centeringModalSyncer(){
 /**
  * This function checks file size.
  * @access public
- * @param none.
- * @return nothing.
  */
 function checkFileSize() {
     if (file_size <= 0) {
@@ -188,8 +161,6 @@ function openSimpleUploader() {
 /**
  * This function is callback for cancel button.
  * @access public
- * @param none.
- * @return nothing.
  */
 function handleCancelClick() {
     location.href = "./yumymedia.php";
@@ -198,8 +169,6 @@ function handleCancelClick() {
 /**
  * This function prints modal window.
  * @access public
- * @param none.
- * @return nothing.
  */
 function fadeInModalWindow() {
     // Window Unfocus for avoid duplication.
@@ -225,8 +194,6 @@ function fadeInModalWindow() {
 /**
  * This function deletes a modal window.
  * @access public
- * @param none.
- * @return nothing.
  */
 function fadeOutModalWindow() {
     // Rescore scroll position of window.
@@ -242,8 +209,6 @@ function fadeOutModalWindow() {
 /**
  * This function adds back button.
  * @access public
- * @param none.
- * @return nothing.
  */
 function addBackButton() {
     var content_html = "<br><input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=Back ";
@@ -255,7 +220,6 @@ function addBackButton() {
  * This function prints error message.
  * @access public
  * @param {string} - string of error message.
- * @return nothing.
  */
 function printErrorMessage(errorMessage) {
     $("#modal_content").append("<font color=\"red\">" + errorMessage + "</font><br>");
@@ -272,7 +236,6 @@ function printErrorMessage(errorMessage) {
  * @param {string} - name of media entry.
  * @param {string} - description of media entry.
  * @param {string} - username of creator.
- * @return nothing.
  */
 function printSuccessMessage(id, name, tags, description, creatorId) {
     // Delete modal window.
@@ -296,8 +259,6 @@ function printSuccessMessage(id, name, tags, description, creatorId) {
 /**
  * This function is callback for reset button.
  * @access public
- * @param none.
- * @return nothing.
  */
 function handleResetClick() {
     $("#file_info").html("");
@@ -339,7 +300,6 @@ function checkTagsString(str) {
 /**
  * This function checks metadata of media.
  * @access public
- * @param none.
  * @return {bool} - if metadata is appropriate, return "true". Otherwise, return "false".
  */
 function checkMetadata() {
@@ -368,8 +328,6 @@ function checkMetadata() {
 /**
  * This function is callback for submit button.
  * @access public
- * @param none.
- * @return nothing.
  */
 function handleSubmitClick() {
 
@@ -389,8 +347,6 @@ function handleSubmitClick() {
 /**
  * This function executes upload process.
  * @access public
- * @param none.
- * @return nothing.
  */
 function executeUploadProcess() {
     var server_host = $("#kalturahost").val(); // Get hostname of kaltura server.
@@ -405,7 +361,6 @@ function executeUploadProcess() {
  * @param {string} - hostname of kaltura server.
  * @param {string} - session string of kaltura connection.
  * @param {string} - token id for uploading.
- * @return nothing.
  */
 function deleteUploadToken(server_host, ks, uploadTokenId) {
     var fd = new FormData();
@@ -457,7 +412,6 @@ function deleteUploadToken(server_host, ks, uploadTokenId) {
  * @access public
  * @param {string} - hostname of kaltura server.
  * @param {string} - session string of kaltura connection.
- * @return nothing.
  */
 function uploadMediaFile(server_host, ks) {
     var uploadTokenId;
@@ -556,7 +510,6 @@ function uploadMediaFile(server_host, ks) {
  * @param {string} - hostname of kaltura server.
  * @param {string} - session string of kaltura connection.
  * @param {string} - upload token id.
- * @return nothing.
  */
 function uploadAttributes(server_host, ks, uploadTokenId) {
 
@@ -706,7 +659,6 @@ function uploadAttributes(server_host, ks, uploadTokenId) {
 /**
  * This function retrieve os type.
  * @access public
- * @param none.
  * @return {string} - os type.
  */
 function getOperatingSystem() {
@@ -735,7 +687,6 @@ function getOperatingSystem() {
  * This function is callback for selection of media file.
  * @access public
  * @param {array} - array of file object.
- * @return nothing.
  */
 function handleFileSelect(files) {
     // Get os type.
@@ -820,8 +771,6 @@ function handleFileSelect(files) {
 /**
  * This function close kaltura session.
  * @access public
- * @param none.
- * @return nothing.
  */
 function sessionEnd()
 {
@@ -838,19 +787,13 @@ function sessionEnd()
     .done(function( xmlData ) {
         // Response is not XML.
         if (xmlData === null) {
-            /**
-             * alert("Cannot delete the uploadToken ! (Cannot get a XML response.)");
-             */
+             console.dir("Cannot delete the uploadToken ! (Cannot get a XML response.)");
         }
         else {
-            /**
-             * alert("Kaltura Session has been deleted.");
-             */
+            console.dir("Kaltura Session has been deleted.");
         }
     })
     .fail(function( xmlData ) {
-        /**
-         *  alert("Cannot delete the uploadToken ! (Cannot connect to contents server.)");
-         */
+         console.dir("Cannot delete the uploadToken ! (Cannot connect to contents server.)");
     });
 }

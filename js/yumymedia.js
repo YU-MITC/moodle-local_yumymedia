@@ -79,7 +79,7 @@ M.local_yumymedia.init_config = function (Y, panel_markup, dialog, conversion_sc
 
     // Create the tab view.
     var tab_view = new Y.TabView({
-        srcNode:'#id_media_details_tab', visible: false, width: "500px", height: "480px"
+        srcNode:'#id_media_details_tab', visible: false, width: "500px", height: "460px"
     });
 
     tab_view.render();

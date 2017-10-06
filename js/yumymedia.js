@@ -26,7 +26,7 @@ M.local_yumymedia = {
     Y: null,
     transaction : {},
 
-    init: function (Y, panelMarkup, dialog, conversionScript, saveMediaScript,
+    init: function(Y, panelMarkup, dialog, conversionScript, saveMediaScript,
                     uiconfid, loadingPanel, editMeta) {
 
         var bodyNode = Y.one("#page-mymedia-index");
@@ -35,7 +35,7 @@ M.local_yumymedia = {
 
         dialog = new Y.YUI2.widget.SimpleDialog("mymedia_simple_dialog", {
             width: "20em",
-            effect :{
+            effect: {
                 effect: Y.YUI2.widget.ContainerEffect.FADE,
                 duration: 0.30
             },
@@ -60,7 +60,7 @@ M.local_yumymedia = {
 
         // Create Loading panel.
         loadingPanel = new Y.YUI2.widget.Panel("wait", {
-            width:"240px", fixedcenter:true, close:false, draggable:false, zIndex:100, modal:true, visible:false
+            width: "240px", fixedcenter: true, close: false, draggable: false, zIndex: 100, modal: true, visible: false
         });
 
         loadingPanel.setHeader("Loading, please wait...");
@@ -104,7 +104,7 @@ M.local_yumymedia = {
         });
 
         var checkConversionStatus = {
-            complete: function check_conversion_status (id, o) {
+            complete: function check_conversion_status(id, o) {
 
                 // If the response text is empty then the media must still be converting.
                 if ('' == o.responseText) {
@@ -163,7 +163,7 @@ M.local_yumymedia = {
         };
 
         var saveMediaInformation = {
-            complete: function saveMediaInformation (id, o) {
+            complete: function saveMediaInformation(id, o) {
 
                 var returnValue = o.responseText.split(" ");
 
@@ -181,7 +181,9 @@ M.local_yumymedia = {
                         case "8":
                         case "9":
                         case "10":
-                            dialog.cfg.setProperty("text", M.util.get_string("error_saving", "local_yumymedia") + " ERROR " + returnValue[1]);
+                            dialog.cfg.setProperty("text",
+                                                   M.util.get_string("error_saving", "local_yumymedia") +
+                                                   " ERROR " + returnValue[1]);
                             break;
                         case "2":
                             dialog.cfg.setProperty("text", M.util.get_string("missing_required", "local_yumymedia"));
@@ -200,10 +202,10 @@ M.local_yumymedia = {
                 }
 
                 // Add okay button to dialog.
-                var button = [ {
+                var button = [{
                     text: M.util.get_string("continue", "local_yumymedia"),
-                    handler: function closeDialog() { detailsPanel.hide(); this.hide(); },
-                    isDefault: true} ];
+                    handler: function closeDialog() {detailsPanel.hide(); this.hide();},
+                    isDefault: true}];
 
                 dialog.cfg.setProperty("buttons", button);
 
@@ -296,7 +298,7 @@ M.local_yumymedia = {
 
         var mymediasort = Y.one("#mymediasort");
         var mymediasortoptions = mymediasort.get("options");
-        Y.on("change", function () {
+        Y.on("change", function() {
             var index = mymediasort.get("selectedIndex");
             var url = mymediasortoptions.item(index).get("value");
             window.location.href = url;

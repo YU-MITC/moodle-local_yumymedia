@@ -30,7 +30,7 @@ define(['jquery'], function($) {
     return {
         /**
          * Initial function.
-         * @access
+         * @access public
          */
         init: function() {
 
@@ -46,20 +46,22 @@ define(['jquery'], function($) {
             };
 
             var STATUS = {
-                ENTRY_IMPORTING : -2,
-                ENTRY_CONVERTING : -1,
-                ENTRY_IMPORT : 0,
-                ENTRY_PRECONVERT : 1,
-                ENTRY_READY : 2,
-                ENTRY_DELETED : 3,
-                ENTRY_PENDING : 4,
-                ENTRY_MODERATE : 5,
-                ENTRY_BLOCKED : 6,
-                ENTRY_NO_CONTENT : 7
+                ENTRY_IMPORTING: -2,
+                ENTRY_CONVERTING: -1,
+                ENTRY_IMPORT: 0,
+                ENTRY_PRECONVERT: 1,
+                ENTRY_READY: 2,
+                ENTRY_DELETED: 3,
+                ENTRY_PENDING: 4,
+                ENTRY_MODERATE: 5,
+                ENTRY_BLOCKED: 6,
+                ENTRY_NO_CONTENT: 7
             };
 
-            // This function centerizes a modal window.
-            function centeringModalSyncer(){
+            /**
+             * This function centerizes a modal window.
+             */
+            function centeringModalSyncer() {
 
                 // Get width and height of window.
                 var w = $(window).width();
@@ -133,8 +135,7 @@ define(['jquery'], function($) {
                     // Dsiable upload button.
                     $("#entry_submit").prop("disabled", true);
                     $("#entry").val("");
-                }
-                else {
+                } else {
                     // Enable upload button.
                     $("#entry_submit").prop("disabled", false);
                 }
@@ -183,9 +184,9 @@ define(['jquery'], function($) {
              */
             function fadeOutModalWindow() {
                 // Rescore scroll position of window.
-                window.scrollTo( modalX , modalY );
+                window.scrollTo(modalX, modalY);
                 // Fade-out [#modal_content] and [#modal_window].
-                $("#modal_content,#modal_window").fadeOut("slow",function(){
+                $("#modal_content,#modal_window").fadeOut("slow", function() {
                     // Delete [#modal_window].
                     $("#modal_window").remove();
                     $("#modal_content").remove();
@@ -267,8 +268,7 @@ define(['jquery'], function($) {
                 var regex = /["$%&'~\^\\`\/]/;
                 if (regex.test(str) === true) {
                     return false;
-                }
-                else {
+                } else {
                     return true;
                 }
             }
@@ -283,8 +283,7 @@ define(['jquery'], function($) {
                 var regex = /[!"#$%&'~\|\^\\@`()\[\]\{\}:;\+\*\/=<>?]/;
                 if (regex.test(str) === true) {
                     return false;
-                }
-                else {
+                } else {
                     return true;
                 }
             }
@@ -355,6 +354,7 @@ define(['jquery'], function($) {
              * @param {string} serverHost - hostname of kaltura server.
              * @param {string} ks - session string of kaltura connection.
              * @param {string} uploadTokenId - token id for uploading.
+             * @return {bool} if upload token is deleted, return true.
              */
             function deleteUploadToken(serverHost, ks, uploadTokenId) {
                 var fd = new FormData();
@@ -380,7 +380,7 @@ define(['jquery'], function($) {
                 var serviceURL = serverHost + "/api_v3/service/uploadToken/action/delete";
 
                 // Transmits a data.
-                $.ajax (
+                $.ajax(
                     serviceURL, postData
                 )
                 .done(function(xmlData) {
@@ -429,8 +429,8 @@ define(['jquery'], function($) {
                     dataType: "xml",
                     xhr: function() {
                         var XHR = $.ajaxSettings.xhr();
-                        if(XHR.upload){
-                            XHR.upload.addEventListener("progress",function(e) {
+                        if (XHR.upload) {
+                            XHR.upload.addEventListener("progress", function(e) {
                                 var newValue = parseInt(e.loaded / e.total * 10000) / 100;
                                 $("#pvalue").html(parseInt(newValue));
                             }, false);
@@ -449,7 +449,7 @@ define(['jquery'], function($) {
                 $.ajax(
                     serviceURL, postData
                 )
-                .done(function( xmlData, textStatus, xhr) {
+                .done(function(xmlData, textStatus, xhr) {
                     // Response is not XML.
                     if (xmlData === null) {
                         deleteUploadToken(serverHost, ks, uploadTokenId);
@@ -480,8 +480,7 @@ define(['jquery'], function($) {
                     if (backendHost !== null) {
                         if (serverHost.indexOf("https") === 0) {
                             serverHost = "https://" + backendHost;
-                        }
-                        else if (serverHost.indexOf("http") === 0){
+                        } else if (serverHost.indexOf("http") === 0) {
                             serverHost = "http://" + backendHost;
                         }
                     }
@@ -572,10 +571,10 @@ define(['jquery'], function($) {
                 var serviceURL = serverHost + "/api_v3/service/media/action/addFromUploadedFile";
 
                 // Transmits data.
-                $.ajax (
+                $.ajax(
                     serviceURL, postData
                 )
-                .done(function(xmlData){
+                .done(function(xmlData) {
                     // Response is not XML.
                     if (xmlData === null || typeof xmlData === undefined) {
                         deleteUploadToken(serverHost, ks, uploadTokenId);
@@ -642,7 +641,7 @@ define(['jquery'], function($) {
                     // Prints success message.
                     printSuccessMessage(entryId, entryName, entryTags, entryDescription, entryCreatorId);
                 })
-                .fail(function(xmlData){
+                .fail(function(xmlData) {
                     deleteUploadToken(serverHost, ks, uploadTokenId);
                     if (xmlData !== null) {
                         window.console.dir(xmlData);
@@ -737,8 +736,7 @@ define(['jquery'], function($) {
                     // Response is not XML.
                     if (xmlData === null) {
                         window.console.log("Cannot delete the uploadToken ! (Cannot get a XML response.)");
-                    }
-                    else {
+                    } else {
                         window.console.log("Kaltura Session has been deleted.");
                     }
                 })
@@ -751,7 +749,7 @@ define(['jquery'], function($) {
             }
 
             // This function execute when window is chagned.
-            $(window).on("change", function(){
+            $(window).on("change", function() {
                 checkForm();
             });
 

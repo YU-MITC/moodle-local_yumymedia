@@ -31,21 +31,21 @@ define(['jquery'], function($) {
     return {
         /**
          * Initial function.
-         * @access
+         * @access public
          */
         init: function() {
 
             var STATUS = {
-                ENTRY_ERROR_IMPORTING  : -2,
-                ENTRY_ERROR_CONVERTING : -1,
-                ENTRY_IMPORT : 0,
-                ENTRY_PRECONVERT : 1,
-                ENTRY_READY : 2,
-                ENTRY_DELETED : 3,
-                ENTRY_PENDING : 4,
-                ENTRY_MODERATE : 5,
-                ENTRY_BLOCKED : 6,
-                ENTRY_NO_CONTENT : 7
+                ENTRY_ERROR_IMPORTING: -2,
+                ENTRY_ERROR_CONVERTING: -1,
+                ENTRY_IMPORT: 0,
+                ENTRY_PRECONVERT: 1,
+                ENTRY_READY: 2,
+                ENTRY_DELETED: 3,
+                ENTRY_PENDING: 4,
+                ENTRY_MODERATE: 5,
+                ENTRY_BLOCKED: 6,
+                ENTRY_NO_CONTENT: 7
             };
 
             /**

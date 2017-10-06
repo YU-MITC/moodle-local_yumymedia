@@ -27,11 +27,11 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
-$plugin->version = 2017100600;
+$plugin->version = 2017100700;
 $plugin->component = 'local_yumymedia';
-$plugin->release = 'YU Kaltura Media Gallery 1.0.4';
+$plugin->release = 'YU Kaltura Media Gallery 1.0.7';
 $plugin->requires = 2015051100;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = array(
-    'local_yukaltura' => 2017100600
+    'local_yukaltura' => 2017100700
 );

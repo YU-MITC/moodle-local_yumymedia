@@ -22,16 +22,13 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once('../../config.php');
+require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.php');
 require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/API/KalturaClient.php');
 
 global $USER, $SESSION, $DB;
 
-if (!defined('MOODLE_INTERNAL')) {
-    // It must be included from a Moodle page.
-    die('Direct access to this script is forbidden.');
-}
+defined('MOODLE_INTERNAL') || die;
 
 $entryid   = required_param('entryid', PARAM_TEXT);
 $page = required_param('page', PARAM_INT);
@@ -44,14 +41,15 @@ $header  = format_string($SITE->shortname).": $mymedia";
 $PAGE->set_url('/local/yumymedia/access_media.php');
 $PAGE->set_course($SITE);
 
+require_login();
+
 $PAGE->set_pagetype('yumymedia-index');
 $PAGE->set_pagelayout('frontpage');
 $PAGE->set_title($header);
 $PAGE->set_heading($header);
 $PAGE->add_body_class('mymedia-index');
-$PAGE->requires->js('/local/yukaltura/js/jquery-3.0.0.js', true);
-$PAGE->requires->js('/local/yumymedia/js/access_media.js', true);
 $PAGE->requires->css('/local/yumymedia/css/yumymedia.css');
+$PAGE->requires->js_call_amd('local_yumymedia/accessrestriction', 'init', array());
 
 $kaltura = new yukaltura_connection();
 $connection = $kaltura->get_connection(true, KALTURA_SESSION_LENGTH);

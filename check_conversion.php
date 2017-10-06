@@ -25,6 +25,13 @@
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.php');
 
+defined("MOODLE_INTERNAL") || die;
+
+$PAGE->set_url('/local/yumymedia/check_conversion.php');
+$PAGE->set_course($SITE);
+
+require_login();
+
 $entryid   = required_param('entryid', PARAM_TEXT);
 $height     = optional_param('height', 0, PARAM_INT);
 $width      = optional_param('width', 0, PARAM_INT);

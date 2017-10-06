@@ -26,14 +26,11 @@ require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.php');
 require_once('lib.php');
 
-if (!defined('MOODLE_INTERNAL')) {
-    // It must be included from a Moodle page.
-    die('Direct access to this script is forbidden.');
-}
+defined('MOODLE_INTERNAL') || die;
 
 header('Access-Control-Allow-Origin: *');
 
-global $SESSION, $USER, $COURSE;
+global $SESSION, $USER, $COURSE, $SITE;
 
 $page = optional_param('page', 0, PARAM_INT);
 $sort = optional_param('sort', 'recent', PARAM_TEXT);
@@ -47,13 +44,14 @@ $header  = format_string($SITE->shortname).": $mymedia";
 $PAGE->set_url('/local/yumymedia/yumymedia.php');
 $PAGE->set_course($SITE);
 
+require_login();
+
 $PAGE->set_pagetype('mymedia-index');
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title($header);
 $PAGE->set_heading($header);
 $PAGE->add_body_class('mymedia-index');
 
-$PAGE->requires->js('/local/yukaltura/js/jquery-3.0.0.js', true);
 $PAGE->requires->css('/local/yumymedia/css/yumymedia.css');
 
 // Connect to Kaltura.
@@ -203,10 +201,16 @@ if (local_yukaltura_get_mymedia_permission()) {
         $loadingmarkup = $renderer->create_loading_screen_markup();
         $uiconfid = local_yukaltura_get_player_uiconf('player_filter');
 
-        $PAGE->requires->js_init_call('M.local_yumymedia.init_config', array($mediadetails, $dialog, $conversionscript,
-                                                                           $savemediascript, $uiconfid,
-                                                                           $loadingmarkup, $editmeta
-                                                                          ), true, $jsmodule);
+        $PAGE->requires->js_init_call('M.local_yumymedia.init',
+                                      array($mediadetails,
+                                            $dialog,
+                                            $conversionscript,
+                                            $savemediascript,
+                                            $uiconfid,
+                                            $loadingmarkup,
+                                            $editmeta),
+                                      true,
+                                      $jsmodule);
 
         $connection->session->end();
     } catch (Exception $ex) {

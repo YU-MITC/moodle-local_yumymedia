@@ -24,6 +24,7 @@
 
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.php');
+
 $entryid = required_param('entryid', PARAM_TEXT);
 $confirm = required_param('confirm', PARAM_TEXT);
 $page = required_param('page', PARAM_INT);
@@ -38,12 +39,13 @@ $header  = format_string($SITE->shortname).": $mymedia";
 $PAGE->set_url('/local/yumymedia/delete_media.php');
 $PAGE->set_course($SITE);
 
+require_login();
+
 $PAGE->set_pagetype('mymedia-index');
 $PAGE->set_pagelayout('frontpage');
 $PAGE->set_title($header);
 $PAGE->set_heading($header);
 $PAGE->add_body_class('yumymedia-index');
-$PAGE->requires->js('/local/yukaltura/js/jquery-3.0.0.js', true);
 $PAGE->requires->css('/local/yumymedia/css/yumymedia.css');
 
 $kaltura = new yukaltura_connection();

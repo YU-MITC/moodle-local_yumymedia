@@ -24,10 +24,12 @@
 
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/config.php');
 
-if (!defined('MOODLE_INTERNAL')) {
-    // It must be included from a Moodle page.
-    die('Direct access to this script is forbidden.');
-}
+defined("MOODLE_INTERNAL") || die;
+
+$PAGE->set_url('/local/yumymedia/db/access.php');
+$PAGE->set_course($SITE);
+
+require_login();
 
 $capabilities = array(
 

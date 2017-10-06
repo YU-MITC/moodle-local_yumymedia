@@ -41,13 +41,15 @@ $header  = format_string($SITE->shortname).": Media Uploader";
 $PAGE->set_url('/local/yumymedia/simple_uploader.php');
 $PAGE->set_course($SITE);
 
+require_login();
+
 $PAGE->set_pagetype('mymedia-index');
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title($header);
 $PAGE->set_heading($header);
 $PAGE->add_body_class('mymedia-index');
-$PAGE->requires->js('/local/yukaltura/js/jquery-3.0.0.js', true);
 $PAGE->requires->css('/local/yumymedia/css/yumymedia.css');
+$PAGE->requires->js_call_amd('local_yumymedia/simpleuploader', 'init', array());
 
 $context = context_user::instance($USER->id);
 
@@ -80,8 +82,6 @@ if (!$connection) {  // When connection failed.
     $rootpath = $result['name'];
 
     $output = '';
-    $output .= '<script type="text/javascript" src="' . new moodle_url('/local/yumymedia/js/simple_uploader_2pass.js') . '">';
-    $output .= '</script>';
 
     if ($ks == null || empty($rootpath)) { // Session failed.
         $output .= get_string('session_failed', 'local_yumymedia');
@@ -98,13 +98,13 @@ if (!$connection) {  // When connection failed.
         }
 
         $attr = array('type' => 'button', 'name' => 'uploader_cancel', 'id' => 'uploader_cancel',
-                      'value' => 'Back', 'onclick' => 'handleCancelClick();');
+                      'value' => 'Back');
         $output .= html_writer::empty_tag('input', $attr);
     } else if ($control == null) {
         $output .= get_string('default_access_control_failed', 'local_yumymedia');
         $output .= html_writer::empty_tag('br');
         $attr = array('type' => 'button', 'name' => 'uploader_cancel', 'id' => 'uploader_cancel',
-                      'value' => 'Back', 'onclick' => 'handleCancelClick();');
+                      'value' => 'Back');
         $output .= html_writer::empty_tag('input', $attr);
     } else { // Session started.
 
@@ -131,7 +131,7 @@ if (!$connection) {  // When connection failed.
         $output .= html_writer::empty_tag('br', null);
 
         $attr = array('type' => 'file', 'size' => '40', 'id' => 'fileData', 'name' => 'fileData',
-                      'required' => 'true', 'onchange' => 'handleFileSelect(this.files)');
+                      'required' => 'true');
         $output .= html_writer::empty_tag('input', $attr);
 
         $output .= html_writer::empty_tag('br', null);
@@ -172,7 +172,7 @@ if (!$connection) {  // When connection failed.
         $output .= html_writer::end_tag('td');
         $output .= html_writer::start_tag('td');
         $attr = array('type' => 'text', 'name' => 'name', 'id' => 'name', 'size' => '30',
-                      'required' => 'true', 'onchange' => 'checkForm()');
+                      'required' => 'true');
         $output .= html_writer::empty_tag('input', $attr);
         $output .= html_writer::end_tag('td');
         $output .= html_writer::end_tag('tr');
@@ -189,7 +189,7 @@ if (!$connection) {  // When connection failed.
         $output .= html_writer::end_tag('td');
         $output .= html_writer::start_tag('td');
         $attr = array('type' => 'text', 'name' => 'tags', 'id' => 'tags', 'size' => '30',
-                      'required' => 'true', 'onchange' => 'checkForm()');
+                      'required' => 'true');
         $output .= html_writer::empty_tag('input', $attr);
         $output .= html_writer::end_tag('td');
         $output .= html_writer::end_tag('tr');
@@ -228,13 +228,13 @@ if (!$connection) {  // When connection failed.
         $output .= html_writer::empty_tag('input', $attr);
 
         $attr = array('type' => 'button', 'name' => 'entry_submit', 'id' => 'entry_submit',
-                      'value' => 'Upload', 'onclick' => 'handleSubmitClick()');
+                      'value' => 'Upload');
         $output .= html_writer::start_tag('input', $attr);
 
         $output .= '&nbsp;&nbsp;';
 
         $attr = array('type' => 'reset', 'name' => 'reset', 'id' => 'entry_reset',
-                      'value' => 'Reset', 'onclick' => 'handleResetClick()');
+                      'value' => 'Reset');
         $output .= html_writer::empty_tag('input', $attr);
 
         $output .= html_writer::end_tag('fieldset');
@@ -245,7 +245,7 @@ if (!$connection) {  // When connection failed.
         $output .= html_writer::empty_tag('br', null);
 
         $attr = array('type' => 'button', 'name' => 'uploader_cancel', 'id' => 'uploader_cancel',
-                      'value' => 'Cancel', 'onclick' => 'handleCancelClick()');
+                      'value' => 'Cancel');
         $output .= html_writer::empty_tag('input', $attr);
 
         $output .= html_writer::end_tag('div');

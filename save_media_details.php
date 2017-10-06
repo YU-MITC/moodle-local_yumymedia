@@ -30,7 +30,13 @@ $name       = required_param('name', PARAM_TEXT);
 $tags       = required_param('tags', PARAM_TEXT);
 $desc       = required_param('desc', PARAM_TEXT);
 
+defined("MOODLE_INTERNAL") || die;
+
 global $USER;
+
+$PAGE->set_url('/local/yumymedia/save_media_details.php');
+
+require_login();
 
 $context = context_user::instance($USER->id);
 require_capability('local/yumymedia:view', $context, $USER);

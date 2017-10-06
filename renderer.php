@@ -22,15 +22,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
+defined('MOODLE_INTERNAL') || die;
+
 require_once(dirname(dirname(dirname(__FILE__))) . '/lib/tablelib.php');
 require_once(dirname(dirname(dirname(__FILE__))) . '/local/yumymedia/download_media.php');
 require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.php');
-
-if (!defined('MOODLE_INTERNAL')) {
-    // It must be included from a Moodle page.
-    die('Direct access to this script is forbidden.');
-}
 
 /**
  * Renderer class of local_yumymedia
@@ -1039,9 +1035,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $output .= '&nbsp;&nbsp;';
 
         $attr = array('class' => 'code_type_select',
-                      'id' => 'code_type_select',
-                      'onChange' => 'printHtmlCode()'
-                     );
+                      'id' => 'code_type_select');
 
         $array = array(0 => get_string('label_embed_code', 'local_yumymedia'),
                        1 => get_string('label_page_url', 'local_yumymedia')
@@ -1102,8 +1096,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $array = array($defaultcontrol->id => get_string('default_access_control', 'local_yumymedia'),
                        $internalcontrol->id => get_string('internal_access_control', 'local_yumymedia'));
         $attr = array('class' => 'access_control_select',
-                      'id' => 'access_control_select',
-                      'onChange' => 'selectedControl()');
+                      'id' => 'access_control_select');
 
         $output .= html_writer::select($array, 'control_id', $selected, false, $attr);
 
@@ -1114,8 +1107,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
                       'id' => 'access_media_save',
                       'name' => 'access_media_save',
                       'value' => 'Save',
-                      'disabled' => 'disabled',
-                      'onclick' => 'updateAccessControlId()');
+                      'disabled' => 'disabled');
 
         $output .= html_writer::empty_tag('input', $attr);
 
@@ -1127,17 +1119,17 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function outputs HTML markup for back button in access setting page.
      *
-     * @param string $url - URL of "My Media".
+     * @param string $mymediaurl - URL of "My Media".
      * @return string - HTML markup of back button.
      */
-    public function create_access_back_markup($url) {
+    public function create_access_back_markup($mymediaurl) {
         $output = '';
 
         $attr = array('type' => 'button',
                       'id' => 'access_media_back',
                       'name' => 'access_media_back',
                       'value' => 'Back',
-                      'onclick' => "location.href='$url'");
+                      'onclick' => 'location.href=\'' . $mymediaurl . '\'');
 
         $output .= html_writer::empty_tag('input', $attr);
 

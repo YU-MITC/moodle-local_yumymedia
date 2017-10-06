@@ -22,15 +22,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
-require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.php');
-
-if (!defined('MOODLE_INTERNAL')) {
-    // It must be included from a Moodle page.
-    die('Direct access to this script is forbidden.');
-}
+defined('MOODLE_INTERNAL') || die;
 
 define('MYMEDIA_ITEMS_PER_PAGE', '9');
+
+require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.php');
 
 /**
  * This function adds my media links to the navigation block.

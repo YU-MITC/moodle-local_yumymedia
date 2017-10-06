@@ -111,8 +111,6 @@ if (!$connection) {  // When connection failed.
         // Set category of media.
         $categorypath = $rootpath . '>' . $USER->username;
 
-        $output .= '<script type="text/javascript" src="' . new moodle_url('/local/yukaltura/js/encoding.js') . '"></script>';
-
         $attr = array('id' => 'upload_info', 'name' => 'upload_info');
         $output .= html_writer::start_tag('div', $attr);
 

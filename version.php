@@ -29,7 +29,7 @@ if (!defined('MOODLE_INTERNAL')) {
 
 $plugin->version = 2017100700;
 $plugin->component = 'local_yumymedia';
-$plugin->release = 'YU Kaltura Media Gallery 1.0.7';
+$plugin->release = 'YU Kaltura Media Gallery 1.0.5';
 $plugin->requires = 2015051100;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = array(

@@ -658,7 +658,6 @@ define(['jquery'], function($) {
              * @param {file[]} files - array of file object.
              */
             function handleFileSelect() {
-                var files = $("#fileData");
 
                 // There exists selected file.
                 if ($("#fileData")) {
@@ -687,7 +686,7 @@ define(['jquery'], function($) {
                         $("#tags").val("");
                         $("#description").val("");
                         $("#type").val("");
-                        files = null;
+                        $("#fileData").val("");
                     } else {  // When any warning do not occures.
                         var fileInfo = "";
                         var filename = file.name;

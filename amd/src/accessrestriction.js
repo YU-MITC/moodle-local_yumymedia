@@ -35,9 +35,6 @@ define(['jquery'], function($) {
          */
         init: function() {
 
-            var modalX = 0;
-            var modalY = 0;
-
             var STATUS = {
                 ENTRY_ERROR_IMPORTING  : -2,
                 ENTRY_ERROR_CONVERTING : -1,
@@ -81,11 +78,6 @@ define(['jquery'], function($) {
                     return false;
                 }
 
-                // Record current scroll position.
-                var dElm = document.documentElement;
-                var dBody = document.body;
-                modalX = dElm.scrollLeft || dBody.scrollLeft; // Get x value of current position.
-                modalY = dElm.scrollTop || dBody.scrollTop; // Get y valueion of current position.
                 // Create modal window and a content area.
                 $("body").append("<div id=\"modal_window\"></div>");
                 $("#modal_window").fadeIn("slow");

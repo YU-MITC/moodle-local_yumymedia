@@ -104,7 +104,7 @@ M.local_yumymedia = {
         });
 
         var checkConversionStatus = {
-            complete: function checkConversionStatus(id, o) {
+            complete: function check_conversion_status(id, o) {
 
                 // If the response text is empty then the media must still be converting.
                 if ('' == o.responseText) {
@@ -131,8 +131,7 @@ M.local_yumymedia = {
                         metadataDesc.set('value', data.description);
 
                         if (undefined !== data.script) {
-                            // This statement is replacement of "eval(data.script);".
-                            Function.call(data.script)();
+                            eval(data.script);
                         }
 
                         // Disable edit tab if the user doesn't have the capability.
@@ -223,7 +222,9 @@ M.local_yumymedia = {
 
         // Set configuration object for saving asynchronous call.
         var saveCfg = {
-            on: { complete: saveMediaInformation.complete},
+            on: {
+                complete: saveMediaInformation.complete
+            },
             context: saveMediaInformation
         };
 
@@ -250,9 +251,17 @@ M.local_yumymedia = {
         var mediaList = Y.one('#mymedia_medias');
         // Create event delegation.
         mediaList.delegate('click', function(e) {
-            if ('mymedia media delete' == this.getAttribute('class') ||
-                'mymedia media access' == this.getAttribute('class') ||
-                'mymedia media download' == this.getAttribute('class')) {
+            if ('mymedia media delete' == this.getAttribute('class')) {
+                // Do nothing.
+                return '';
+            }
+
+            if ('mymedia media access' == this.getAttribute('class')) {
+                // Do nothing.
+                return '';
+            }
+
+            if ('mymedia media download' == this.getAttribute('class')) {
                 // Do nothing.
                 return '';
             }
@@ -289,8 +298,6 @@ M.local_yumymedia = {
             } else if (-1 != buttonClass.search("embed")) {
                 tabView.selectChild(2);
             }
-
-            return '';
 
         }, 'a');
 

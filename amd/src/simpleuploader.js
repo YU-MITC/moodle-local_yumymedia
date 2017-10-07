@@ -121,7 +121,7 @@ define(['jquery'], function($) {
                 return "N/A";
             }
 
-            /*i*
+            /**
              * This function checks metadata.
              * @access public
              */

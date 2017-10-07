@@ -24,7 +24,7 @@
 M.local_yumymedia = {
 
     Y: null,
-    transaction : {},
+    transaction: {},
 
     init: function(Y, panelMarkup, dialog, conversionScript, saveMediaScript,
                     uiconfid, loadingPanel, editMeta) {
@@ -104,7 +104,7 @@ M.local_yumymedia = {
         });
 
         var checkConversionStatus = {
-            complete: function check_conversion_status(id, o) {
+            complete: function checkConversionStatus(id, o) {
 
                 // If the response text is empty then the media must still be converting.
                 if ('' == o.responseText) {
@@ -131,7 +131,8 @@ M.local_yumymedia = {
                         metadataDesc.set('value', data.description);
 
                         if (undefined !== data.script) {
-                            eval(data.script);
+                            // This statement is replacement of "eval(data.script);".
+                            Function.call(data.script)();
                         }
 
                         // Disable edit tab if the user doesn't have the capability.
@@ -204,7 +205,10 @@ M.local_yumymedia = {
                 // Add okay button to dialog.
                 var button = [{
                     text: M.util.get_string("continue", "local_yumymedia"),
-                    handler: function closeDialog() {detailsPanel.hide(); this.hide();},
+                    handler: function closeDialog() {
+                        detailsPanel.hide();
+                        this.hide();
+                    },
                     isDefault: true}];
 
                 dialog.cfg.setProperty("buttons", button);
@@ -246,17 +250,9 @@ M.local_yumymedia = {
         var mediaList = Y.one('#mymedia_medias');
         // Create event delegation.
         mediaList.delegate('click', function(e) {
-            if ('mymedia media delete' == this.getAttribute('class')) {
-                // Do nothing.
-                return '';
-            }
-
-            if ('mymedia media access' == this.getAttribute('class')) {
-                // Do nothing.
-                return '';
-            }
-
-            if ('mymedia media download' == this.getAttribute('class')) {
+            if ('mymedia media delete' == this.getAttribute('class') ||
+                'mymedia media access' == this.getAttribute('class') ||
+                'mymedia media download' == this.getAttribute('class')) {
                 // Do nothing.
                 return '';
             }
@@ -293,6 +289,8 @@ M.local_yumymedia = {
             } else if (-1 != buttonClass.search("embed")) {
                 tabView.selectChild(2);
             }
+
+            return '';
 
         }, 'a');
 

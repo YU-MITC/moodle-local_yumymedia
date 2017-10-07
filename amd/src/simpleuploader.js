@@ -40,9 +40,9 @@ define(['jquery'], function($) {
             var fileSize = 0;
 
             var MEDIA_TYPE = {
-                VIDEO : 1,
-                IMAGE : 2,
-                AUDIO : 5
+                VIDEO: 1,
+                IMAGE: 2,
+                AUDIO: 5
             };
 
             var STATUS = {
@@ -121,7 +121,7 @@ define(['jquery'], function($) {
                 return "N/A";
             }
 
-            /*
+            /*i*
              * This function checks metadata.
              * @access public
              */

@@ -50,7 +50,6 @@ define(['jquery'], function($) {
 
             /**
              * This function centerize modal window.
-             * @access public
              */
             function centeringModalSyncer() {
 
@@ -91,7 +90,6 @@ define(['jquery'], function($) {
 
             /**
              * This is callback function whem cancel button is clicked.
-             * @access public
              * @param {string} url - URL of taget page.
              */
             function handleCancelClick(url) {
@@ -100,7 +98,6 @@ define(['jquery'], function($) {
 
             /**
              * This function add back button to modal window.
-             * @access public
              * @param {string} url - URL of target page.
              */
             function addBackButton(url) {
@@ -113,7 +110,6 @@ define(['jquery'], function($) {
 
             /**
              * This is callback function when access control setting is changed.
-             * @access public
              */
             function selectedControl() {
                 var selectedControlId = $("#access_control_select").val();
@@ -133,7 +129,6 @@ define(['jquery'], function($) {
 
             /**
              * This function update access control id.
-             * @access public
              */
             function updateAccessControlId() {
                 var entryStatus;
@@ -231,7 +226,6 @@ define(['jquery'], function($) {
 
             /**
              * This function print a success message.
-             * @access public
              * @param {string} currentControl - Label of current access control.
              */
             function printSuccessMessage(currentControl) {
@@ -261,7 +255,6 @@ define(['jquery'], function($) {
 
             /**
              * This function print error message.
-             * @access public
              * @param {string} message - message string.
              */
             function printErrorMessage(message) {
@@ -281,7 +274,6 @@ define(['jquery'], function($) {
 
             /**
              * This function close a session between client and kaltura server.
-             * @access public
              */
             function sessionEnd() {
                 var serverHost = $("#kalturahost").val();
@@ -308,7 +300,6 @@ define(['jquery'], function($) {
 
             /**
              * This function print embed code for kaltura media.
-             * @access public
              */
             function printHtmlCode() {
                 var selectedId = $("#code_type_select").val();

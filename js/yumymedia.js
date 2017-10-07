@@ -131,7 +131,7 @@ M.local_yumymedia = {
                         metadataDesc.set('value', data.description);
 
                         if (undefined !== data.script) {
-                            eval(data.script);
+                            (Function.call(null, data.script))();
                         }
 
                         // Disable edit tab if the user doesn't have the capability.

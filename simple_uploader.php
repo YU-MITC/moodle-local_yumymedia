@@ -25,25 +25,22 @@
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.php');
 
-if (!defined('MOODLE_INTERNAL')) {
-    // It must be included from a Moodle page.
-    die('Direct access to this script is forbidden.');
-}
+defined('MOODLE_INTERNAL') || die;
 
-header('Access-Control-Allow-Origin:	*');
+header('Access-Control-Allow-Origin: *');
 
 global $USER, $SESSION;
 
 $mymedia = get_string('heading_mymedia', 'local_yumymedia');
 $PAGE->set_context(context_system::instance());
-$header  = format_string($SITE->shortname).": Media Uploader";
+$header  = format_string($SITE->shortname). ": " . get_string('uploader_hdr', 'local_yumymedia');
 
 $PAGE->set_url('/local/yumymedia/simple_uploader.php');
 $PAGE->set_course($SITE);
 
 require_login();
 
-$PAGE->set_pagetype('mymedia-index');
+$PAGE->set_pagetype('simple-uploader');
 $PAGE->set_pagelayout('standard');
 $PAGE->set_title($header);
 $PAGE->set_heading($header);
@@ -88,23 +85,23 @@ if (!$connection) {  // When connection failed.
         $output .= html_writer::empty_tag('br');
 
         if (empty($rootpath)) {
-            $output .= '(Cannot set root category of content.)';
+            $output .= '(' . get_string('category_failed', 'local_yumymedia') . ')';
             $output .= html_writer::empty_tag('br');
         }
 
         if ($ks == null) {
-            $output .= '(Cannot set kaltura session.)';
+            $output .= '(' . get_string('ks_failed', 'local_yumymedia') . ')';
             $output .= html_writer::empty_tag('br');
         }
 
         $attr = array('type' => 'button', 'name' => 'uploader_cancel', 'id' => 'uploader_cancel',
-                      'value' => 'Back');
+                      'value' => get_string('back_label', 'local_yumymedia'));
         $output .= html_writer::empty_tag('input', $attr);
     } else if ($control == null) {
         $output .= get_string('default_access_control_failed', 'local_yumymedia');
         $output .= html_writer::empty_tag('br');
         $attr = array('type' => 'button', 'name' => 'uploader_cancel', 'id' => 'uploader_cancel',
-                      'value' => 'Back');
+                      'value' => get_string('back_label', 'local_yumymedia'));
         $output .= html_writer::empty_tag('input', $attr);
     } else { // Session started.
 
@@ -115,7 +112,7 @@ if (!$connection) {  // When connection failed.
         $output .= html_writer::start_tag('div', $attr);
 
         $output .= html_writer::start_tag('h2'. null);
-        $output .= 'File Upload Form';
+        $output .= get_string('upload_from_hdr', 'local_yumymedia');
         $output .= html_writer::end_tag('h2');
 
         $attr = array('method' => 'post', 'name' => 'entry_form', 'enctype' => 'multipart/form-data',
@@ -124,7 +121,7 @@ if (!$connection) {  // When connection failed.
 
         $attr = array('id' => 'entry_steps');
         $output .= html_writer::start_tag('div', $attr);
-        $output .= '1. Please slect a file.';
+        $output .= '1. ' . get_string('select_file_exp', 'local_yumymedia');
         $output .= html_writer::end_tag('div');
         $output .= html_writer::empty_tag('br', null);
 
@@ -142,12 +139,12 @@ if (!$connection) {  // When connection failed.
         $attr = array('id' => 'entry_steps');
 
         $output .= html_writer::start_tag('div', $attr);
-        $output .= '2. Please input metadata (atrribute information), and submit the file.';
+        $output .= '2. ' . get_string('fill_form_exp', 'local_yumymedia'); 
         $output .= html_writer::empty_tag('br', null);
         $output .= '(';
         $attr = array('id' => 'entry_warning');
         $output .= html_writer::start_tag('span', $attr);
-        $output .= '* : Required field';
+        $output .= '* : ' . get_string('required_field', 'local_yumymedia');
         $output .= html_writer::end_tag('span');
         $output .= ')';
         $output .= html_writer::end_tag('div');
@@ -161,7 +158,7 @@ if (!$connection) {  // When connection failed.
         $output .= html_writer::start_tag('tr');
         $attr = array('id' => 'metadata_fields', 'valign' => 'top');
         $output .= html_writer::start_tag('td');
-        $output .= 'Name&nbsp;';
+        $output .= get_string('name_header', 'local_yumymedia') . '&nbsp;';
         $attr = array('id' => 'entry_warning');
         $output .= html_writer::start_tag('span', $attr);
         $output .= '*';
@@ -178,7 +175,7 @@ if (!$connection) {  // When connection failed.
         $output .= html_writer::start_tag('tr', null);
         $attr = array('id' => 'metadata_fields', 'valign' => 'top');
         $output .= html_writer::start_tag('td', $attr);
-        $output .= 'Tags&nbsp;';
+        $output .= get_string('tags_header', 'local_yumymedia') . '&nbsp;';
         $attr = array('id' => 'entry_warning');
         $output .= html_writer::start_tag('span', $attr);
         $output .= '*';
@@ -195,7 +192,7 @@ if (!$connection) {  // When connection failed.
         $output .= html_writer::start_tag('tr', null);
         $attr = array('id' => 'metadata_fields');
         $output .= html_writer::start_tag('td', $attr);
-        $output .= 'Description:';
+        $output .= get_string('desc_header', 'local_yumymedia') . ':';
         $output .= html_writer::end_tag('td');
         $output .= html_writer::start_tag('td', null);
         $attr = array('name' => 'description', 'id' => 'description',
@@ -226,13 +223,13 @@ if (!$connection) {  // When connection failed.
         $output .= html_writer::empty_tag('input', $attr);
 
         $attr = array('type' => 'button', 'name' => 'entry_submit', 'id' => 'entry_submit',
-                      'value' => 'Upload');
+                      'value' => get_string('upload_label', 'local_yumymedia'));
         $output .= html_writer::start_tag('input', $attr);
 
         $output .= '&nbsp;&nbsp;';
 
         $attr = array('type' => 'reset', 'name' => 'reset', 'id' => 'entry_reset',
-                      'value' => 'Reset');
+                      'value' => get_string('reset_label', 'local_yumymedia'));
         $output .= html_writer::empty_tag('input', $attr);
 
         $output .= html_writer::end_tag('fieldset');
@@ -243,7 +240,7 @@ if (!$connection) {  // When connection failed.
         $output .= html_writer::empty_tag('br', null);
 
         $attr = array('type' => 'button', 'name' => 'uploader_cancel', 'id' => 'uploader_cancel',
-                      'value' => 'Cancel');
+                      'value' => get_string('cancel_label', 'local_yumymedia'));
         $output .= html_writer::empty_tag('input', $attr);
 
         $output .= html_writer::end_tag('div');
@@ -251,7 +248,7 @@ if (!$connection) {  // When connection failed.
         $output .= html_writer::start_tag('div', $attr);
         $attr = array('align' => 'center');
         $output .= html_writer::start_tag('h3', $attr);
-        $output .= 'Uploading';
+        $output .= get_string('uploading_header', 'local_yumymedia');
         $output .= html_writer::end_tag('h3');
         $output .= html_writer::end_tag('div');
     }

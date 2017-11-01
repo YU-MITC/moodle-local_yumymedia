@@ -32,17 +32,17 @@ $PAGE->set_course($SITE);
 
 require_login();
 
-$entryid   = required_param('entryid', PARAM_TEXT);
-$height     = optional_param('height', 0, PARAM_INT);
-$width      = optional_param('width', 0, PARAM_INT);
-$uiconfid   = optional_param('uiconf_id', 0, PARAM_INT);
-$title      = optional_param('media_title', '', PARAM_TEXT);
-$widget     = optional_param('widget', 'kdp', PARAM_TEXT);
-$courseid   = required_param('courseid', PARAM_INT);
+$entryid = required_param('entryid', PARAM_TEXT);
+$height = optional_param('height', 0, PARAM_INT);
+$width = optional_param('width', 0, PARAM_INT);
+$uiconfid = optional_param('uiconf_id', 0, PARAM_INT);
+$title = optional_param('media_title', '', PARAM_TEXT);
+$widget = optional_param('widget', 'kdp', PARAM_TEXT);
+$courseid = required_param('courseid', PARAM_INT);
 
-$thumbnail    = '';
-$data         = '';
-$entryobj    = null;
+$thumbnail = '';
+$data = '';
+$entryobj = null;
 
 // When request is for a kaltura dynamic player get the entry object disregarding the entry object status.
 if (0 == strcmp($widget, 'kdp')) {

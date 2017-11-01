@@ -63,14 +63,6 @@ if (!$connection) {
     print_error('conn_failed', 'local_yukaltura', $url);
 }
 
-$partnerid = local_yukaltura_get_partner_id();
-
-// Include javascript for screen recording widget.
-$uiconfid  = local_yukaltura_get_player_uiconf('yumymedia_screen_recorder');
-$host = local_yukaltura_get_host();
-$url = new moodle_url("{$host}/p/{$partnerid}/sp/{$partnerid}/ksr/uiconfId/{$uiconfid}");
-$PAGE->requires->js($url, true);
-
 $courseid = $COURSE->id;
 
 if (local_yukaltura_has_mobile_flavor_enabled() && local_yukaltura_get_enable_html5()) {

@@ -89,12 +89,30 @@ $string['delete_media_failed'] = 'Failed to delete media';
 $string['delete_media_failed_not_owner'] = 'You cannot delete a media you do not own.<br>If you own this media, please contact the site administrator.';
 $string['delete_media_not_exist'] = 'This media no longer exists.';
 
-// Video Upload.
-$string['session_failed'] = 'Unable to start new kaltura session for media uploading.<br>Please contact your site administrator.';
-$string['upload'] = 'Upload media or record from webcam';
+// Media Upload.
 $string['simple_upload'] = 'Upload your media';
+$string['session_failed'] = 'Unable to start new kaltura session for media uploading.<br>Please contact your site administrator.';
+$string['category_failed'] = 'Cannot set root category of content.';
+$string['ks_failed'] = 'Cannot set kaltura session.';
+$string['uploader_hdr'] = 'Media Uploader';
+$string['upload_from_hdr'] = 'Media Upload Form';
+$string['required_field'] = 'Required field';
+$string['name_header'] = 'Name';
+$string['tags_header'] = 'Tags';
+$string['desc_header'] = 'Description';
+$string['select_file_exp'] = 'Please select a media file.';
+$string['fill_form_exp'] = 'Please input metadata (attribute information), and submit the file.';
 $string['upload_success_hdr'] = 'Upload Success';
 $string['upload_success'] = 'Media uploaded successfully';
+$string['uploading_header'] = 'Uploading';
+
+// Buttons
+$string['ok_label'] = 'OK';
+$string['save_label'] = 'Save';
+$string['upload_label'] = 'Upload';
+$string['cancel_label'] = 'Cancal';
+$string['reset_label'] = 'Reset';
+$string['back_label'] = 'Back';
 
 // Search.
 $string['search'] = 'Search';

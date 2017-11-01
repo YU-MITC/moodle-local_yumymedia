@@ -25,10 +25,10 @@
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.php');
 
-$entryid   = required_param('entryid', PARAM_TEXT);
-$name       = required_param('name', PARAM_TEXT);
-$tags       = required_param('tags', PARAM_TEXT);
-$desc       = required_param('desc', PARAM_TEXT);
+$entryid = required_param('entryid', PARAM_TEXT);
+$name = required_param('name', PARAM_TEXT);
+$tags = required_param('tags', PARAM_TEXT);
+$desc = required_param('desc', PARAM_TEXT);
 
 defined("MOODLE_INTERNAL") || die;
 
@@ -44,12 +44,14 @@ require_capability('local/yumymedia:view', $context, $USER);
 if (empty($entryid)) {
     $errormessage = 'Update media details - media entry id empty, entry id - ' . $entryid;
     print_error($errormessage, 'local_yumymedia');
-    echo 'n 1';
+    echo 'n'
     die();
 }
 
 if (empty($name)) {
-    echo 'n 2';
+    $errormessage = 'Name is empty';
+    print_error($errormessage, 'local_yumymedia');
+    echo 'n'
     die();
 }
 
@@ -63,7 +65,6 @@ try {
     if (!$clientobj) {
         $errormessage = 'Connection failed when saving';
         print_error($errormessage, 'local_yumymedia');
-        echo 'n 3';
     }
 
     // Start a multi request.
@@ -97,7 +98,7 @@ try {
     if (!is_array($result)) {
         $errormessage = 'Connection failed when saving';
         print_error($errormessage, 'local_yumymedia');
-        echo 'n 5';
+        echo 'n'
         die();
     }
 
@@ -105,7 +106,7 @@ try {
     if (!array_key_exists(0, $result) || !$result[0] instanceof KalturaMediaEntry) {
         $errormessage = 'view - media->get,' . $result[0]['mesasge'];
         print_error($errormessage, 'local_yumymedia');
-        echo 'n 6';
+        echo 'n'
         die();
     }
 
@@ -113,14 +114,14 @@ try {
     if (0 != strcmp($result[0]->userId, $USER->username)) {
         $errormessage = 'update - media details, User is not the owner of media';
         print_error($errormessage, 'local_yumymedia');
-        echo 'n 7';
+        echo 'n'
         die();
     }
 
     if (!array_key_exists(1, $result) || !$result[1] instanceof KalturaMediaEntry) {
         $errormessage = 'update - media->update,' . $result[1]['message'];
         prnt_error($errormessage, 'local_yumymedia');
-        echo 'n 8';
+        echo 'n'
         die();
     }
 

@@ -139,7 +139,7 @@ if (!$connection) {  // When connection failed.
         $attr = array('id' => 'entry_steps');
 
         $output .= html_writer::start_tag('div', $attr);
-        $output .= '2. ' . get_string('fill_form_exp', 'local_yumymedia'); 
+        $output .= '2. ' . get_string('fill_form_exp', 'local_yumymedia');
         $output .= html_writer::empty_tag('br', null);
         $output .= '(';
         $attr = array('id' => 'entry_warning');

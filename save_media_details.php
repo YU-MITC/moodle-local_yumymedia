@@ -44,14 +44,14 @@ require_capability('local/yumymedia:view', $context, $USER);
 if (empty($entryid)) {
     $errormessage = 'Update media details - media entry id empty, entry id - ' . $entryid;
     print_error($errormessage, 'local_yumymedia');
-    echo 'n'
+    echo 'n';
     die();
 }
 
 if (empty($name)) {
     $errormessage = 'Name is empty';
     print_error($errormessage, 'local_yumymedia');
-    echo 'n'
+    echo 'n';
     die();
 }
 
@@ -98,7 +98,7 @@ try {
     if (!is_array($result)) {
         $errormessage = 'Connection failed when saving';
         print_error($errormessage, 'local_yumymedia');
-        echo 'n'
+        echo 'n';
         die();
     }
 
@@ -106,7 +106,7 @@ try {
     if (!array_key_exists(0, $result) || !$result[0] instanceof KalturaMediaEntry) {
         $errormessage = 'view - media->get,' . $result[0]['mesasge'];
         print_error($errormessage, 'local_yumymedia');
-        echo 'n'
+        echo 'n';
         die();
     }
 
@@ -114,14 +114,14 @@ try {
     if (0 != strcmp($result[0]->userId, $USER->username)) {
         $errormessage = 'update - media details, User is not the owner of media';
         print_error($errormessage, 'local_yumymedia');
-        echo 'n'
+        echo 'n';
         die();
     }
 
     if (!array_key_exists(1, $result) || !$result[1] instanceof KalturaMediaEntry) {
         $errormessage = 'update - media->update,' . $result[1]['message'];
         prnt_error($errormessage, 'local_yumymedia');
-        echo 'n'
+        echo 'n';
         die();
     }
 

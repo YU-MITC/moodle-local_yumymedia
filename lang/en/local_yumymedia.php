@@ -106,7 +106,7 @@ $string['upload_success_hdr'] = 'Upload Success';
 $string['upload_success'] = 'Media uploaded successfully';
 $string['uploading_header'] = 'Uploading';
 
-// Buttons
+// Buttons.
 $string['ok_label'] = 'OK';
 $string['save_label'] = 'Save';
 $string['upload_label'] = 'Upload';

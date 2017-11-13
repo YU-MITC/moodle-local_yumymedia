@@ -26,12 +26,6 @@ require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/config.php');
 
 defined("MOODLE_INTERNAL") || die;
 
-global $PAGE;
-
-$PAGE->set_url('/local/yumymedia/db/access.php');
-
-require_login();
-
 $capabilities = array(
 
     'local/yumymedia:view' => array(

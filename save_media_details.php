@@ -32,6 +32,11 @@ $desc = required_param('desc', PARAM_TEXT);
 
 defined('MOODLE_INTERNAL') || die();
 
+$PAGE->set_url('/local/yumymedia/save_media_details.php');
+$PAGE->set_course($SITE);
+
+require_login();
+
 global $USER;
 
 $context = context_user::instance($USER->id);

@@ -27,6 +27,11 @@ require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.ph
 
 defined('MOODLE_INTERNAL') || die();
 
+$PAGE->set_url('/local/yumymedia/download_media.php');
+$PAGE->set_course($SITE);
+
+require_login();
+
 /**
  * This function retrieve source download URL of Kaltura Media entry.
  * @param object $connection - Kaltura Connection object.

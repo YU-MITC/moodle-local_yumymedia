@@ -49,9 +49,8 @@ define(['jquery'], function($) {
             var blobUrl = null;
             var recorder =  null;
             var constraints = null;
-            var recordFlag = false;
 
-            var createObjectURL 
+            var createObjectURL
                 = window.URL && window.URL.createObjectURL
                     ? function(file) { return window.URL.createObjectURL(file); }
                     : window.webkitURL && window.webkitURL.createObjectURL
@@ -160,10 +159,9 @@ define(['jquery'], function($) {
                         window.alert("Wrong file size.");
                     }
                     checkForm();
-                    
+
                 };
                 recorder.stop();
-                recordFlag = true;
 
                 $("#leftspan").css("display", "none");
                 $("#rightspan").css("display", "inline");
@@ -211,7 +209,6 @@ define(['jquery'], function($) {
                     return;
                 }
 
-                recordFlag = false;
                 setPreviewPlayer(null);
 
                 if (blobUrl !== null) {

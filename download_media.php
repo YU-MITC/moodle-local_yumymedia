@@ -27,8 +27,9 @@ require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.ph
 
 defined('MOODLE_INTERNAL') || die();
 
+global $PAGE;
+
 $PAGE->set_url('/local/yumymedia/download_media.php');
-$PAGE->set_course($SITE);
 
 require_login();
 

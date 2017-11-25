@@ -26,8 +26,6 @@ defined('MOODLE_INTERNAL') || die();
 
 define('MYMEDIA_ITEMS_PER_PAGE', '9');
 
-require_login();
-
 require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.php');
 
 /**

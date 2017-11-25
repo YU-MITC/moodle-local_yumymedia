@@ -91,16 +91,20 @@ $string['delete_media_not_exist'] = 'This media no longer exists.';
 
 // Media Upload.
 $string['simple_upload'] = 'Upload your media';
+$string['webcam_upload'] = 'Upload from webcamera';
 $string['session_failed'] = 'Unable to start new kaltura session for media uploading.<br>Please contact your site administrator.';
 $string['category_failed'] = 'Cannot set root category of content.';
 $string['ks_failed'] = 'Cannot set kaltura session.';
 $string['uploader_hdr'] = 'Media Uploader';
-$string['upload_from_hdr'] = 'Media Upload Form';
+$string['webcam_hdr'] = 'Webcam Uploader';
+$string['upload_form_hdr'] = 'Media Upload Form';
+$string['webcam_form_hdr'] = 'Webcamera Recording Form';
 $string['required_field'] = 'Required field';
 $string['name_header'] = 'Name';
 $string['tags_header'] = 'Tags';
 $string['desc_header'] = 'Description';
 $string['select_file_exp'] = 'Please select a media file.';
+$string['webcam_recording_exp'] = 'Please recording a movie.';
 $string['fill_form_exp'] = 'Please input metadata (attribute information), and submit the file.';
 $string['upload_success_hdr'] = 'Upload Success';
 $string['upload_success'] = 'Media uploaded successfully';
@@ -113,6 +117,7 @@ $string['upload_label'] = 'Upload';
 $string['cancel_label'] = 'Cancal';
 $string['reset_label'] = 'Reset';
 $string['back_label'] = 'Back';
+$string['okdelete_label'] = 'OK, Delete';
 
 // Search.
 $string['search'] = 'Search';
@@ -122,7 +127,8 @@ $string['search_text_tooltip'] = 'Enter media name or tags';
 // Trouble.
 $string['problem_viewing'] = 'There is a problem displaying the page.  Please try again or contact your site administrator';
 $string['no_medias'] = 'No media found';
-$string['permission_disable'] = 'You don\'t have permission to use kaltura media.';
+$string['permission_disable'] = 'You don\'t have permission to use kaltura my-media.';
+$string['webcam_disable'] = 'You don\'t have permission to use webcamera.';
 
 // Sorting.
 $string['sortby'] = 'Sort by';

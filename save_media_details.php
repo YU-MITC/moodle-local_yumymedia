@@ -30,7 +30,7 @@ $name = required_param('name', PARAM_TEXT);
 $tags = required_param('tags', PARAM_TEXT);
 $desc = required_param('desc', PARAM_TEXT);
 
-defined("MOODLE_INTERNAL") || die;
+defined('MOODLE_INTERNAL') || die();
 
 global $USER;
 

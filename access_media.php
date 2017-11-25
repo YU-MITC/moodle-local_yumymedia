@@ -28,7 +28,7 @@ require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/API/Kaltura
 
 global $USER, $SESSION, $DB;
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
 $entryid   = required_param('entryid', PARAM_TEXT);
 $page = required_param('page', PARAM_INT);

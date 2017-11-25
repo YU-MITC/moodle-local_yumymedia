@@ -26,7 +26,7 @@ require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.php');
 require_once('lib.php');
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
 header('Access-Control-Allow-Origin: *');
 

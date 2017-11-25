@@ -1481,7 +1481,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $attr = array('id' => 'leftspan', 'name' => 'leftspan');
         $output .= html_writer::start_tag('div', $attr);
         $attr = array('src' => $recurl,
-                      'width'=>'64',
+                      'width' => '64',
                       'height' => '64',
                       'alt' => 'recstop',
                       'name' => 'recstop',
@@ -1495,7 +1495,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $attr = array('id' => 'rightspan', 'name' => 'rightspan');
         $output .= html_writer::start_tag('div', $attr);
         $attr = array('src' => $deleteurl,
-                      'width'=>'64',
+                      'width' => '64',
                       'height' => '64',
                       'alt' => 'remove',
                       'name' => 'remove',

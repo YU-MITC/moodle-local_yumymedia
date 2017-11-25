@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(dirname(dirname(__FILE__))) . '/lib/tablelib.php');
 require_once(dirname(dirname(dirname(__FILE__))) . '/local/yumymedia/download_media.php');
@@ -186,7 +186,9 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         $output = '';
 
-        $attr = array('border' => 0, 'width' => '100%',
+        $output .= html_writer::start_tag('center');
+
+        $attr = array('border' => '0', 'id' => 'mymedia_upper',
                         'class' => 'mymedia upper paging upload search');
         $output .= html_writer::start_tag('table', $attr);
 
@@ -197,20 +199,37 @@ class local_yumymedia_renderer extends plugin_renderer_base {
                         'class' => 'mymedia upper col_0');
         $output .= html_writer::start_tag('td', $attr);
 
-        $upload = '';
+        $simpleupload = '';
+        $webcamupload = '';
         $simplesearch = '';
 
         $context = context_user::instance($USER->id);
 
         if (has_capability('local/yumymedia:upload', $context, $USER)) {
-            $upload = $this->create_upload_markup();
+            $simpleupload .= $this->create_upload_markup();
         }
+
+        if (local_yukaltura_get_webcam_permission()) {
+            $webcamupload .= $this->create_webcam_markup();
+        }
+
+        $output .= $simpleupload . $webcamupload;
+
+        $output .= html_writer::end_tag('td');
+        $output .= html_writer::end_tag('tr');
 
         if (has_capability('local/yumymedia:search', $context, $USER)) {
-            $simplesearch = $this->create_search_markup();
+            $simplesearch .= $this->create_search_markup();
         }
 
-        $output .= $upload . '&nbsp;&nbsp;' . $simplesearch;
+        $attr = array('class' => 'mymedia upper row_1 upload search');
+        $output .= html_writer::start_tag('tr', $attr);
+
+        $attr = array('colspan' => 3, 'align' => 'right',
+                        'class' => 'mymedia upper col_0');
+        $output .= html_writer::start_tag('td', $attr);
+
+        $output .= $simplesearch;
 
         $output .= html_writer::end_tag('td');
 
@@ -233,6 +252,8 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $output .= html_writer::end_tag('tr');
 
         $output .= html_writer::end_tag('table');
+
+        $output .= html_writer::end_tag('center');
 
         return $output;
     }
@@ -886,6 +907,29 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     }
 
     /**
+     * This function outputs the media upload.
+     *
+     * @return string - HTML markup of webcam upload.
+     */
+    public function create_webcam_markup() {
+        $output = '';
+        $output .= '<script>';
+        $output .= 'function openWebcamUploader() { location.href="./webcam_uploader.php"; }';
+        $output .= '</script>';
+
+        $attr = array('id' => 'webcam_open',
+                      'class' => 'mymedia webcam upload button',
+                      'value' => get_string('webcam_upload', 'local_yumymedia'),
+                      'type' => 'button',
+                      'title' => get_string('webcam_upload', 'local_yumymedia'),
+                      'onClick' => 'openWebcamUploader()');
+
+        $output .= html_writer::empty_tag('input', $attr);
+
+        return $output;
+    }
+
+    /**
      * This function outputs the "now loading" panel.
      *
      * @return string - HTML markup of "now loading".
@@ -1208,10 +1252,10 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
             $output .= html_writer::start_tag('tr');
             $output .= html_writer::start_tag('th');
-            $output .= 'course shortname';
+            $output .= get_string("shortnamecourse", "moodle");
             $output .= html_writer::end_tag('th');
             $output .= html_writer::start_tag('th');
-            $output .= 'course fullname';
+            $output .= get_string("fullnamecourse", "moodle");
             $output .= html_writer::end_tag('th');
             $output .= html_writer::end_tag('tr');
 
@@ -1280,7 +1324,9 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         $output .= html_writer::start_tag('form', $attr);
 
-        $attr = array('type' => 'submit', 'name' => 'delete_media_ok', 'value' => 'OK, Delete');
+        $attr = array('type' => 'submit', 'name' => 'delete_media_ok',
+                      'value' => get_string("okdelete_label", "local_yumymedia")
+                     );
 
         $output .= html_writer::start_tag('input', $attr);
 
@@ -1291,7 +1337,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $output .= html_writer::start_tag('td');
 
         $attr = array('type' => 'button', 'name' => 'delete_media_cancel',
-                      'value' => 'Cancel',
+                      'value' => get_string("cancel_label", "local_yumymedia"),
                       'onclick' => 'location.href=\'' . $mymediaurl . '\''
                      );
 
@@ -1308,4 +1354,307 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         return $output;
     }
 
+    /**
+     * This function outpus HTML markup of session failed..
+     * @return string - HTML markup for session failed.
+     */
+    public function create_session_failed_markup() {
+        $output = '';
+        $output .= get_string('session_failed', 'local_yumymedia');
+        $output .= html_writer::empty_tag('br');
+
+        if (empty($rootpath)) {
+            $output .= '(' . get_string('category_failed', 'local_yumymedia') . ')';
+            $output .= html_writer::empty_tag('br');
+        }
+
+        if ($ks == null) {
+            $output .= '(' . get_string('ks_failed', 'local_yumymedia') . ')';
+            $output .= html_writer::empty_tag('br');
+        }
+
+        $attr = array('type' => 'button', 'name' => 'uploader_cancel', 'id' => 'uploader_cancel',
+                      'value' => get_string('back_label', 'local_yumymedia'));
+        $output .= html_writer::empty_tag('input', $attr);
+
+        return $output;
+    }
+
+    /**
+     * This function outputs HTML markup of access ontrol failed.
+     * @return string - HTML markup of access control failed.
+     */
+    public function create_access_control_failed_markup() {
+        $output = '';
+        $output .= get_string('default_access_control_failed', 'local_yumymedia');
+        $output .= html_writer::empty_tag('br');
+        $attr = array('type' => 'button', 'name' => 'uploader_cancel', 'id' => 'uploader_cancel',
+                      'value' => get_string('back_label', 'local_yumymedia'));
+        $output .= html_writer::empty_tag('input', $attr);
+
+        return $output;
+    }
+
+    /**
+     * This function outputs HTML markup for media file selection.
+     * @return string - HTML markup of media file selection.
+     */
+    public function create_file_selection_markup() {
+        $output = '';
+
+        $attr = array('id' => 'entry_steps');
+        $output .= html_writer::start_tag('div', $attr);
+        $output .= '1. ' . get_string('select_file_exp', 'local_yumymedia');
+        $output .= html_writer::end_tag('div');
+        $output .= html_writer::empty_tag('br', null);
+
+        $attr = array('type' => 'file', 'size' => '40', 'id' => 'fileData', 'name' => 'fileData',
+                      'required' => 'true');
+        $output .= html_writer::empty_tag('input', $attr);
+
+        $output .= html_writer::empty_tag('br', null);
+
+        $attr = array('id' => 'file_info', 'name' => 'file_info');
+        $output .= html_writer::start_tag('div', $attr);
+        $output .= html_writer::end_tag('div');
+        $output .= html_writer::empty_tag('br', null);
+
+        return $output;
+    }
+
+    /**
+     * This function outputs HTML markup for webcam recording.
+     * @return string - HTML markup of webcam recording.
+     */
+    public function create_webcam_recording_markup() {
+        $output = '';
+
+        $recurl = new moodle_url('/local/yumymedia/pix/rec.png');
+        $stopurl = new moodle_url('/local/yumymedia/pix/stop.png');
+        $deleteurl = new moodle_url('/local/yumymedia/pix/delete.png');
+
+        $attr = array('type' => 'hidden', 'name' => 'recurl', 'id' => 'recurl', 'value' => $recurl);
+        $output .= html_writer::start_tag('input', $attr);
+        $attr = array('type' => 'hidden', 'name' => 'stopurl', 'id' => 'stopurl', 'value' => $stopurl);
+        $output .= html_writer::start_tag('input', $attr);
+        $attr = array('type' => 'hidden', 'name' => 'deleteurl', 'id' => 'deleteurl', 'value' => $deleteurl);
+        $output .= html_writer::start_tag('input', $attr);
+
+        $attr = array('id' => 'entry_steps');
+        $output .= html_writer::start_tag('div', $attr);
+        $output .= '1. ' . get_string('webcam_recording_exp', 'local_yumymedia');
+        $output .= html_writer::end_tag('div');
+        $output .= html_writer::empty_tag('br', null);
+
+        $attr = array('id' => 'message', 'class' => 'message');
+        $output .= html_writer::start_tag('div', $attr);
+        $output .= html_writer::end_tag('div');
+
+        $attr = array('border' => '0');
+        $output .= html_writer::start_tag('table', $attr);
+        $output .= html_writer::start_tag('tr');
+        $attr = array('colspan' => '2');
+        $output .= html_writer::start_tag('td', $attr);
+        $attr = array('border' => '2');
+        $output .= html_writer::start_tag('table', $attr);
+        $output .= html_writer::start_tag('tr');
+        $output .= html_writer::start_tag('td');
+        $attr = array('id' => 'videospan', 'name' => 'videospan');
+        $output .= html_writer::start_tag('div', $attr);
+        $output .= html_writer::end_tag('div');
+        $output .= html_writer::end_tag('td');
+        $output .= html_writer::end_tag('tr');
+        $output .= html_writer::end_tag('table');
+        $output .= html_writer::end_tag('td');
+        $output .= html_writer::end_tag('tr');
+        $output .= html_writer::start_tag('tr');
+        $attr = array('colspan' => '2', 'align' => 'center');
+        $output .= html_writer::start_tag('td', $attr);
+        $attr = array('id' => 'status', 'name' => 'status');
+        $output .= html_writer::start_tag('div', $attr);
+        $output .= html_writer::end_tag('div');
+        $output .= html_writer::end_tag('td');
+        $output .= html_writer::end_tag('tr');
+        $output .= html_writer::start_tag('tr');
+        $attr = array('align' => 'left');
+        $output .= html_writer::start_tag('td', $attr);
+        $attr = array('id' => 'leftspan', 'name' => 'leftspan');
+        $output .= html_writer::start_tag('div', $attr);
+        $attr = array('src' => $recurl,
+                      'width'=>'64',
+                      'height' => '64',
+                      'alt' => 'recstop',
+                      'name' => 'recstop',
+                      'id' => 'recstop',
+                      'border' => '0');
+        $output .= html_writer::start_tag('img', $attr);
+        $output .= html_writer::end_tag('div');
+        $output .= html_writer::end_tag('td');
+        $attr = array('align' => 'right');
+        $output .= html_writer::start_tag('td', $attr);
+        $attr = array('id' => 'rightspan', 'name' => 'rightspan');
+        $output .= html_writer::start_tag('div', $attr);
+        $attr = array('src' => $deleteurl,
+                      'width'=>'64',
+                      'height' => '64',
+                      'alt' => 'remove',
+                      'name' => 'remove',
+                      'id' => 'remove',
+                      'border' => '0');
+        $output .= html_writer::start_tag('img', $attr);
+        $output .= html_writer::end_tag('div');
+        $output .= html_writer::end_tag('td');
+        $output .= html_writer::end_tag('tr');
+        $output .= html_writer::end_tag('table');
+        $output .= html_writer::empty_tag('br');
+        $output .= html_writer::empty_tag('br');
+
+        return $output;
+    }
+
+    /**
+     * This function outputs HTML markup of entry's metadata.
+     * @param string $ks - string of kaltura session.
+     * @param string $kalturahost - hostname of kaltura server.
+     * @param string $rootpath - category path of moodle root category.
+     * @param object $control - object of kaltura access control.
+     * @return string - HTML markup of entry's metadata.
+     */
+    public function create_entry_metadata_markup($ks, $kalturahost, $rootpath, $control) {
+        global $USER;
+
+        // Set category of media.
+        $categorypath = $rootpath . '>' . $USER->username;
+
+        $output = '';
+        $attr = array('id' => 'entry_steps');
+
+        $output .= html_writer::start_tag('div', $attr);
+        $output .= '2. ' . get_string('fill_form_exp', 'local_yumymedia');
+        $output .= html_writer::empty_tag('br', null);
+        $output .= '(';
+        $attr = array('id' => 'entry_warning');
+        $output .= html_writer::start_tag('span', $attr);
+        $output .= '* : ' . get_string('required_field', 'local_yumymedia');
+        $output .= html_writer::end_tag('span');
+        $output .= ')';
+        $output .= html_writer::end_tag('div');
+        $output .= html_writer::empty_tag('br', null);
+
+        $output .= html_writer::start_tag('fieldset', null);
+
+        $attr = array('border' => '0');
+        $output .= html_writer::start_tag('table', $attr);
+
+        $output .= html_writer::start_tag('tr');
+        $attr = array('id' => 'metadata_fields', 'valign' => 'top');
+        $output .= html_writer::start_tag('td');
+        $output .= get_string('name_header', 'local_yumymedia') . '&nbsp;';
+        $attr = array('id' => 'entry_warning');
+        $output .= html_writer::start_tag('span', $attr);
+        $output .= '*';
+        $output .= html_writer::end_tag('span');
+        $output .= '&nbsp;:';
+        $output .= html_writer::end_tag('td');
+        $output .= html_writer::start_tag('td');
+        $attr = array('type' => 'text', 'name' => 'name', 'id' => 'name', 'size' => '30',
+                      'required' => 'true');
+        $output .= html_writer::empty_tag('input', $attr);
+        $output .= html_writer::end_tag('td');
+        $output .= html_writer::end_tag('tr');
+
+        $attr = array('id' => 'entry_steps');
+
+        $output .= html_writer::start_tag('tr', null);
+        $attr = array('id' => 'metadata_fields', 'valign' => 'top');
+        $output .= html_writer::start_tag('td', $attr);
+        $output .= get_string('tags_header', 'local_yumymedia') . '&nbsp;';
+        $attr = array('id' => 'entry_warning');
+        $output .= html_writer::start_tag('span', $attr);
+        $output .= '*';
+        $output .= html_writer::end_tag('span');
+        $output .= '&nbsp;:';
+        $output .= html_writer::end_tag('td');
+        $output .= html_writer::start_tag('td');
+        $attr = array('type' => 'text', 'name' => 'tags', 'id' => 'tags', 'size' => '30',
+                      'required' => 'true');
+        $output .= html_writer::empty_tag('input', $attr);
+        $output .= html_writer::end_tag('td');
+        $output .= html_writer::end_tag('tr');
+
+        $output .= html_writer::start_tag('tr', null);
+        $attr = array('id' => 'metadata_fields');
+        $output .= html_writer::start_tag('td', $attr);
+        $output .= get_string('desc_header', 'local_yumymedia') . ':';
+        $output .= html_writer::end_tag('td');
+        $output .= html_writer::start_tag('td', null);
+        $attr = array('name' => 'description', 'id' => 'description',
+                      'cols' => '30', 'rows' => '5', 'maxlength' => '150');
+        $output .= html_writer::start_tag('textarea', $attr);
+        $output .= html_writer::end_tag('textarea');
+        $output .= html_writer::end_tag('td');
+        $output .= html_writer::end_tag('tr');
+
+        $output .= html_writer::end_tag('table');
+
+        $output .= html_writer::empty_tag('br', null);
+
+        $attr = array('type' => 'hidden', 'id' => 'kalturahost',
+                      'name' => 'kalturahost', 'value' => "$kalturahost");
+        $output .= html_writer::empty_tag('input', $attr);
+        $attr = array('type' => 'hidden', 'id' => 'ks', 'name' => 'ks', 'value' => "$ks");
+        $output .= html_writer::empty_tag('input', $attr);
+        $attr = array('type' => 'hidden', 'id' => 'type', 'name' => 'type', 'value' => '');
+        $output .= html_writer::empty_tag('input', $attr);
+        $attr = array('type' => 'hidden', 'id' => 'categories', 'name' => 'categories', 'value' => "$categorypath");
+        $output .= html_writer::empty_tag('input', $attr);
+        $attr = array('type' => 'hidden', 'id' => 'creatorId', 'name' => 'creatorId', 'value' => "$USER->username");
+        $output .= html_writer::empty_tag('input', $attr);
+        $attr = array('type' => 'hidden', 'id' => 'controlId', 'name' => 'controlId', 'value' => "$control->id");
+        $output .= html_writer::empty_tag('input', $attr);
+        $attr = array('type' => 'hidden', 'id' => 'entry', 'name' => 'entry', 'value' => '');
+        $output .= html_writer::empty_tag('input', $attr);
+
+        $attr = array('type' => 'button', 'name' => 'entry_submit', 'id' => 'entry_submit',
+                      'value' => get_string('upload_label', 'local_yumymedia'));
+        $output .= html_writer::start_tag('input', $attr);
+
+        $output .= '&nbsp;&nbsp;';
+
+        $attr = array('type' => 'reset', 'name' => 'reset', 'id' => 'entry_reset',
+                      'value' => get_string('reset_label', 'local_yumymedia'));
+        $output .= html_writer::empty_tag('input', $attr);
+
+        $output .= html_writer::end_tag('fieldset');
+
+        return $output;
+    }
+
+    /**
+     * This function outputs HTML markup of upload cancel.
+     * @return string - HTML markup of upload cancel.
+     */
+    public function create_upload_cancel_markup() {
+        $output = '';
+        $attr = array('type' => 'button', 'name' => 'uploader_cancel', 'id' => 'uploader_cancel',
+                      'value' => get_string('cancel_label', 'local_yumymedia'));
+        $output .= html_writer::empty_tag('input', $attr);
+        return $output;
+    }
+
+    /**
+     * This function outputs HTML markup of modal content.
+     * @return string - HTML markup of modal content.
+     */
+    public function create_modal_content_markup() {
+        $output = '';
+        $attr = array('id' => 'modal_content');
+        $output .= html_writer::start_tag('div', $attr);
+        $attr = array('align' => 'center');
+        $output .= html_writer::start_tag('h3', $attr);
+        $output .= get_string('uploading_header', 'local_yumymedia');
+        $output .= html_writer::end_tag('h3');
+        $output .= html_writer::end_tag('div');
+        return $output;
+    }
 }

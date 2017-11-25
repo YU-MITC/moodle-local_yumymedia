@@ -25,7 +25,7 @@
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.php');
 
-defined("MOODLE_INTERNAL") || die;
+defined('MOODLE_INTERNAL') || die();
 
 global $PAGE;
 

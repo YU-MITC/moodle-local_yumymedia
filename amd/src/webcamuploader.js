@@ -22,7 +22,7 @@
  */
 
 /**
- * @module local_yumymedia/simpleuploader
+ * @module local_yumymedia/webcamuploader
  */
 
 define(['jquery'], function($) {
@@ -38,6 +38,32 @@ define(['jquery'], function($) {
             var modalY = 0;
 
             var fileSize = 0;
+            var sizeResult = false;
+            var fileType = "";
+
+            var defaultWidth = 400;
+            var defaultHeight = 300;
+
+            var localStream = null;
+            var videoBlob = null;
+            var blobUrl = null;
+            var recorder =  null;
+            var constraints = null;
+            var recordFlag = false;
+
+            var createObjectURL 
+                = window.URL && window.URL.createObjectURL
+                    ? function(file) { return window.URL.createObjectURL(file); }
+                    : window.webkitURL && window.webkitURL.createObjectURL
+                        ? function(file) { return window.webkitURL.createObjectURL(file); }
+                        : undefined;
+
+            var revokeObjectURL
+                = window.URL && window.URL.revokeObjectURL
+                    ? function(file) { return window.URL.revokeObjectURL(file); }
+                    : window.webkitURL && window.webkitURL.revokeObjectURL
+                        ? function(file) { return window.webkitURL.revokeObjectURL(file); }
+                        : undefined;
 
             var MEDIA_TYPE = {
                 VIDEO: 1,
@@ -59,7 +85,228 @@ define(['jquery'], function($) {
             };
 
             /**
+             * This function print a video player for playing.
+             * @access public
+             * @param {string} url - url of media.
+             */
+            function setPlayingPlayer(url) {
+                var str = "<video id=\"webcam\" width=\"" + defaultWidth + "\" height=\"" + defaultHeight + "\" ";
+                str = str + "src=\"" + url + "\" autoplay=\"false\" oncontextmenu=\"return false;\" controls></video>";
+                $("#videospan").html(str);
+                document.getElementById("webcam").pause();
+                document.getElementById("webcam").currentTime = 0;
+            }
+
+            /**
+             * This function print a video player for preview.
+             * @access public
+             * @param {string} url - url of media.
+             */
+            function setPreviewPlayer(url) {
+                var str = "<video id=\"webcam\" width=\"" + defaultWidth + "\" height=\"" + defaultHeight + "\" ";
+                str = str + "autoplay=\"0\" muted oncontextmenu=\"return false;\"></video>";
+                $("#videospan").html(str);
+                $("#webcam").attr("src", url);
+            }
+
+            /**
+             * This function start video recording by webcamera.
+             * @access public
+             */
+            function startRecording() {
+                $("#recstop").attr("src", $("#stopurl").val());
+                $('#recstop').off("click");
+
+                $("#recstop").on("click", function () {
+                    stopRecording();
+                });
+
+                $("#leftspan").css("display", "inline");
+                $("#webcam").volume = 0.0;
+                recorder.start();
+
+                $("#status").html("<font color=\"red\">Now, recording...</font>");
+            }
+
+            /**
+             * This function stop video recording.
+             * @access public
+             */
+            function stopRecording() {
+                recorder.ondataavailable = function(evt) {
+                    videoBlob = new Blob([evt.data], { type: evt.data.type });
+                    blobUrl = createObjectURL(videoBlob);
+                    setPlayingPlayer(blobUrl);
+                    fileSize = videoBlob.size;
+                    var sizeStr = "";
+
+                    if (fileSize > 1024 * 1024 * 1024) {  // When file size exceeds 1GB.
+                        fileSize = fileSize / (1024 * 1024 * 1024);
+                        sizeStr = fileSize.toFixed(2) + " G";
+                    } else if (fileSize > 1024 * 1024) {  // When file size exceeds 1MB.
+                        fileSize = fileSize / (1024 * 1024);
+                        sizeStr = fileSize.toFixed(2) + " M";
+                    } else if (fileSize > 1024) {  // When file size exceeds 1kB.
+                        fileSize = fileSize / 1024;
+                        sizeStr = fileSize.toFixed(2) + " k";
+                    } else {  // When file size under 1kB.
+                        sizeStr = fileSize + " ";
+                    }
+
+                    $("#status").html("<font color=\"green\">Video preview (" + videoBlob.type + ", " + sizeStr + "B).</font>");
+                    fileType = checkFileType(videoBlob.type);
+                    sizeResult = checkFileSize();
+                    if (sizeResult === false) {
+                        window.alert("Wrong file size.");
+                    }
+                    checkForm();
+                    
+                };
+                recorder.stop();
+                recordFlag = true;
+
+                $("#leftspan").css("display", "none");
+                $("#rightspan").css("display", "inline");
+
+                $("#remove").on("click", function() {
+                    removeVideo();
+                });
+            }
+
+            /**
+             * This function stop video recording.
+             * @access public
+             */
+            function removeVideo() {
+                var str = "";
+
+                navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+                try {
+                    if (navigator.getUserMedia === null || navigator.getUserMedia === undefined ||
+                        MediaRecorder === null || MediaRecorder === undefined) {
+                        str = "<font color=\"red\">This uploader requires the WebRTC.<br>";
+                        str = str + "Howerver, your web browser don't support the WebRTC.</font>";
+                        $("#message").html(str);
+                        return;
+                    }
+                } catch (err) {
+                    str = "<font color=\"red\">This uploader requires the WebRTC.<br>";
+                    str = str + "Howerver, your web browser don't support the WebRTC.</font>";
+                    $("#message").html(str);
+                    return;
+                }
+
+                try {
+                    if (createObjectURL === null || createObjectURL === undefined ||
+                        revokeObjectURL === null || revokeObjectURL === undefined) {
+                        str = "<font color=\"red\">This uploader requires the createObjectURL/revokeObjectURL.<br>";
+                        str = str + "Howerver, your web browser don't support these function.</font>";
+                        $("#message").html(str);
+                        return;
+                    }
+                } catch(err) {
+                    str = "<font color=\"red\">This uploader requires the WebRTC.<br>";
+                    str = str + "Howerver, your web browser don't support the WebRTC.</font>";
+                    $("#message").html(str);
+                    return;
+                }
+
+                recordFlag = false;
+                setPreviewPlayer(null);
+
+                if (blobUrl !== null) {
+                    revokeObjectURL(blobUrl);
+                    blobUrl = null;
+                    videoBlob = null;
+                }
+
+                if (localStream !== null && localStream.stop !== undefined) {
+                    localStream.stop();
+                }
+
+                fileSize = 0;
+                sizeResult = false;
+                fileType = "";
+
+                $("#recstop").off("click");
+                $("#remove").off("click");
+                $("#webcam").off("ondataavailable");
+
+                // Prefer camera resolution nearest to 1280x720.
+                if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
+                    constraints = {
+                        mimeType: 'video/webm; codecs=vp9',
+                        audio: true,
+                        video: {
+                            "mandatory": {
+                                minWidth: 320,
+                                minHeight: 240,
+                                maxWidth: 1280,
+                                maxHeight: 720,
+                                minFrameRate: 5,
+                                maxFrameRate: 15
+                            }
+                        }
+                    };
+                } else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp8')) {
+                    constraints = {
+                        mimeType: 'video/webm; codecs=vp8',
+                        audio: true,
+                        video: {
+                            "mandatory": {
+                                minWidth: 320,
+                                minHeight: 240,
+                                maxWidth: 1280,
+                                maxHeight: 720,
+                                minFrameRate: 5,
+                                maxFrameRate: 15
+                            }
+                        }
+                    };
+                } else {
+                    constraints = {
+                        audio: true,
+                        video: {
+                            "mandatory": {
+                                minWidth: 320,
+                                minHeight: 240,
+                                maxWidth: 1280,
+                                maxHeight: 720,
+                                minFrameRate: 5,
+                                maxFrameRate: 15
+                            }
+                        }
+                    };
+                }
+
+                navigator.getUserMedia(constraints,
+                function(stream) {
+                    localStream = stream;
+                    blobUrl = createObjectURL(localStream);
+                    $('#webcam').attr("src", blobUrl);
+                    window.console.log(localStream);
+                    recorder = new MediaRecorder(localStream, constraints);
+                    $("#recstop").attr("src", $("#recurl").val());
+                    $("#recstop").on("click", function() {
+                        startRecording();
+                    });
+                    $("#leftspan").css("display", "inline");
+                    $("#rightspan").css("display", "none");
+                    $("#status").html("Camera preview.");
+                },
+                function(err) {
+                    var str = "<font color=\"red\">Your webcamera is not supported, ";
+                    str = str + "or the webcamera is already used.</font>";
+                    $("#message").html(str);
+                    window.console.log(err.name + ": " + err.message);
+                });
+
+                checkForm();
+            }
+
+            /**
              * This function centerizes a modal window.
+             * @access public
              */
             function centeringModalSyncer() {
 
@@ -99,7 +346,7 @@ define(['jquery'], function($) {
             function checkFileType(fileType) {
                 if (fileType.indexOf("video/avi") != -1 || fileType.indexOf("video/x-msvideo") != -1 ||
                     fileType.indexOf("video/mpeg") != -1 || fileType.indexOf("video/mpg") != -1 ||
-                    fileType.indexOf("video/mp4") != -1 || fileType.indexOf("video/ogg") != -1 ||
+                    fileType.indexOf("video/mp4") != -1 || fileType.indexOf("video/ogg") ||
                     fileType.indexOf("video/quicktime") != -1 || fileType.indexOf("video/VP8") != -1 ||
                     fileType.indexOf("video/x-flv") != -1 || fileType.indexOf("video/x-f4v") != -1 ||
                     fileType.indexOf("video/x-matroska") != -1 ||
@@ -108,7 +355,7 @@ define(['jquery'], function($) {
                 }
 
                 if (fileType.indexOf("audio/ac3") != -1 || fileType.indexOf("audio/ogg") != -1 ||
-                    fileType.indexOf("audio/mpeg") != -1 || fileType.indexOf("audip/mp4") != -1 ||
+                    fileType.indexOf("audio/mpeg") != -1  || fileType.indexOf("audip/mp4") != -1 ||
                     fileType.indexOf("audio/wav") != -1 || fileType.indexOf("audio/x-ms-wma") != -1) {
                     return "audio";
                 }
@@ -126,12 +373,14 @@ define(['jquery'], function($) {
              * @access public
              */
             function checkForm() {
-                if ($("#fileData") === null ||
-                    $("#fileData").files === null ||
+                if (blobUrl === null ||
+                    videoBlob === null ||
+                    videoBlob.size === 0 ||
+                    sizeResult === false ||
                     $("#name").val() === "" ||
                     $("#tags").val() === "" ||
-                    $("#type").val() === "" ||
-                    $("#type").val() === "N/A") {
+                    fileType === "" ||
+                    fileType === "N/A") {
                     // Dsiable upload button.
                     $("#entry_submit").prop("disabled", true);
                     $("#entry").val("");
@@ -415,7 +664,7 @@ define(['jquery'], function($) {
 
                 // Creates form data.
                 fd.append("action", "upload");
-                fd.append("fileData", $("input[name='fileData']").prop("files")[0]);
+                fd.append("fileData", videoBlob);
                 fd.append("ks", ks);
 
                 // Creates transmission data.
@@ -653,72 +902,6 @@ define(['jquery'], function($) {
             }
 
             /**
-             * This function is callback for selection of media file.
-             * @access public
-             */
-            function handleFileSelect() {
-
-                // There exists selected file.
-                if ($("#fileData")) {
-                    // Get an object of selected file.
-                    var file = $("#fileData").prop("files")[0];
-
-                    fileSize = parseInt(encodeURI(file.size));
-                    var typeResult = checkFileType(encodeURI(file.type));
-                    var sizeResult = checkFileSize();
-                    var alertInfo = "";
-
-                    // When file size is wrong.
-                    if (sizeResult === false) {
-                        alertInfo += "Wrong file size.";
-                    }
-                    // When file is no supported.
-                    if (typeResult == "N/A") {
-                        alertInfo += "Unsupported file type.";
-                    }
-
-                    // When any warning occures.
-                    if (alertInfo !== "") {
-                        window.alert(alertInfo);
-                        $("#file_info").html("");
-                        $("#name").val("");
-                        $("#tags").val("");
-                        $("#description").val("");
-                        $("#type").val("");
-                        $("#fileData").val("");
-                    } else {  // When any warning do not occures.
-                        var fileInfo = "";
-                        var filename = file.name;
-                        var sizeStr = "";
-
-                        if (fileSize > 1024 * 1024 * 1024) {  // When file size exceeds 1GB.
-                            fileSize = fileSize / (1024 * 1024 * 1024);
-                            sizeStr = fileSize.toFixed(2) + " G";
-                        } else if (fileSize > 1024 * 1024) {  // When file size exceeds 1MB.
-                            fileSize = fileSize / (1024 * 1024);
-                            sizeStr = fileSize.toFixed(2) + " M";
-                        } else if (fileSize > 1024) {  // When file size exceeds 1kB.
-                            fileSize = fileSize / 1024;
-                            sizeStr = fileSize.toFixed(2) + " k";
-                        } else {  // When file size under 1kB.
-                            sizeStr = fileSize + " ";
-                        }
-
-                        fileInfo += "<div id=metadata_fields>";
-                        fileInfo += "Size: " + sizeStr + "bytes<br>";
-                        fileInfo += "MIME Type: " + encodeURI(file.type) + "<br>";
-                        fileInfo += "</div><hr>";
-
-                        $("#file_info").html(fileInfo);
-                        $("#name").val(filename);
-                        $("#type").val(typeResult);
-                    }
-                }
-
-                checkForm();
-            }
-
-            /**
              * This function close kaltura session.
              * @access public
              */
@@ -755,15 +938,21 @@ define(['jquery'], function($) {
 
             // This function execute when window is uloaded.
             $(window).on("unload", function() {
+                if (blobUrl !== null) {
+                    revokeObjectURL(blobUrl);
+                    videoBlob = null;
+                    blobUrl = null;
+                }
+
+                if (localStream !== null) {
+                    localStream.stop();
+                }
+
                 sessionEnd();
             });
 
             // This function execute when window is resized.
             $(window).resize(centeringModalSyncer);
-
-            $("#fileData").on("change", function() {
-                handleFileSelect();
-            });
 
             $("#uploader_cancel").on("click", function() {
                 handleCancelClick();
@@ -785,9 +974,12 @@ define(['jquery'], function($) {
                 handleResetClick();
             });
 
-            // This function execute when this script is loaded.
-            checkForm();
+            $("#name").val("");
+            $("#tags").val("");
+            $("#description").val("");
 
+            // This function execute when this script is loaded.
+            removeVideo();
         }
     };
 });

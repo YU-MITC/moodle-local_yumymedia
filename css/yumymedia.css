@@ -35,10 +35,12 @@ table#mymedia_media_metadata_table tr {
 }
 
 #upload_btn,
+#webcam_btn,
 #scr_btn,
 #simple_search_btn,
 #clear_simple_search_btn,
-#uploader_open {
+#uploader_open,
+#webcam_open {
     font-size: 1.1em;
 }
 
@@ -54,6 +56,12 @@ table#mymedia_medias {
     border: 0 none black;
     table-layout: fixed;
     width: 700px;
+}
+
+table#mymedia_upper {
+    border: 0 none black;
+    table-layout: fixed;
+    width: 850px;
 }
 
 div#id_media_details_tab.yui3-tabview-content.yui3-widget-content-expanded {

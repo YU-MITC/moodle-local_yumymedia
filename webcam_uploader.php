@@ -90,7 +90,7 @@ if (local_yukaltura_get_mymedia_permission() == false) {  // When mymedia is dis
         $rootpath = $result['name'];
 
         if ($ks == null || empty($rootpath)) { // Session failed.
-            $output .= $renderer->create_session_failed_markup();
+            $output .= $renderer->create_session_failed_markup($ks, $rootpath);
         } else if ($control == null) {
             $output .= $renderer->create_access_control_failed_markup();
         } else { // Session started.

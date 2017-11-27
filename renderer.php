@@ -1355,10 +1355,12 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     }
 
     /**
-     * This function outpus HTML markup of session failed..
+     * This function outpus HTML markup of session failed.
+     * @param string $ks - kaltura session string.
+     * @param string $rootpath - path of root category.
      * @return string - HTML markup for session failed.
      */
-    public function create_session_failed_markup() {
+    public function create_session_failed_markup($ks, $rootpath) {
         $output = '';
         $output .= get_string('session_failed', 'local_yumymedia');
         $output .= html_writer::empty_tag('br');

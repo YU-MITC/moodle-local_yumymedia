@@ -114,7 +114,7 @@ define(['jquery'], function($) {
              */
             function startRecording() {
                 $("#recstop").attr("src", $("#stopurl").val());
-                $('#recstop').off("click");
+                $("#recstop").off("click");
 
                 $("#recstop").on("click", function () {
                     stopRecording();
@@ -229,58 +229,41 @@ define(['jquery'], function($) {
                 $("#remove").off("click");
                 $("#webcam").off("ondataavailable");
 
+                var mimeOption = "";
+
                 // Prefer camera resolution nearest to 1280x720.
-                if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
-                    constraints = {
-                        mimeType: 'video/webm; codecs=vp9',
-                        audio: true,
-                        video: {
-                            "mandatory": {
-                                minWidth: 320,
-                                minHeight: 240,
-                                maxWidth: 1280,
-                                maxHeight: 720,
-                                minFrameRate: 5,
-                                maxFrameRate: 15
-                            }
-                        }
-                    };
-                } else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp8')) {
-                    constraints = {
-                        mimeType: 'video/webm; codecs=vp8',
-                        audio: true,
-                        video: {
-                            "mandatory": {
-                                minWidth: 320,
-                                minHeight: 240,
-                                maxWidth: 1280,
-                                maxHeight: 720,
-                                minFrameRate: 5,
-                                maxFrameRate: 15
-                            }
-                        }
-                    };
+                if (MediaRecorder.isTypeSupported("video/webm;codecs=vp9")) {
+                    mimeOption = "video/webm; codecs=vp9";
+                } else if (MediaRecorder.isTypeSupported("video/webm;codecs=vp8")) {
+                    mimeOption = "video/webm; codecs=vp8";
+                } else if (MediaRecorder.isTypeSupported("video/webm")) {
+                    mimeOption = "video/webm";
                 } else {
-                    constraints = {
-                        audio: true,
-                        video: {
-                            "mandatory": {
-                                minWidth: 320,
-                                minHeight: 240,
-                                maxWidth: 1280,
-                                maxHeight: 720,
-                                minFrameRate: 5,
-                                maxFrameRate: 15
-                            }
-                        }
-                    };
+                    mimeOption = "video/mp4";
                 }
+
+                constraints = {
+                    mimeType: mimeOption,
+                    audio: true,
+                    video: {
+                        "mandatory": {
+                            minWidth: 320,
+                            minHeight: 240,
+                            maxWidth: 1280,
+                            maxHeight: 720,
+                            minFrameRate: 5,
+                            maxFrameRate: 15
+                        },
+                        "optional": [{"facingMode": "user"}]
+                    }
+                };
+
 
                 navigator.getUserMedia(constraints,
                 function(stream) {
                     localStream = stream;
                     blobUrl = createObjectURL(localStream);
-                    $('#webcam').attr("src", blobUrl);
+                    $("#webcam").attr("src", blobUrl);
                     window.console.log(localStream);
                     recorder = new MediaRecorder(localStream, constraints);
                     $("#recstop").attr("src", $("#recurl").val());

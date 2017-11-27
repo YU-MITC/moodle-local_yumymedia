@@ -8,7 +8,7 @@ Original plugin package ("Kaltura Video Package") has better functions than ours
 YU Kaltura Media Gallery for Moodle
 ------
 
-This plugin provides media gallery (called "My Media") for users. Through the "My Media", users can upload media files, preview and delete their medias, and edit metadata of each media. Also, users can set enable/disable access restriction to their own media.
+This plugin provides media gallery (called "My Media") for users. Through the "My Media", users can upload media files, record a movie using web-camera, preview and delete their medias, and edit metadata of each media. Also, users can set enable/disable access restriction to their own media.
 This plugin is updated with stable releases. To follow active development on GitHub, click [here](https://github.com/YU-MITC/moodle-local_yumymedia/).
 
 Requirements
@@ -27,8 +27,11 @@ Installation will be completed after you log in as an administrator and access t
 How to use
 ------
 
-Soory!!
-We will write soon...
+User's guide, click [here](https://github.com/YU-MITC/moodle-local_yukaltura/blob/master/userguide_version1.1.pdf).
+
+Now, we wrote sections about installation, initial configuration and summary of "My Media".
+
+Rest sections will be written soon...
 
 Targeted Moodle versions
 ------
@@ -42,8 +45,8 @@ Branches
 * MOODLE_30_STABLE -> Moodle3.0 branch 
 * MOODLE_31_STABLE -> Moodle3.1 branch 
 * MOODLE_32_STABLE -> Moodle3.2 branch 
-* MOODLE_33_STABLE -> Moodle3.3 branch
-* MOODLE_34_STABLE -> Moodle3.4 branch
+* MOODLE_33_STABLE -> Moodle3.3 branch 
+* MOODLE_34_STABLE -> Moodle3.4 branch 
 
 First clone the repository with "git clone", then "git checkout MOODLE_29_STABLE(branch name)" to switch branches.
 
@@ -53,4 +56,4 @@ Warning
 * We are not responsible for any problem caused by this software. 
 * This software follows the license policy of Moodle (GNU GPL v3).
 * "Kaltura" is the registered trademark of the Kaltura Inc.
-* Web-camera recording function in "My Media" supports the Mozilla Firefox, Google chrome and Opera.
+* Web-camera recording function in "My Media" supports the Mozilla Firefox, Google chrome and Opera. For smartphones and tablets, you can record  and upload movies through a normal media uploader.

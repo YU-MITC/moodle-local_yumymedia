@@ -17,7 +17,7 @@
  * YU Kaltura "My Media" script for simple uploader.
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2017 Yamaguchi University (info-cc@ml.cc.yamaguchi-u.ac.jp)
+ * @copyright  (C) 2016-2017 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -108,7 +108,7 @@ define(['jquery'], function($) {
                 }
 
                 if (fileType.indexOf("audio/ac3") != -1 || fileType.indexOf("audio/ogg") != -1 ||
-                    fileType.indexOf("audio/mpeg") != -1 || fileType.indexOf("audip/mp4") != -1 ||
+                    fileType.indexOf("audio/mpeg") != -1 || fileType.indexOf("audio/mp4") != -1 ||
                     fileType.indexOf("audio/wav") != -1 || fileType.indexOf("audio/x-ms-wma") != -1) {
                     return "audio";
                 }
@@ -164,8 +164,8 @@ define(['jquery'], function($) {
                 // Records scroll position of window.
                 var dElm = document.documentElement;
                 var dBody = document.body;
-                modalX = dElm.scrollLeft || dBody.scrollLeft;   // X position.
-                modalY = dElm.scrollTop || dBody.scrollTop;     // Y position.
+                modalX = dElm.scrollLeft || dBody.scrollLeft; // X position.
+                modalY = dElm.scrollTop || dBody.scrollTop; // Y position.
                 // Print overlay.
                 $("body").append("<div id=\"modal_window\"></div>");
                 $("#modal_window").fadeIn("slow");
@@ -477,15 +477,6 @@ define(['jquery'], function($) {
 
                     $("#modal_content").append("Uploading an attirbute information ...<br>");
 
-                    var backendHost = xhr.getResponseHeader("X-Me");
-                    if (backendHost !== null) {
-                        if (serverHost.indexOf("https") === 0) {
-                            serverHost = "https://" + backendHost;
-                        } else if (serverHost.indexOf("http") === 0) {
-                            serverHost = "http://" + backendHost;
-                        }
-                    }
-
                     // Entry metadata.
                     setTimeout(function() {
                         uploadAttributes(serverHost, ks, uploadTokenId);
@@ -686,21 +677,21 @@ define(['jquery'], function($) {
                         $("#description").val("");
                         $("#type").val("");
                         $("#fileData").val("");
-                    } else {  // When any warning do not occures.
+                    } else { // When any warning do not occures.
                         var fileInfo = "";
                         var filename = file.name;
                         var sizeStr = "";
 
-                        if (fileSize > 1024 * 1024 * 1024) {  // When file size exceeds 1GB.
+                        if (fileSize > 1024 * 1024 * 1024) { // When file size exceeds 1GB.
                             fileSize = fileSize / (1024 * 1024 * 1024);
                             sizeStr = fileSize.toFixed(2) + " G";
-                        } else if (fileSize > 1024 * 1024) {  // When file size exceeds 1MB.
+                        } else if (fileSize > 1024 * 1024) { // When file size exceeds 1MB.
                             fileSize = fileSize / (1024 * 1024);
                             sizeStr = fileSize.toFixed(2) + " M";
-                        } else if (fileSize > 1024) {  // When file size exceeds 1kB.
+                        } else if (fileSize > 1024) { // When file size exceeds 1kB.
                             fileSize = fileSize / 1024;
                             sizeStr = fileSize.toFixed(2) + " k";
-                        } else {  // When file size under 1kB.
+                        } else { // When file size under 1kB.
                             sizeStr = fileSize + " ";
                         }
 

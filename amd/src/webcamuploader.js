@@ -14,10 +14,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * YU Kaltura "My Media" script for simple uploader.
+ * YU Kaltura "My Media" script for webcam uploader.
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2017 Yamaguchi University (info-cc@ml.cc.yamaguchi-u.ac.jp)
+ * @copyright  (C) 2016-2017 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -47,21 +47,27 @@ define(['jquery'], function($) {
             var localStream = null;
             var videoBlob = null;
             var blobUrl = null;
-            var recorder =  null;
+            var recorder = null;
             var constraints = null;
 
-            var createObjectURL
-                = window.URL && window.URL.createObjectURL
-                    ? function(file) { return window.URL.createObjectURL(file); }
+            var createObjectURL = window.URL && window.URL.createObjectURL
+                    ? function(file) { 
+                        return window.URL.createObjectURL(file);
+                    }
                     : window.webkitURL && window.webkitURL.createObjectURL
-                        ? function(file) { return window.webkitURL.createObjectURL(file); }
+                        ? function(file) {
+                            return window.webkitURL.createObjectURL(file);
+                        }
                         : undefined;
 
-            var revokeObjectURL
-                = window.URL && window.URL.revokeObjectURL
-                    ? function(file) { return window.URL.revokeObjectURL(file); }
+            var revokeObjectURL = window.URL && window.URL.revokeObjectURL
+                    ? function(file) {
+                        return window.URL.revokeObjectURL(file);
+                    }
                     : window.webkitURL && window.webkitURL.revokeObjectURL
-                        ? function(file) { return window.webkitURL.revokeObjectURL(file); }
+                        ? function(file) {
+                            return window.webkitURL.revokeObjectURL(file);
+                        }
                         : undefined;
 
             var MEDIA_TYPE = {
@@ -116,7 +122,7 @@ define(['jquery'], function($) {
                 $("#recstop").attr("src", $("#stopurl").val());
                 $("#recstop").off("click");
 
-                $("#recstop").on("click", function () {
+                $("#recstop").on("click", function() {
                     stopRecording();
                 });
 
@@ -133,22 +139,22 @@ define(['jquery'], function($) {
              */
             function stopRecording() {
                 recorder.ondataavailable = function(evt) {
-                    videoBlob = new Blob([evt.data], { type: evt.data.type });
+                    videoBlob = new Blob([evt.data], {type: evt.data.type});
                     blobUrl = createObjectURL(videoBlob);
                     setPlayingPlayer(blobUrl);
                     fileSize = videoBlob.size;
                     var sizeStr = "";
 
-                    if (fileSize > 1024 * 1024 * 1024) {  // When file size exceeds 1GB.
+                    if (fileSize > 1024 * 1024 * 1024) { // When file size exceeds 1GB.
                         fileSize = fileSize / (1024 * 1024 * 1024);
                         sizeStr = fileSize.toFixed(2) + " G";
-                    } else if (fileSize > 1024 * 1024) {  // When file size exceeds 1MB.
+                    } else if (fileSize > 1024 * 1024) { // When file size exceeds 1MB.
                         fileSize = fileSize / (1024 * 1024);
                         sizeStr = fileSize.toFixed(2) + " M";
-                    } else if (fileSize > 1024) {  // When file size exceeds 1kB.
+                    } else if (fileSize > 1024) { // When file size exceeds 1kB.
                         fileSize = fileSize / 1024;
                         sizeStr = fileSize.toFixed(2) + " k";
-                    } else {  // When file size under 1kB.
+                    } else { // When file size under 1kB.
                         sizeStr = fileSize + " ";
                     }
 
@@ -187,7 +193,7 @@ define(['jquery'], function($) {
                         $("#message").html(str);
                         return;
                     }
-                } catch (err) {
+                } catch(err) {
                     str = "<font color=\"red\">This uploader requires the WebRTC.<br>";
                     str = str + "Howerver, your web browser don't support the WebRTC.</font>";
                     $("#message").html(str);
@@ -335,7 +341,7 @@ define(['jquery'], function($) {
                 }
 
                 if (fileType.indexOf("audio/ac3") != -1 || fileType.indexOf("audio/ogg") != -1 ||
-                    fileType.indexOf("audio/mpeg") != -1  || fileType.indexOf("audip/mp4") != -1 ||
+                    fileType.indexOf("audio/mpeg") != -1  || fileType.indexOf("audio/mp4") != -1 ||
                     fileType.indexOf("audio/wav") != -1 || fileType.indexOf("audio/x-ms-wma") != -1) {
                     return "audio";
                 }
@@ -393,8 +399,8 @@ define(['jquery'], function($) {
                 // Records scroll position of window.
                 var dElm = document.documentElement;
                 var dBody = document.body;
-                modalX = dElm.scrollLeft || dBody.scrollLeft;   // X position.
-                modalY = dElm.scrollTop || dBody.scrollTop;     // Y position.
+                modalX = dElm.scrollLeft || dBody.scrollLeft; // X position.
+                modalY = dElm.scrollTop || dBody.scrollTop; // Y position.
                 // Print overlay.
                 $("body").append("<div id=\"modal_window\"></div>");
                 $("#modal_window").fadeIn("slow");
@@ -706,15 +712,6 @@ define(['jquery'], function($) {
 
                     $("#modal_content").append("Uploading an attirbute information ...<br>");
 
-                    var backendHost = xhr.getResponseHeader("X-Me");
-                    if (backendHost !== null) {
-                        if (serverHost.indexOf("https") === 0) {
-                            serverHost = "https://" + backendHost;
-                        } else if (serverHost.indexOf("http") === 0) {
-                            serverHost = "http://" + backendHost;
-                        }
-                    }
-
                     // Entry metadata.
                     setTimeout(function() {
                         uploadAttributes(serverHost, ks, uploadTokenId);
@@ -916,6 +913,14 @@ define(['jquery'], function($) {
                 checkForm();
             });
 
+            // This function execute when window is loaded.
+            $(window).on("load", function() {
+                $("#name").val("");
+                $("#tags").val("");
+                $("#description").val("");
+                removeVideo();
+            });
+
             // This function execute when window is uloaded.
             $(window).on("unload", function() {
                 if (blobUrl !== null) {
@@ -953,13 +958,6 @@ define(['jquery'], function($) {
             $("#entry_reset").on("click", function() {
                 handleResetClick();
             });
-
-            $("#name").val("");
-            $("#tags").val("");
-            $("#description").val("");
-
-            // This function execute when this script is loaded.
-            removeVideo();
         }
     };
 });

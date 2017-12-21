@@ -8,3 +8,9 @@ Version 1.1.0
 * added a link button to webcam uploade form in "My Media".
 * fixed some error messages in simpleuploader.js.
 * fixed a filetype detection function in simpleuploader.js.
+
+Version 1.1.1
+
+* fixed font size issue in uploaders.
+* fixed file type check function in javascript.
+* fiexd statements in README.md.

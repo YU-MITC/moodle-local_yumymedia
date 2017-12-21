@@ -18,7 +18,7 @@
  * String script for "My Media".
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2017 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -103,6 +103,7 @@ $string['required_field'] = 'Required field';
 $string['name_header'] = 'Name';
 $string['tags_header'] = 'Tags';
 $string['desc_header'] = 'Description';
+$string['comma_separated'] = 'Commna-separated';
 $string['select_file_exp'] = 'Please select a media file.';
 $string['webcam_recording_exp'] = 'Please recording a movie.';
 $string['fill_form_exp'] = 'Please input metadata (attribute information), and submit the file.';

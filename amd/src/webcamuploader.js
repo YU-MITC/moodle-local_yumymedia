@@ -51,7 +51,7 @@ define(['jquery'], function($) {
             var constraints = null;
 
             var createObjectURL = window.URL && window.URL.createObjectURL
-                    ? function(file) { 
+                    ? function(file) {
                         return window.URL.createObjectURL(file);
                     }
                     : window.webkitURL && window.webkitURL.createObjectURL

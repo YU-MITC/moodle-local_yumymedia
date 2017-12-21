@@ -18,7 +18,7 @@
  * YU Kaltura My Media renderer class.
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2017 Yamaguchi University <ghcc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -31,7 +31,7 @@ require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.ph
 /**
  * Renderer class of local_yumymedia
  * @package local_yumymedia
- * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2017 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class local_yumymedia_renderer extends plugin_renderer_base {
@@ -1404,7 +1404,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     public function create_file_selection_markup() {
         $output = '';
 
-        $attr = array('id' => 'entry_steps');
+        $attr = array('id' => 'video_exp');
         $output .= html_writer::start_tag('div', $attr);
         $output .= '1. ' . get_string('select_file_exp', 'local_yumymedia');
         $output .= html_writer::end_tag('div');
@@ -1442,7 +1442,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $attr = array('type' => 'hidden', 'name' => 'deleteurl', 'id' => 'deleteurl', 'value' => $deleteurl);
         $output .= html_writer::start_tag('input', $attr);
 
-        $attr = array('id' => 'entry_steps');
+        $attr = array('id' => 'video_exp');
         $output .= html_writer::start_tag('div', $attr);
         $output .= '1. ' . get_string('webcam_recording_exp', 'local_yumymedia');
         $output .= html_writer::end_tag('div');
@@ -1529,7 +1529,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $categorypath = $rootpath . '>' . $USER->username;
 
         $output = '';
-        $attr = array('id' => 'entry_steps');
+        $attr = array('id' => 'metadata_exp');
 
         $output .= html_writer::start_tag('div', $attr);
         $output .= '2. ' . get_string('fill_form_exp', 'local_yumymedia');
@@ -1549,7 +1549,6 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $output .= html_writer::start_tag('table', $attr);
 
         $output .= html_writer::start_tag('tr');
-        $attr = array('id' => 'metadata_fields', 'valign' => 'top');
         $output .= html_writer::start_tag('td');
         $output .= get_string('name_header', 'local_yumymedia') . '&nbsp;';
         $attr = array('id' => 'entry_warning');
@@ -1565,8 +1564,6 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $output .= html_writer::end_tag('td');
         $output .= html_writer::end_tag('tr');
 
-        $attr = array('id' => 'entry_steps');
-
         $output .= html_writer::start_tag('tr', null);
         $attr = array('id' => 'metadata_fields', 'valign' => 'top');
         $output .= html_writer::start_tag('td', $attr);
@@ -1581,6 +1578,8 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $attr = array('type' => 'text', 'name' => 'tags', 'id' => 'tags', 'size' => '30',
                       'required' => 'true');
         $output .= html_writer::empty_tag('input', $attr);
+        $output .= '&nbsp;';
+        $output .= "(" . get_string('comma_separated', 'local_yumymedia') . ")";
         $output .= html_writer::end_tag('td');
         $output .= html_writer::end_tag('tr');
 

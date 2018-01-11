@@ -26,6 +26,18 @@ M.local_yumymedia = {
     Y: null,
     transaction: {},
 
+    /**
+     * Initial function.
+     * @access public
+     * @param {object} Y - YUI object.
+     * @param {string} panelMarkup - HTML markup of panel.
+     * @param {string} dialog - HTML markup of dialog.
+     * @param {string} conversionScript - URL of conversion script.
+     * @param {string} saveMediaScript - URL of save media script.
+     * @param {string} uiconfid - UiConf id on Kaltura server.
+     * @param {string} loadingPanel - URL of loading panel.
+     * @param {int} editMeta - capability for edit metadata.
+     */
     init: function(Y, panelMarkup, dialog, conversionScript, saveMediaScript,
                     uiconfid, loadingPanel, editMeta) {
 

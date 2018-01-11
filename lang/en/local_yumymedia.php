@@ -91,7 +91,7 @@ $string['delete_media_not_exist'] = 'This media no longer exists.';
 
 // Media Upload.
 $string['simple_upload'] = 'Upload your media';
-$string['webcam_upload'] = 'Upload from webcamera';
+$string['webcam_upload'] = 'Upload from web-camera';
 $string['session_failed'] = 'Unable to start new kaltura session for media uploading.<br>Please contact your site administrator.';
 $string['category_failed'] = 'Cannot set root category of content.';
 $string['ks_failed'] = 'Cannot set kaltura session.';

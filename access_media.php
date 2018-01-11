@@ -65,7 +65,7 @@ $publishername = local_yukaltura_get_publisher_name();
 $secret = local_yukaltura_get_admin_secret();
 $kalturahost = local_yukaltura_get_host();
 $partnerid = local_yukaltura_get_partner_id();
-$uiconfid = local_yukaltura_get_player_uiconf('player_resource');
+$uiconfid = local_yukaltura_get_player_uiconf('player_mymedia');
 $expiry = KALTURA_SESSION_LENGTH;
 
 echo $OUTPUT->header();

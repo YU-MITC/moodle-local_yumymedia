@@ -487,7 +487,7 @@ define(['jquery'], function($) {
                     if (xmlData !== null) {
                         window.console.dir(xmlData);
                     }
-                    printErrorMessage("Cannot upload the file !<br>(Cannot connect to contents server.)");
+                    printErrorMessage("Cannot upload the file !<br>(Cannot connect to content server.)");
 
                 });
             }
@@ -638,7 +638,7 @@ define(['jquery'], function($) {
                     if (xmlData !== null) {
                         window.console.dir(xmlData);
                     }
-                    printErrorMessage("Cannot upload the attribute information !<br>(Cannot connect to contents server.)");
+                    printErrorMessage("Cannot upload the attribute information !<br>(Cannot connect to content server.)");
                     return;
                 });
             }
@@ -732,7 +732,7 @@ define(['jquery'], function($) {
                     }
                 })
                 .fail(function(xmlData) {
-                    window.console.log("Cannot delete the uploadToken ! (Cannot connect to contents server.)");
+                    window.console.log("Cannot delete the uploadToken ! (Cannot connect to content server.)");
                     if (xmlData !== null) {
                         window.console.dir(xmlData);
                     }

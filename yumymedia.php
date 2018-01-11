@@ -66,7 +66,7 @@ if (!$connection) {
 $courseid = $COURSE->id;
 
 if (local_yukaltura_has_mobile_flavor_enabled() && local_yukaltura_get_enable_html5()) {
-    $uiconfid = local_yukaltura_get_player_uiconf('player_resource');
+    $uiconfid = local_yukaltura_get_player_uiconf('player_mymedia');
     $url = new moodle_url(local_yukaltura_html5_javascript_url($uiconfid));
     $PAGE->requires->js($url, true);
     $url = new moodle_url('/local/yukaltura/js/frameapi.js');
@@ -191,7 +191,7 @@ if (local_yukaltura_get_mymedia_permission()) {
         $savemediascript = "../../local/yumymedia/save_media_details.php?entryid=";
         $conversionscript = "../../local/yumymedia/check_conversion.php?courseid={$courseid}&entryid=";
         $loadingmarkup = $renderer->create_loading_screen_markup();
-        $uiconfid = local_yukaltura_get_player_uiconf('player_filter');
+        $uiconfid = local_yukaltura_get_player_uiconf('player_mymedia');
 
         $PAGE->requires->js_init_call('M.local_yumymedia.init',
                                       array($mediadetails,

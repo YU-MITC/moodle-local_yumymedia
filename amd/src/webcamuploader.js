@@ -193,7 +193,7 @@ define(['jquery'], function($) {
                         $("#message").html(str);
                         return;
                     }
-                } catch(err) {
+                } catch (err) {
                     str = "<font color=\"red\">This uploader requires the WebRTC.<br>";
                     str = str + "Howerver, your web browser don't support the WebRTC.</font>";
                     $("#message").html(str);
@@ -208,7 +208,7 @@ define(['jquery'], function($) {
                         $("#message").html(str);
                         return;
                     }
-                } catch(err) {
+                } catch (err) {
                     str = "<font color=\"red\">This uploader requires the WebRTC.<br>";
                     str = str + "Howerver, your web browser don't support the WebRTC.</font>";
                     $("#message").html(str);
@@ -263,7 +263,6 @@ define(['jquery'], function($) {
                         "optional": [{"facingMode": "user"}]
                     }
                 };
-
 
                 navigator.getUserMedia(constraints,
                 function(stream) {
@@ -722,7 +721,7 @@ define(['jquery'], function($) {
                     if (xmlData !== null) {
                         window.console.dir(xmlData);
                     }
-                    printErrorMessage("Cannot upload the file !<br>(Cannot connect to contents server.)");
+                    printErrorMessage("Cannot upload the file !<br>(Cannot connect to content server.)");
 
                 });
             }
@@ -873,7 +872,7 @@ define(['jquery'], function($) {
                     if (xmlData !== null) {
                         window.console.dir(xmlData);
                     }
-                    printErrorMessage("Cannot upload the attribute information !<br>(Cannot connect to contents server.)");
+                    printErrorMessage("Cannot upload the attribute information !<br>(Cannot connect to content server.)");
                     return;
                 });
             }
@@ -901,7 +900,7 @@ define(['jquery'], function($) {
                     }
                 })
                 .fail(function(xmlData) {
-                    window.console.log("Cannot delete the uploadToken ! (Cannot connect to contents server.)");
+                    window.console.log("Cannot delete the uploadToken ! (Cannot connect to content server.)");
                     if (xmlData !== null) {
                         window.console.dir(xmlData);
                     }

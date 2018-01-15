@@ -1357,23 +1357,39 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function outpus HTML markup of session failed.
      * @param string $ks - kaltura session string.
-     * @param string $rootpath - path of root category.
      * @return string - HTML markup for session failed.
      */
-    public function create_session_failed_markup($ks, $rootpath) {
+    public function create_session_failed_markup($ks) {
         $output = '';
         $output .= get_string('session_failed', 'local_yumymedia');
         $output .= html_writer::empty_tag('br');
 
-        if (empty($rootpath)) {
-            $output .= '(' . get_string('category_failed', 'local_yumymedia') . ')';
-            $output .= html_writer::empty_tag('br');
-        }
+        $output .= '(' . get_string('ks_failed', 'local_yumymedia') . ')';
+        $output .= html_writer::empty_tag('br');
 
-        if ($ks == null) {
-            $output .= '(' . get_string('ks_failed', 'local_yumymedia') . ')';
-            $output .= html_writer::empty_tag('br');
+        $attr = array('type' => 'button', 'name' => 'uploader_cancel', 'id' => 'uploader_cancel',
+                      'value' => get_string('back_label', 'local_yumymedia'));
+        $output .= html_writer::empty_tag('input', $attr);
+
+        return $output;
+    }
+
+    /**
+     * This function output HTML markup of category failed.
+     * @return string - HTML markup for category failed.
+     */
+    public function create_category_failed_markup() {
+        $output = '';
+        $output .= get_string('category_failed', 'local_yumymedia');
+        $output .= html_writer::empty_tag('br');
+
+        if (get_config(KALTURA_PLUGIN_NAME, 'rootcategory') == null ||
+            get_config(KALTURA_PLUGIN_NAME, 'rootcategory') == '') {
+            $output .= '(' . get_string('category_failed_empty', 'local_yumymedia') . ')';
+        } else {
+            $output .= '(' . get_string('category_failed_no_exists', 'local_yumymedia') . ')';
         }
+        $output .= html_writer::empty_tag('br');
 
         $attr = array('type' => 'button', 'name' => 'uploader_cancel', 'id' => 'uploader_cancel',
                       'value' => get_string('back_label', 'local_yumymedia'));
@@ -1526,7 +1542,11 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         global $USER;
 
         // Set category of media.
-        $categorypath = $rootpath . '>' . $USER->username;
+        if (empty($rootpath)) {
+            $categorypath = $USER->username;
+        } else {
+            $categorypath = $rootpath . '>' . $USER->username;
+        }
 
         $output = '';
         $attr = array('id' => 'metadata_exp');

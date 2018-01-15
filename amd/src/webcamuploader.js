@@ -249,8 +249,12 @@ define(['jquery'], function($) {
                 }
 
                 constraints = {
+                    audioBitsPerSecond: 128000,
+                    videoBitsPerSecond: 1500000,
                     mimeType: mimeOption,
-                    audio: true,
+                    audio: {
+                        echoCancellation : false
+                    },
                     video: {
                         "mandatory": {
                             minWidth: 320,

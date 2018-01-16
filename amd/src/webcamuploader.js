@@ -239,9 +239,9 @@ define(['jquery'], function($) {
 
                 // Prefer camera resolution nearest to 1280x720.
                 if (MediaRecorder.isTypeSupported("video/webm;codecs=vp9")) {
-                    mimeOption = "video/webm; codecs=vp9";
-                } else if (MediaRecorder.isTypeSupported("video/webm;codecs=vp8")) {
                     mimeOption = "video/webm; codecs=vp8";
+                } else if (MediaRecorder.isTypeSupported("video/webm;codecs=vp8")) {
+                    mimeOption = "video/webm; codecs=vp9";
                 } else if (MediaRecorder.isTypeSupported("video/webm")) {
                     mimeOption = "video/webm";
                 } else {

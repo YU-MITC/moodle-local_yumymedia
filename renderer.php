@@ -1627,6 +1627,8 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $output .= html_writer::empty_tag('input', $attr);
         $attr = array('type' => 'hidden', 'id' => 'type', 'name' => 'type', 'value' => '');
         $output .= html_writer::empty_tag('input', $attr);
+        $attr = array('type' => 'hidden', 'id' => 'filename', 'name' => 'filename', 'value' => "\"" . sha1($ks, false) . "\"");
+        $output .= html_writer::empty_tag('input', $attr);
         $attr = array('type' => 'hidden', 'id' => 'categories', 'name' => 'categories', 'value' => "$categorypath");
         $output .= html_writer::empty_tag('input', $attr);
         $attr = array('type' => 'hidden', 'id' => 'creatorId', 'name' => 'creatorId', 'value' => "$USER->username");

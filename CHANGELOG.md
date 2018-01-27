@@ -23,4 +23,5 @@ Version 1.1.2
 * fixed error detection algorithms in simple_uploader.php and webcam_uploader.php
 * added statements in README.md.
 * separetd mymedia player setting from Kaltura Media Assignment.
+* replaced deprecated APIs to new APIs (simpleuploader.js and webcamuploader.js).
 

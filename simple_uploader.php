@@ -84,8 +84,11 @@ if (!$connection) {  // When connection failed.
 
     $output = '';
 
-    if ($ks == null || empty($rootpath)) { // Session failed.
-        $output .= $renderer->create_session_failed_markup($ks, $rootpath);
+    if ($ks == null) { // Session failed.
+        $output .= $renderer->create_session_failed_markup($ks);
+    } else if (get_config(KALTURA_PLUGIN_NAME, 'rootcategory') == null ||
+             get_config(KALTURA_PLUGIN_NAME, 'rootcategory') == '' || empty($rootpath)) {
+        $output .= $renderer->create_category_failed_markup();
     } else if ($control == null) {
         $output .= $renderer->create_access_control_failed_markup();
     } else { // Session started.

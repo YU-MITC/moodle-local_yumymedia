@@ -316,7 +316,7 @@ define(['jquery'], function($) {
                     $("#status").html("Camera preview.");
                 });
 
-                p.catch(function(err) { 
+                p.catch(function(err) {
                     var str = "<font color=\"red\">Your webcamera is not supported, ";
                     str = str + "or the webcamera is already used.</font>";
                     $("#message").html(str);

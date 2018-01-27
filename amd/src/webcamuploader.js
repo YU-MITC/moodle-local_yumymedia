@@ -46,6 +46,7 @@ define(['jquery'], function($) {
 
             var localStream = null;
             var videoBlob = null;
+            var videoFilename = "";
             var blobUrl = null;
             var recorder = null;
             var constraints = null;
@@ -76,7 +77,13 @@ define(['jquery'], function($) {
                 AUDIO: 5
             };
 
-            var STATUS = {
+            var AUTO_FINALIZE = {
+                TRUE: 1,
+                FALSE: 0,
+                NULL: -1
+            };
+
+            var ENTRY_STATUS = {
                 ENTRY_IMPORTING: -2,
                 ENTRY_CONVERTING: -1,
                 ENTRY_IMPORT: 0,
@@ -88,6 +95,16 @@ define(['jquery'], function($) {
                 ENTRY_BLOCKED: 6,
                 ENTRY_NO_CONTENT: 7
             };
+
+            var UPLOAD_TOKEN_STATUS = {
+                PENDING: 0,
+                PARTIAL_UPLOAD: 1,
+                FULL_UPLOAD: 2,
+                CLOSED: 3,
+                TIMED_OUT: 4,
+                DELETED: 5
+            };
+
 
             /**
              * This function print a video player for playing.
@@ -144,16 +161,17 @@ define(['jquery'], function($) {
                     setPlayingPlayer(blobUrl);
                     fileSize = videoBlob.size;
                     var sizeStr = "";
+                    var dividedSize = 0;
 
                     if (fileSize > 1024 * 1024 * 1024) { // When file size exceeds 1GB.
-                        fileSize = fileSize / (1024 * 1024 * 1024);
-                        sizeStr = fileSize.toFixed(2) + " G";
+                        dividedSize = fileSize / (1024 * 1024 * 1024);
+                        sizeStr = dividedSize.toFixed(2) + " G";
                     } else if (fileSize > 1024 * 1024) { // When file size exceeds 1MB.
-                        fileSize = fileSize / (1024 * 1024);
-                        sizeStr = fileSize.toFixed(2) + " M";
+                        dividedSize = fileSize / (1024 * 1024);
+                        sizeStr = dividedSize.toFixed(2) + " M";
                     } else if (fileSize > 1024) { // When file size exceeds 1kB.
-                        fileSize = fileSize / 1024;
-                        sizeStr = fileSize.toFixed(2) + " k";
+                        dividedSize = fileSize / 1024;
+                        sizeStr = dividedSize.toFixed(2) + " k";
                     } else { // When file size under 1kB.
                         sizeStr = fileSize + " ";
                     }
@@ -166,6 +184,7 @@ define(['jquery'], function($) {
                     }
                     checkForm();
 
+                    videoFilename = $("#filename").val() + "." + getFileExtension(videoBlob.type);
                 };
                 recorder.stop();
 
@@ -184,18 +203,28 @@ define(['jquery'], function($) {
             function removeVideo() {
                 var str = "";
 
-                navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+               navigator.mediaDevices = navigator.mediaDevices || ((navigator.mozGetUserMedia || navigator.webkitGetUserMedia) ? {
+                   getUserMedia: function(c) {
+                       return new Promise(function(y, n) {
+                           (navigator.mozGetUserMedia || navigator.webkitGetUserMedia).call(navigator, c, y, n);
+                       });
+                   }
+               } : null);
+
                 try {
-                    if (navigator.getUserMedia === null || navigator.getUserMedia === undefined ||
+                    // if (navigator.getUserMedia === null || navigator.getUserMedia === undefined ||
+                    if (navigator.mediaDevices === null || navigator.mediaDevices === undefined ||
                         MediaRecorder === null || MediaRecorder === undefined) {
                         str = "<font color=\"red\">This uploader requires the WebRTC.<br>";
-                        str = str + "Howerver, your web browser don't support the WebRTC.</font>";
+                        str = str + "Howerver, your web browser don't support the WebRTC.<br>";
+                        str = str + "Please use other browser.</font>";
                         $("#message").html(str);
                         return;
                     }
                 } catch (err) {
                     str = "<font color=\"red\">This uploader requires the WebRTC.<br>";
-                    str = str + "Howerver, your web browser don't support the WebRTC.</font>";
+                    str = str + "Howerver, your web browser don't support the WebRTC.<br>";
+                    str = str + "Please use other browser.</font>";
                     $("#message").html(str);
                     return;
                 }
@@ -204,13 +233,15 @@ define(['jquery'], function($) {
                     if (createObjectURL === null || createObjectURL === undefined ||
                         revokeObjectURL === null || revokeObjectURL === undefined) {
                         str = "<font color=\"red\">This uploader requires the createObjectURL/revokeObjectURL.<br>";
-                        str = str + "Howerver, your web browser don't support these function.</font>";
+                        str = str + "Howerver, your web browser don't support these function.<br>";
+                        str = str + "Please use other browser.</font>";
                         $("#message").html(str);
                         return;
                     }
                 } catch (err) {
                     str = "<font color=\"red\">This uploader requires the WebRTC.<br>";
-                    str = str + "Howerver, your web browser don't support the WebRTC.</font>";
+                    str = str + "Howerver, your web browser don't support the WebRTC.<br>";
+                    str = str + "Please use other browser.</font>";
                     $("#message").html(str);
                     return;
                 }
@@ -238,9 +269,9 @@ define(['jquery'], function($) {
                 var mimeOption = "";
 
                 // Prefer camera resolution nearest to 1280x720.
-                if (MediaRecorder.isTypeSupported("video/webm;codecs=vp9")) {
+                if (MediaRecorder.isTypeSupported("video/webm;codecs=vp8")) {
                     mimeOption = "video/webm; codecs=vp8";
-                } else if (MediaRecorder.isTypeSupported("video/webm;codecs=vp8")) {
+                } else if (MediaRecorder.isTypeSupported("video/webm;codecs=vp9")) {
                     mimeOption = "video/webm; codecs=vp9";
                 } else if (MediaRecorder.isTypeSupported("video/webm")) {
                     mimeOption = "video/webm";
@@ -268,8 +299,9 @@ define(['jquery'], function($) {
                     }
                 };
 
-                navigator.getUserMedia(constraints,
-                function(stream) {
+                var p = navigator.mediaDevices.getUserMedia(constraints);
+
+                p.then(function(stream) {
                     localStream = stream;
                     blobUrl = createObjectURL(localStream);
                     $("#webcam").attr("src", blobUrl);
@@ -282,8 +314,9 @@ define(['jquery'], function($) {
                     $("#leftspan").css("display", "inline");
                     $("#rightspan").css("display", "none");
                     $("#status").html("Camera preview.");
-                },
-                function(err) {
+                });
+
+                p.catch(function(err) { 
                     var str = "<font color=\"red\">Your webcamera is not supported, ";
                     str = str + "or the webcamera is already used.</font>";
                     $("#message").html(str);
@@ -345,6 +378,7 @@ define(['jquery'], function($) {
 
                 if (fileType.indexOf("audio/ac3") != -1 || fileType.indexOf("audio/ogg") != -1 ||
                     fileType.indexOf("audio/mpeg") != -1  || fileType.indexOf("audio/mp4") != -1 ||
+                    fileType.indexOf("audio/mp3") != -1 ||
                     fileType.indexOf("audio/wav") != -1 || fileType.indexOf("audio/x-ms-wma") != -1) {
                     return "audio";
                 }
@@ -355,6 +389,74 @@ define(['jquery'], function($) {
                 }
 
                 return "N/A";
+            }
+
+             /**
+              * This function return file extension string.
+              * @access public
+              * @param {string} fileType - file type of selected media.
+              * @return {string} - file extension of selected media.
+              */
+             function getFileExtension(fileType) {
+                 if (fileType.indexOf("video/avi") != -1 || fileType.indexOf("video/x-msvideo") != -1) {
+                     return "avi";
+                 }
+                 if (fileType.indexOf("video/mpeg") != -1 || fileType.indexOf("video/mpg") != -1 ||
+                     fileType.indexOf("audio/mpeg") != -1 || fileType.indexOf("audio/mpg") != -1) {
+                     return "mpeg";
+                 }
+                 if (fileType.indexOf("video/mp4") != -1 || fileType.indexOf("video/m4v") != -1 ||
+                     fileType.indexOf("audio/mp4") != -1) {
+                     return "mp4";
+                 }
+                 if (fileType.indexOf("video/ogg") != -1) {
+                     return "ogg";
+                 }
+                 if (fileType.indexOf("video/quicktime") != -1) {
+                     return "mov";
+                 }
+                 if (fileType.indexOf("video/VP8") != -1 || fileType.indexOf("video/VP9") != -1 ||
+                     fileType.indexOf("video/vp8") != -1 || fileType.indexOf("video/vp9") != -1 ||
+                     fileType.indexOf("video/webm") != -1) {
+                     return "webm";
+                 }
+                 if (fileType.indexOf("video/x-flv") != -1 || fileType.indexOf("video/x-f4v") != -1) {
+                     return "flv";
+                 }
+                 if (fileType.indexOf("video/x-matroska") != -1) {
+                     return "mkv";
+                 }
+                 if (fileType.indexOf("video/x-ms-wmv") != -1) {
+                     return "wmv";
+                 }
+
+                 if (fileType.indexOf("audio/ac3") != -1) {
+                     return "ac3";
+                 }
+                 if (fileType.indexOf("audio/ogg") != -1) {
+                     return "ogg";
+                 }
+                 if (fileType.indexOf("audio/wav") != -1) {
+                     return "wav";
+                 }
+                 if (fileType.indexOf("audio/x-ms-wma") != -1) {
+                     return "wma";
+                 }
+
+                if (fileType.indexOf("image/gif") != -1) {
+                    return "gif";
+                }
+                if (fileType.indexOf("image/jpeg") != -1) {
+                    return "jpg";
+                }
+                if (fileType.indexOf("image/png") != -1) {
+                    return "png";
+                }
+                if (fileType.indexOf("image/tiff") != -1) {
+                    return "tiff";
+                }
+
+                return "webm";
             }
 
             /**
@@ -583,8 +685,8 @@ define(['jquery'], function($) {
             function executeUploadProcess() {
                 var serverHost = $("#kalturahost").val(); // Get hostname of kaltura server.
                 var ks = $("#ks").val(); // Get session id.
-                // Uploadgin media file.
-                uploadMediaFile(serverHost, ks);
+                // Create upload token.
+                createUploadToken(serverHost, ks);
             }
 
             /**
@@ -640,105 +742,92 @@ define(['jquery'], function($) {
             }
 
             /**
-             * This function uploads media file.
+             * This function creates upload token.
              * @access public
              * @param {string} serverHost - hostname of kaltura server.
              * @param {string} ks - session string of kaltura connection.
              */
-            function uploadMediaFile(serverHost, ks) {
+            function createUploadToken(serverHost, ks) {
                 var uploadTokenId;
                 var findData;
 
-                var fd = new FormData();
-
-                // Creates form data.
-                fd.append("action", "upload");
-                fd.append("fileData", videoBlob);
-                fd.append("ks", ks);
-
-                // Creates transmission data.
                 var postData = {
-                    type: "POST",
-                    data: fd,
+                    type: "GET",
                     cache: false,
                     async: true,
                     contentType: false,
                     scriptCharset: "utf-8",
-                    processData: false,
-                    dataType: "xml",
-                    xhr: function() {
-                        var XHR = $.ajaxSettings.xhr();
-                        if (XHR.upload) {
-                            XHR.upload.addEventListener("progress", function(e) {
-                                var newValue = parseInt(e.loaded / e.total * 10000) / 100;
-                                $("#pvalue").html(parseInt(newValue));
-                            }, false);
-                        }
-                        return XHR;
-                    }
+                    dataType: "xml"
                 };
 
-                var serviceURL = serverHost + "/api_v3/service/media/action/upload";
-
-                $("#modal_content").append("Uploading a media file ...<br>");
-
-                $("#modal_content").append("<p>Progress: <span id=\"pvalue\" style=\"color:#00b200\">0.00</span> %</p>");
+                var serviceURL = serverHost + "/api_v3/service/uploadToken/action/add?ks=" + ks;
+                serviceURL = serviceURL + "&uploadToken:objectType=KalturaUploadToken";
+                serviceURL = serviceURL + "uploadToken:fileName=" + encodeURI(videoFilename);
+                serviceURL = serviceURL + "&uploadToken:fileSize=" + videoBlob.size;
+                serviceURL = serviceURL + "&uploadToken:autoFinalize=" + AUTO_FINALIZE.NULL;
 
                 // Transmits data.
                 $.ajax(
                     serviceURL, postData
                 )
-                .done(function(xmlData, textStatus, xhr) {
+                .done(function(xmlData) {
                     // Response is not XML.
                     if (xmlData === null) {
-                        deleteUploadToken(serverHost, ks, uploadTokenId);
-                        printErrorMessage("Cannot upload the file !<br>(Cannot get a XML response.)");
+                        printErrorMessage("Cannot create upload token !<br>(Cannot get a XML response.)");
                         return;
                     }
+
                     // Get a tag of error code.
                     findData = $(xmlData).find("code");
                     // There exists error code.
                     if (findData !== null && typeof findData !== undefined && findData.text() !== "") {
-                        printErrorMessage("Cannot upload the file !<br>(" + findData.text() + ")");
+                        printErrorMessage("Cannot create upload token !<br>(" + findData.text() + ")");
+                        return;
+                    }
+
+                    findData = $(xmlData).find("status");
+                    // There not exists upload token id.
+                    if (findData === null || typeof findData === undefined || findData.text() === "") {
+                        printErrorMessage("Cannot create upload token !<br>(Cannot get status of upload token.)");
+                        return;
+                    }
+
+                    var uploadTokenStatus = findData.text();
+                    if (uploadTokenStatus != UPLOAD_TOKEN_STATUS.PENDING) {
+                        printErrorMessage("Cannot create upload token !<br>(UPLOAD_TOKEN_STATUS : " + uploadTokenStatus + ")");
                         return;
                     }
 
                     // Get upload token id.
-                    findData = $(xmlData).find("result");
+                    findData = $(xmlData).find("id");
                     // There not exists upload token id.
                     if (findData === null || typeof findData === undefined || findData.text() === "") {
-                        printErrorMessage("Cannot upload the file !<br>(Cannot get an uploadTokenId.)");
+                        printErrorMessage("Cannot create uplaod token !<br>(Cannot get an uploadTokenId.)");
                         return;
                     }
-                    // Get a value of upload token id.
                     uploadTokenId = findData.text();
-
-                    $("#modal_content").append("Uploading an attirbute information ...<br>");
-
                     // Entry metadata.
                     setTimeout(function() {
-                        uploadAttributes(serverHost, ks, uploadTokenId);
+                        createMediaEntry(serverHost, ks, uploadTokenId);
                     }, 1000);
+
                 })
                 .fail(function(xmlData) {
-                    deleteUploadToken(serverHost, ks, uploadTokenId);
                     if (xmlData !== null) {
                         window.console.dir(xmlData);
                     }
-                    printErrorMessage("Cannot upload the file !<br>(Cannot connect to content server.)");
-
+                    printErrorMessage("Cannot create upload token !<br>(Cannot connect to kaltura server.)");
                 });
             }
 
             /**
-             * This function uploads metadata.
+             * This function creates media entry.
              * @access public
              * @param {string} serverHost - hostname of kaltura server.
-             * @param {string} ks - session string of kaltura connection.
+             * @param {string} ks - session string of kaltura connecion;
              * @param {string} uploadTokenId - upload token id.
              */
-            function uploadAttributes(serverHost, ks, uploadTokenId) {
-
+            function createMediaEntry(serverHost, ks, uploadTokenId) {
                 var findData;
                 var entryStatus;
                 var entryId = "";
@@ -746,21 +835,12 @@ define(['jquery'], function($) {
                 var entryTags = "";
                 var entryDescription = "";
                 var entryCreatorId = "";
-                var type = $("#type").val();
-                var mediaType = "";
-
-                if (type == "image") {
-                    mediaType = MEDIA_TYPE.IMAGE;
-                } else if (type == "audio") {
-                    mediaType = MEDIA_TYPE.AUDIO;
-                } else {
-                    mediaType = MEDIA_TYPE.VIDEO;
-                }
 
                 var nameStr = $("#name").val();
                 var tagsStr = $("#tags").val();
                 var descStr = $("#description").val();
                 var controlId = $("#controlId").val();
+                var creatorId = $("#creatorId").val();
 
                 nameStr = nameStr.trim();
                 tagsStr = tagsStr.trim();
@@ -768,23 +848,30 @@ define(['jquery'], function($) {
                     descStr = descStr.trim();
                 }
 
-                // Creates form data.
                 var fd = new FormData();
-                fd.append("action", "addFromUploadedFile");
+
+                // Creates form data.
+                fd.append("action", "add");
                 fd.append("ks", ks);
-                fd.append("uploadTokenId", uploadTokenId);
-                fd.append("mediaEntry:name", nameStr);
-                fd.append("mediaEntry:tags", tagsStr);
+                fd.append("entry:objectType", "KalturaMediaEntry");
+                fd.append("entry:mediaType", MEDIA_TYPE.VIDEO);
+                fd.append("entry:sourceType", 1);
+                fd.append("entry:name", nameStr);
+                fd.append("entry:tags", tagsStr);
                 if (descStr !== null && descStr !== "") {
-                    fd.append("mediaEntry:description", descStr);
+                    fd.append("entry:description", descStr);
                 } else {
-                    fd.append("mediaEntry:description", "");
+                    fd.append("entry:description", "");
                 }
-                fd.append("mediaEntry:categories", $("#categories").val());
-                fd.append("mediaEntry:creatorId", $("#creatorId").val());
-                fd.append("mediaEntry:userId", $("#creatorId").val());
-                fd.append("mediaEntry:mediaType", mediaType);
-                fd.append("mediaEntry:accessControlId", controlId);
+
+                fd.append("entry:categories", $("#categories").val());
+
+                if (controlId !== null && controlId !== "") {
+                    fd.append("entry:accessControlId", controlId);
+                }
+
+                fd.append("entry:creatorId", creatorId);
+                fd.append("entry:userId", creatorId);
 
                 // Creates transmission data.
                 var postData = {
@@ -798,7 +885,7 @@ define(['jquery'], function($) {
                     dataType: "xml"
                 };
 
-                var serviceURL = serverHost + "/api_v3/service/media/action/addFromUploadedFile";
+                var serviceURL = serverHost + "/api_v3/service/media/action/add";
 
                 // Transmits data.
                 $.ajax(
@@ -808,16 +895,16 @@ define(['jquery'], function($) {
                     // Response is not XML.
                     if (xmlData === null || typeof xmlData === undefined) {
                         deleteUploadToken(serverHost, ks, uploadTokenId);
-                        printErrorMessage("Cannot upload the attribute information !<br>(Cannot get a XML response.)");
+                        printErrorMessage("Cannot create media entry !<br>(Cannot get a XML response.)");
                         return;
                     }
 
                     // Get a tag of error code.
                     findData = $(xmlData).find("code");
-                    // There exists error code.
+                    // There exists an error code.
                     if (findData !== null && typeof findData !== undefined && findData.text() !== "") {
                         deleteUploadToken(serverHost, ks, uploadTokenId);
-                        printErrorMessage("Cannot upload the attribute information !<br>(" + findData.text() + ")");
+                        printErrorMessage("Cannot create media entry !<br>(" + findData.text() + ")");
                         return;
                     }
 
@@ -826,17 +913,243 @@ define(['jquery'], function($) {
                     // There not exists a tag of status.
                     if (findData === null || typeof findData === undefined || findData.text() === "") {
                         deleteUploadToken(serverHost, ks, uploadTokenId);
-                        printErrorMessage("Cannot upload the attribute information !<br>(Cannot get a mediaEntryStatus.)");
+                        printErrorMessage("Cannot create media entyry !<br>(Cannot get a mediaEntryStatus.)");
                         return;
                     }
 
                     // Get a value of status.
                     entryStatus = findData.text();
                     // When uploading of metadata failed.
-                    if (entryStatus != STATUS.ENTRY_READY && entryStatus != STATUS.ENTRY_PENDING &&
-                        entryStatus != STATUS.ENTRY_PRECONVERT) {
+                    if (entryStatus != ENTRY_STATUS.ENTRY_NO_CONTENT) {
                         deleteUploadToken(serverHost, ks, uploadTokenId);
-                        printErrorMessage("Cannot upload the attribute information !<br>(mediaEntryStatus: " + entryStatus + ")");
+                        printErrorMessage("Cannot create media entry!<br>(mediaEntryStatus: " + entryStatus + ")");
+                        return;
+                    }
+
+                    // Get a tag of entry id.
+                    findData = $(xmlData).find("id");
+                    // Get a value of entry id.
+                    entryId = findData.text();
+                    // Get a tag of name.
+                    findData = $(xmlData).find("name");
+                    // Get a value of name.
+                    entryName = findData.text();
+                    // Get a tag of tags.
+                    findData = $(xmlData).find("tags");
+                    // Get a value of tags.
+                    entryTags = findData.text();
+                    // Get a tag of description.
+                    findData = $(xmlData).find("description");
+                    // There exists description.
+                    if (findData !== null && typeof findData !== undefined && findData.text() !== "") {
+                        // Get a value of description.
+                        entryDescription = findData.text();
+                    } else {
+                        entryDescription = "";
+                    }
+                    // Get a tago of creator id.
+                    findData = $(xmlData).find("creatorId");
+                    // Get a value of creator id.
+                    entryCreatorId = findData.text();
+
+                    // Associate uploaded file with media entry
+                    setTimeout(function() {
+                        uploadMediaFile(serverHost, ks, uploadTokenId, entryId);
+                    }, 1000);
+
+                })
+                .fail(function(xmlData) {
+                    if (xmlData !== null) {
+                        window.console.dir(xmlData);
+                }
+                    deleteUploadToken(serverHost, ks, uploadTokenId);
+                    printErrorMessage("Cannot create media entry !<br>(Cannot connect to kaltura server.)");
+                    return;
+                });
+            }
+
+
+            /**
+             * This function uploads media file.
+             * @access public
+             * @param {string} serverHost - hostname of kaltura server.
+             * @param {string} ks - session string of kaltura connection.
+             * @param {string} uyploadTokenId - upload token id.
+             * @param {string} entryId - id of media entry.
+             */
+            function uploadMediaFile(serverHost, ks, uploadTokenId, entryId) {
+                var findData;
+                var fd = new FormData();
+
+                $("#modal_content").append("Uploading a recorded video ...");
+                $("#modal_content").append("<p>Progress: <span id=\"pvalue\" style=\"color:#00b200\">0.00</span> %</p>");
+
+                // Creates form data.
+                fd.append("action", "upload");
+                fd.append("ks", ks);
+                fd.append("uploadTokenId", uploadTokenId);
+                fd.append("fileData", videoBlob, encodeURI(videoFilename), videoBlob.size);
+                fd.append("resume", false);
+                fd.append("finalChunk", true);
+                fd.append("resumeAt", 0);
+
+                // Creates tnramission data.
+                var postData = {
+                    type: "POST",
+                    data: fd,
+                    cache: false,
+                    async: true,
+                    contentType: false,
+                    scriptCharset: "utf-8",
+                    processData: false,
+                    dataType: "xml",
+                    xhr: function() {
+                        var XHR = $.ajaxSettings.xhr();
+                        if (XHR.upload) {
+                            XHR.upload.addEventListener("progress", function(e) {
+                                var newValue = parseInt(parseInt(e.loaded) / parseInt(e.total) * 10000) / 100;
+                                $("#pvalue").html(parseInt(newValue));
+                            }, false);
+                        }
+                        return XHR;
+                    }
+                };
+
+                var serviceURL = serverHost + "/api_v3/service/uploadToken/action/upload";
+
+                // Transmits data.
+                $.ajax(
+                    serviceURL, postData
+                )
+                .done(function(xmlData, textStatus, xhr) {
+                    // Response is not XML.
+                    if (xmlData === null) {
+                        deleteUploadToken(serverHost, ks, uploadTokenId);
+                        printErrorMessage("Cannot upload the video !<br>(Cannot get a XML response.)");
+                        return;
+                    }
+
+                    // Get a tag of error code.
+                    findData = $(xmlData).find("code");
+                    // There exists error code.
+                    if (findData !== null && typeof findData !== undefined && findData.text() !== "") {
+                        deleteUploadToken(serverHost, ks, uploadTokenId);
+                        printErrorMessage("Cannot upload the video !<br>(" + findData.text() + ")");
+                        return;
+                    }
+
+                    // Get upload token id.
+                    findData = $(xmlData).find("status");
+                    // There not exists upload token id.
+                    if (findData === null || typeof findData === undefined || findData.text() === "") {
+                        deleteUploadToken(serverHost, ks, uploadTokenId);
+                        printErrorMessage("Cannot upload the video !<br>(Cannot get an uploadTokenStatus.)");
+                        return;
+                    }
+
+                    var uploadTokenStatus = findData.text();
+                    if (uploadTokenStatus != UPLOAD_TOKEN_STATUS.FULL_UPLOAD &&
+                        uploadTokenStatus != UPLOAD_TOKEN_STATUS.PARTIAL_UPLOAD) {
+                        deleteUploadToken(serverHost, ks, uploadTokenId);
+                        printErrorMessage("Cannot upload the video !<br>(UPLOAD_TOKEN_STATUS : " + uploadTokenStatus + ")");
+                        return;
+                    } else {
+                        window.console.log("Ffile chunk have been transmitted.");
+                    }
+                    $("#modal_content").append("Attach uploaded file ...<br>");
+                    // Create media entry.
+                    setTimeout(function() {
+                        attachUploadedFile(serverHost, ks, uploadTokenId, entryId);
+                    }, 1000);
+
+                })
+                .fail(function(xmlData) {
+                    if (xmlData !== null) {
+                        window.console.dir(xmlData);
+                    }
+                    deleteUploadToken(serverHost, ks, uploadTokenId);
+                    printErrorMessage("Cannot upload the file !<br>(Cannot connect to contents server.)");
+                    return;
+                });
+            }
+
+            /**
+             * This function uploads metadata.
+             * @access public
+             * @param {string} serverHost - hostname of kaltura server.
+             * @param {string} ks - session string of kaltura connection.
+             * @param {string} uploadTokenId - upload token id.
+             * @param {string} entryId - id of media entry.
+             */
+            function attachUploadedFile(serverHost, ks, uploadTokenId, entryId) {
+                var entryStatus;
+                var entryName = "";
+                var entryTags = "";
+                var entryDescription = "";
+                var entryCreatorId = "";
+
+                var findData;
+
+                // Creates form data.
+                var fd = new FormData();
+                fd.append("action", "addContent");
+                fd.append("ks", ks);
+                fd.append("entryId", entryId);
+                fd.append("resource:objectType", "KalturaUploadedFileTokenResource");
+                fd.append("resource:token", uploadTokenId);
+
+                // Creates transmission data.
+                var postData = {
+                    type: "POST",
+                    data: fd,
+                    cache: false,
+                    async: true,
+                    contentType: false,
+                    scriptCharset: "utf-8",
+                    processData: false,
+                    dataType: "xml"
+                };
+
+                var serviceURL = serverHost + "/api_v3/service/media/action/addContent";
+
+                // Transmits data.
+                $.ajax(
+                    serviceURL, postData
+                )
+                .done(function(xmlData) {
+                    // Response is not XML.
+                    if (xmlData === null || typeof xmlData === undefined) {
+                        deleteUploadToken(serverHost, ks, uploadTokenId);
+                        printErrorMessage("Cannot attach uploaded file !<br>(Cannot get a XML response.)");
+                        return;
+                    }
+
+                    // Get a tag of error code.
+                    findData = $(xmlData).find("code");
+                    // There exists error code.
+                    if (findData !== null && typeof findData !== undefined && findData.text() !== "") {
+                        deleteUploadToken(serverHost, ks, uploadTokenId);
+                        printErrorMessage("Cannot attach uploaded file !<br>(" + findData.text() + ")");
+                        return;
+                    }
+
+                    // Get a tag of status.
+                    findData = $(xmlData).find("status");
+                    // There not exists a tag of status.
+                    if (findData === null || typeof findData === undefined || findData.text() === "") {
+                        deleteUploadToken(serverHost, ks, uploadTokenId);
+                        printErrorMessage("Cannot attach uploaded file !<br>(Cannot get a mediaEntryStatus.)");
+                        return;
+                    }
+
+                    // Get a value of status.
+                    entryStatus = findData.text();
+                    // When uploading of metadata failed.
+                    if (entryStatus != ENTRY_STATUS.ENTRY_READY && entryStatus != ENTRY_STATUS.ENTRY_PENDING &&
+                        entryStatus != ENTRY_STATUS.ENTRY_PRECONVERT && entryStatus != ENTRY_STATUS.IMPORT &&
+                        entryStatus != ENTRY_STATUS.IMPORTING) {
+                        deleteUploadToken(serverHost, ks, uploadTokenId);
+                        printErrorMessage("Cannot attach uploaded file !<br>(mediaEntryStatus: " + entryStatus + ")");
                         return;
                     }
 
@@ -872,11 +1185,11 @@ define(['jquery'], function($) {
                     printSuccessMessage(entryId, entryName, entryTags, entryDescription, entryCreatorId);
                 })
                 .fail(function(xmlData) {
-                    deleteUploadToken(serverHost, ks, uploadTokenId);
                     if (xmlData !== null) {
                         window.console.dir(xmlData);
                     }
-                    printErrorMessage("Cannot upload the attribute information !<br>(Cannot connect to content server.)");
+                    deleteUploadToken(serverHost, ks, uploadTokenId);
+                    printErrorMessage("Cannot attach uploaded file !<br>(Cannot connect to kaltura server.)");
                     return;
                 });
             }
@@ -904,7 +1217,7 @@ define(['jquery'], function($) {
                     }
                 })
                 .fail(function(xmlData) {
-                    window.console.log("Cannot delete the uploadToken ! (Cannot connect to content server.)");
+                    window.console.log("Cannot delete the uploadToken ! (Cannot connect to kaltura server.)");
                     if (xmlData !== null) {
                         window.console.dir(xmlData);
                     }

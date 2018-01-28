@@ -1015,7 +1015,7 @@ define(['jquery'], function($) {
                         var XHR = $.ajaxSettings.xhr();
                         if (XHR.upload) {
                             XHR.upload.addEventListener("progress", function(e) {
-                                var newValue = parseInt(parseInt(e.loaded) / parseInt(e.total) * 10000) / 100;
+                                var newValue = parseInt(e.loaded / e.total * 10000) / 100;
                                 $("#pvalue").html(parseInt(newValue));
                             }, false);
                         }

@@ -650,7 +650,7 @@ define(['jquery'], function($) {
                     entryCreatorId = findData.text();
 
                     if (entryId === null || entryId === "" || entryName === null || entryName === "" ||
-                        entryTags === null || entryTags === "" || entryCreatorId === null || entryCreatorId === "" || 
+                        entryTags === null || entryTags === "" || entryCreatorId === null || entryCreatorId === "" ||
                         descStr !== "" && (entryDescription === null || entryDescription === "")) {
                         deleteUploadToken(serverHost, ks, uploadTokenId);
                         printErrorMessage("There exists wrong information(s) <br>");

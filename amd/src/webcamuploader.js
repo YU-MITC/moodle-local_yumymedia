@@ -952,6 +952,14 @@ define(['jquery'], function($) {
                     // Get a value of creator id.
                     entryCreatorId = findData.text();
 
+                    if (entryId === null || entryId === "" || entryName === null || entryName === "" ||
+                        entryTags === null || entryTags === "" || entryCreatorId === null || entryCreatorId === "" ||
+                        descStr !== "" && (entryDescription === null || entryDescription === "")) {
+                        deleteUploadToken(serverHost, ks, uploadTokenId);
+                        printErrorMessage("There exists wrong information(s) <br>");
+                        return;
+                    }
+
                     // Associate uploaded file with media entry
                     setTimeout(function() {
                         uploadMediaFile(serverHost, ks, uploadTokenId, entryId);
@@ -1007,7 +1015,7 @@ define(['jquery'], function($) {
                         var XHR = $.ajaxSettings.xhr();
                         if (XHR.upload) {
                             XHR.upload.addEventListener("progress", function(e) {
-                                var newValue = parseInt(parseInt(e.loaded) / parseInt(e.total) * 10000) / 100;
+                                var newValue = parseInt(e.loaded / e.total * 10000) / 100;
                                 $("#pvalue").html(parseInt(newValue));
                             }, false);
                         }

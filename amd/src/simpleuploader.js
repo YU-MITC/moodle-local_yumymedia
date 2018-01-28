@@ -649,6 +649,14 @@ define(['jquery'], function($) {
                     // Get a value of creator id.
                     entryCreatorId = findData.text();
 
+                    if (entryId === null || entryId === "" || entryName === null || entryName === "" ||
+                        entryTags === null || entryTags === "" || entryCreatorId === null || entryCreatorId === "" ||
+                        descStr !== "" && (entryDescription === null || entryDescription === "")) {
+                        deleteUploadToken(serverHost, ks, uploadTokenId);
+                        printErrorMessage("There exists wrong information(s) <br>");
+                        return;
+                    }
+
                     // Associate uploaded file with media entry
                     setTimeout(function() {
                         uploadMediaFile(serverHost, ks, uploadTokenId, entryId);

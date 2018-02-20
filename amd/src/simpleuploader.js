@@ -287,7 +287,7 @@ define(['jquery'], function($) {
              * @return {bool} - if name is appropriate, return "true". Otherwise, return "false".
              */
             function checkNameString(str) {
-                var regex = /["$%&'~\^\\`\/]/;
+                var regex = /["$%&'~^\\`/]/;
                 if (regex.test(str) === true) {
                     return false;
                 } else {
@@ -302,7 +302,7 @@ define(['jquery'], function($) {
              * @return {bool} - if tags are appropriate, return "true". Otherwise, return "false".
              */
             function checkTagsString(str) {
-                var regex = /[!"#$%&'~\|\^\\@`()\[\]\{\}:;\+\*\/=<>?]/;
+                var regex = /[!"#$%&'~|^\\@`()[\]{}:;+*/=<>?]/;
                 if (regex.test(str) === true) {
                     return false;
                 } else {
@@ -678,7 +678,7 @@ define(['jquery'], function($) {
              * @access public
              * @param {string} serverHost - hostname of kaltura server.
              * @param {string} ks - session string of kaltura connection.
-             * @param {string} uyploadTokenId - upload token id.
+             * @param {string} uploadTokenId - upload token id.
              * @param {string} entryId - id of media entry.
              */
             function uploadMediaFile(serverHost, ks, uploadTokenId, entryId) {

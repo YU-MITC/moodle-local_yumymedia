@@ -212,7 +212,6 @@ define(['jquery'], function($) {
                } : null);
 
                 try {
-                    // if (navigator.getUserMedia === null || navigator.getUserMedia === undefined ||
                     if (navigator.mediaDevices === null || navigator.mediaDevices === undefined ||
                         MediaRecorder === null || MediaRecorder === undefined) {
                         str = "<font color=\"red\">This uploader requires the WebRTC.<br>";
@@ -284,7 +283,7 @@ define(['jquery'], function($) {
                     videoBitsPerSecond: 1500000,
                     mimeType: mimeOption,
                     audio: {
-                        echoCancellation : false
+                        echoCancellation: false
                     },
                     video: {
                         "mandatory": {
@@ -377,7 +376,7 @@ define(['jquery'], function($) {
                 }
 
                 if (fileType.indexOf("audio/ac3") != -1 || fileType.indexOf("audio/ogg") != -1 ||
-                    fileType.indexOf("audio/mpeg") != -1  || fileType.indexOf("audio/mp4") != -1 ||
+                    fileType.indexOf("audio/mpeg") != -1 || fileType.indexOf("audio/mp4") != -1 ||
                     fileType.indexOf("audio/mp3") != -1 ||
                     fileType.indexOf("audio/wav") != -1 || fileType.indexOf("audio/x-ms-wma") != -1) {
                     return "audio";
@@ -620,7 +619,7 @@ define(['jquery'], function($) {
              * @return {bool} - if tags are appropriate, return "true". Otherwise, return "false".
              */
             function checkTagsString(str) {
-                var regex = /[!"#$%&'~\|\^\\@`()\[\]\{\}:;\+\*\/=<>?]/;
+                var regex = /[!"#$%&'~|^\\@`()[\]{}:;+*/=<>?]/;
                 if (regex.test(str) === true) {
                     return false;
                 } else {
@@ -982,7 +981,7 @@ define(['jquery'], function($) {
              * @access public
              * @param {string} serverHost - hostname of kaltura server.
              * @param {string} ks - session string of kaltura connection.
-             * @param {string} uyploadTokenId - upload token id.
+             * @param {string} uploadTokenId - upload token id.
              * @param {string} entryId - id of media entry.
              */
             function uploadMediaFile(serverHost, ks, uploadTokenId, entryId) {

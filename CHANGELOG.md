@@ -18,10 +18,14 @@ Version 1.1.1
 Version 1.1.2
 
 * fixed some strings in local_yumymedia.php.
-* fixed some coding style issues in webcam_uploader.js
-* fixed statement of error messages style in simple_uploader.js and webcam_uploader.js.
-* fixed error detection algorithms in simple_uploader.php and webcam_uploader.php
+* fixed some coding style issues in webcamuploader.js
+* fixed statement of error messages style in simpleuploader.js and webcam_uploader.js.
+* fixed error detection algorithms in simpleuploader.php and webcam_uploader.php
 * added statements in README.md.
 * separetd mymedia player setting from Kaltura Media Assignment.
 * replaced deprecated APIs to new APIs (simpleuploader.js and webcamuploader.js).
+
+Version 1.1.3
+
+* fixed some bugs in simpleuploader.js and webcamuploader.js.
 

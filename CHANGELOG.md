@@ -29,3 +29,8 @@ Version 1.1.3
 
 * fixed some bugs in simpleuploader.js and webcamuploader.js.
 
+Version 1.1.4
+
+* fixed documentation of function and some bugs in webcamuploader.js.
+* fixed some bugs in yumymedia.js.
+

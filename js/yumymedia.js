@@ -64,7 +64,7 @@ M.local_yumymedia = {
         dialog.render("page-mymedia-index");
 
         if (null === Y.one("#mymedia_medias")) {
-            return '';
+            return;
         }
 
         bodyNode.append(panelMarkup);

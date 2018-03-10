@@ -105,6 +105,101 @@ define(['jquery'], function($) {
                 DELETED: 5
             };
 
+            /**
+             * This function retrieve whether web browser is the Internet Explorer.
+             * @access public
+             * @return {bool} - true if web browser is the IE, otherwise false.
+             */
+            function isIE() {
+                var ua = navigator.userAgent.toLowerCase();
+                var ver = navigator.appVersion.toLowerCase();
+
+                // Case of IE(not 11).
+                var isMsIE = (ua.indexOf('msie') > -1) && (ua.indexOf('opera') == -1);
+                // Case of IE6.
+                var isIE6 = isMsIE && (ver.indexOf('msie 6.') > -1);
+                // Case of IE7.
+                var isIE7 = isMsIE && (ver.indexOf('msie 7.') > -1);
+                // Cae of IE8.
+                var isIE8 = isMsIE && (ver.indexOf('msie 8.') > -1);
+                // Case of IE9.
+                var isIE9 = isMsIE && (ver.indexOf('msie 9.') > -1);
+                // Case of IE10.
+                var isIE10 = isMsIE && (ver.indexOf('msie 10.') > -1);
+                // Case of IE11.
+                var isIE11 = (ua.indexOf('trident/7') > -1);
+
+                return isMsIE || isIE6 || isIE7 || isIE8 || isIE9 || isIE10 || isIE11;
+            }
+
+            /**
+             * This function retrieve whether we browser is the Edge.
+             * @access public
+             * @return {bool} - true if web browser is the Edge, otherwise false.
+             */
+             function isEdge() {
+                var ua = navigator.userAgent.toLowerCase();
+
+                // Case of Edge.
+                var isMsEdge = (ua.indexOf('edge') > -1);
+                // Case of Google Chrome.
+                var isChrome = (ua.indexOf('chrome') > -1) && (ua.indexOf('edge') == -1);
+                // Case of Moziila Firefox.
+                var isFirefox = (ua.indexOf('firefox') > -1);
+                // Case of Safari.
+                var isSafari = (ua.indexOf('safari') > -1) && (ua.indexOf('chrome') == -1);
+                // Case of Opera.
+                var isOpera = (ua.indexOf('opera') > -1);
+
+                return isMsEdge === true && isChrome === false && isFirefox === false && isSafari === false && isOpera === false;
+             }
+
+            /**
+             * This function retrieve whether web browser is unsupported.
+             * @access public
+             * @return {bool} - true if web browser is unsupported, otherwise false.
+             */
+            function checkUnsupportedBrowser() {
+                var str = "";
+
+                if(isIE() || isEdge()) {
+                    var browser = "";
+                    if (isIE()) {
+                        browser = "Internet Explorer";
+                    } else {
+                        browser = "Edge";
+                    }
+
+                    str = "<p><font color=\"red\">Sorry!!<br>";
+                    str = str + "This uploader don't support your web browser (" +  browser + ").<br>";
+                    str = str + "Please use other browser.</font></p>";
+                    str = str + "<br><input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"Back\" />";
+                    $("#upload_info").html(str);
+
+                    $("#backToMymedia").on("click", function() {
+                        handleCancelClick();
+                    });
+
+                    return true;
+                }
+                return false;
+            }
+
+            /**
+             * This function print initial error message.
+             * @access public
+             * @param {string} message - error message.
+             */
+            function printInitialErrorMessage(message) {
+                var str = "";
+                str = "<p><font color=\"red\">" + message + "</font></p>";
+                str = str + "<br><input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"Back\" />";
+                $("#upload_info").html(str);
+
+                $("#backToMymedia").on("click", function() {
+                    handleCancelClick();
+                });
+            }
 
             /**
              * This function print a video player for playing.
@@ -197,51 +292,56 @@ define(['jquery'], function($) {
             }
 
             /**
-             * This function stop video recording.
+             * This function remove recorded video.
              * @access public
              */
             function removeVideo() {
                 var str = "";
 
-               navigator.mediaDevices = navigator.mediaDevices || ((navigator.mozGetUserMedia || navigator.webkitGetUserMedia) ? {
-                   getUserMedia: function(c) {
-                       return new Promise(function(y, n) {
-                           (navigator.mozGetUserMedia || navigator.webkitGetUserMedia).call(navigator, c, y, n);
-                       });
-                   }
-               } : null);
+                // Print error message and return true if web browser is unsupported.
+                if (checkUnsupportedBrowser()) {
+                    return;
+                }
+
+                navigator.mediaDevices = navigator.mediaDevices || ((navigator.mozGetUserMedia || navigator.webkitGetUserMedia) ? {
+                    getUserMedia: function(c) {
+                        return new Promise(function(y, n) {
+                            (navigator.mozGetUserMedia || navigator.webkitGetUserMedia).call(navigator, c, y, n);
+                        });
+                    }
+                } : null);
 
                 try {
                     if (navigator.mediaDevices === null || navigator.mediaDevices === undefined ||
                         MediaRecorder === null || MediaRecorder === undefined) {
-                        str = "<font color=\"red\">This uploader requires the WebRTC.<br>";
+                        str = "This uploader requires the WebRTC.<br>";
                         str = str + "Howerver, your web browser don't support the WebRTC.<br>";
-                        str = str + "Please use other browser.</font>";
-                        $("#message").html(str);
+                        str = str + "Please use other browser.";
+                        printInitialErrorMessage(str);
                         return;
                     }
                 } catch (err) {
-                    str = "<font color=\"red\">This uploader requires the WebRTC.<br>";
+                    str = "This uploader requires the WebRTC.<br>";
                     str = str + "Howerver, your web browser don't support the WebRTC.<br>";
-                    str = str + "Please use other browser.</font>";
-                    $("#message").html(str);
+                    str = str + "Please use other browser.";
+                    printInitialErrorMessage();
                     return;
                 }
 
                 try {
                     if (createObjectURL === null || createObjectURL === undefined ||
                         revokeObjectURL === null || revokeObjectURL === undefined) {
-                        str = "<font color=\"red\">This uploader requires the createObjectURL/revokeObjectURL.<br>";
+                        str = "This uploader requires the createObjectURL/revokeObjectURL.<br>";
                         str = str + "Howerver, your web browser don't support these function.<br>";
-                        str = str + "Please use other browser.</font>";
-                        $("#message").html(str);
+                        str = str + "Please use other browser.";
+                        printInitialErrorMessage(str);
                         return;
                     }
                 } catch (err) {
-                    str = "<font color=\"red\">This uploader requires the WebRTC.<br>";
+                    str = "This uploader requires the WebRTC.<br>";
                     str = str + "Howerver, your web browser don't support the WebRTC.<br>";
-                    str = str + "Please use other browser.</font>";
-                    $("#message").html(str);
+                    str = str + "Please use other browser.";
+                    printInitialErrorMessage(str);
                     return;
                 }
 
@@ -316,10 +416,12 @@ define(['jquery'], function($) {
                 });
 
                 p.catch(function(err) {
-                    var str = "<font color=\"red\">Your webcamera is not supported, ";
-                    str = str + "or the webcamera is already used.</font>";
-                    $("#message").html(str);
-                    window.console.log(err.name + ": " + err.message);
+                    var str = "Your webcamera is not supported, ";
+                    str = str + "or it is already used.<br>";
+                    str = str += "Please check your webcamera.";
+                    printInitialErrorMessage(str);
+                    window.console.log(err);
+                    return;
                 });
 
                 checkForm();
@@ -604,7 +706,7 @@ define(['jquery'], function($) {
              * @return {bool} - if name is appropriate, return "true". Otherwise, return "false".
              */
             function checkNameString(str) {
-                var regex = /["$%&'~\^\\`\/]/;
+                var regex = /["$%&'~^\\`/]/;
                 if (regex.test(str) === true) {
                     return false;
                 } else {
@@ -1241,8 +1343,9 @@ define(['jquery'], function($) {
                 $("#name").val("");
                 $("#tags").val("");
                 $("#description").val("");
-                removeVideo();
             });
+
+            removeVideo();
 
             // This function execute when window is uloaded.
             $(window).on("unload", function() {

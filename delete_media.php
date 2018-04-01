@@ -107,19 +107,7 @@ if ($media == null or $media->status == KalturaEntryStatus::DELETED) {
             if (strcmp($confirm , 'yet') == 0) {
                 echo $renderer->create_delete_confirm_markup($entryid, $page, $sort, $mymediaurl);
             } else if (strcmp($confirm, 'Drop') == 0) {
-                $flavorassetarray = $connection->flavorAsset->getByEntryId($entryid);
-                foreach ($flavorassetarray as $flavor) {
-                    $connection->flavorAsset->delete($flavor->id);
-                }
-
-                $thumbnailarray = $connection->thumbAsset->getByEntryId($entryid);
-
-                foreach ($thumbnailarray as $thumbnail) {
-                     $connection->thumbAsset->delete($thumbnail->id);
-                }
-
-                $connection->baseEntry->delete($entryid);
-
+                $connection->media->delete($entryid);
                 echo $renderer->create_delete_message_markup(get_string('delete_media_complete', 'local_yumymedia'),
                                                              $mymediaurl);
             } else {

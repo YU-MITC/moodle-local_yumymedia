@@ -34,3 +34,9 @@ Version 1.1.4
 * fixed documentation of function and some bugs in webcamuploader.js.
 * fixed some bugs in yumymedia.js.
 
+Version 1.1.5
+
+* fixed some coding styles in webcamuploader.js.
+* added a non-supported OS detection mechanism in webcamuploader.js.
+* fixed media delete procedures in delete_media.php.
+

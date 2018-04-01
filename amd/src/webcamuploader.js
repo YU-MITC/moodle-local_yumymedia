@@ -162,7 +162,7 @@ define(['jquery'], function($) {
             function checkUnsupportedBrowser() {
                 var str = "";
 
-                if(isIE() || isEdge()) {
+                if (isIE() || isEdge()) {
                     var browser = "";
                     if (isIE()) {
                         browser = "Internet Explorer";
@@ -171,8 +171,61 @@ define(['jquery'], function($) {
                     }
 
                     str = "<p><font color=\"red\">Sorry!!<br>";
-                    str = str + "This uploader don't support your web browser (" +  browser + ").<br>";
+                    str = str + "This uploader don't support your web browser (" + browser + ").<br>";
                     str = str + "Please use other browser.</font></p>";
+                    str = str + "<br><input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"Back\" />";
+                    $("#upload_info").html(str);
+
+                    $("#backToMymedia").on("click", function() {
+                        handleCancelClick();
+                    });
+
+                    return true;
+                }
+                return false;
+            }
+
+            /**
+             * This function retrieve os type.
+             * @return {string} - os type.
+             */
+            function getOperatingSystem() {
+                var os;
+                var ua = navigator.userAgent;
+
+                if (ua.match(/iPhone|iPad|iPod/)) {
+                    os = "iOS";
+                } else if (ua.match(/Android|android/)) {
+                    os = "Android";
+                } else if (ua.match(/Linux|linux/)) {
+                    os = "Linux";
+                } else if (ua.match(/Win(dows)/)) {
+                    os = "Windows";
+                } else if (ua.match(/Mac|PPC/)) {
+                    os = "Mac OS";
+                } else if (ua.match(/CrOS/)) {
+                    os = "Chrome OS";
+                } else {
+                    os = "Other";
+                }
+
+                return os;
+            }
+
+            /**
+             * This function retrieve whether os is unsupported.
+             * @access public
+             * @return {bool} - true if os is unsupported, otherwise false.
+             */
+            function checkUnsupportedOS() {
+                var str = "";
+
+                var os = getOperatingSystem();
+
+                if(os == "iOS" || os == "Android") {
+                    str = "<p><font color=\"red\">Sorry!!<br>";
+                    str = str + "This uploader don't support your os (" +  os + ").<br>";
+                    str = str + "Please use normal media uploader for your device.</font></p>";
                     str = str + "<br><input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"Back\" />";
                     $("#upload_info").html(str);
 
@@ -299,9 +352,10 @@ define(['jquery'], function($) {
                 var str = "";
 
                 // Print error message and return true if web browser is unsupported.
-                if (checkUnsupportedBrowser()) {
+                if (checkUnsupportedBrowser() || checkUnsupportedOS()) {
                     return;
                 }
+                
 
                 navigator.mediaDevices = navigator.mediaDevices || ((navigator.mozGetUserMedia || navigator.webkitGetUserMedia) ? {
                     getUserMedia: function(c) {
@@ -320,15 +374,7 @@ define(['jquery'], function($) {
                         printInitialErrorMessage(str);
                         return;
                     }
-                } catch (err) {
-                    str = "This uploader requires the WebRTC.<br>";
-                    str = str + "Howerver, your web browser don't support the WebRTC.<br>";
-                    str = str + "Please use other browser.";
-                    printInitialErrorMessage();
-                    return;
-                }
 
-                try {
                     if (createObjectURL === null || createObjectURL === undefined ||
                         revokeObjectURL === null || revokeObjectURL === undefined) {
                         str = "This uploader requires the createObjectURL/revokeObjectURL.<br>";
@@ -342,6 +388,7 @@ define(['jquery'], function($) {
                     str = str + "Howerver, your web browser don't support the WebRTC.<br>";
                     str = str + "Please use other browser.";
                     printInitialErrorMessage(str);
+                    window.console.log(err);
                     return;
                 }
 

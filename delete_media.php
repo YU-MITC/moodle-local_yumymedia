@@ -55,8 +55,8 @@ $connection = $kaltura->get_connection(true, KALTURA_SESSION_LENGTH);
 $context = context_user::instance($USER->id);
 
 if (!$connection) {
-$url = new moodle_url('/admin/settings.php', array('section' => 'local_yukaltura'));
-print_error('conn_failed', 'local_yukaltura', $url);
+    $url = new moodle_url('/admin/settings.php', array('section' => 'local_yukaltura'));
+    print_error('conn_failed', 'local_yukaltura', $url);
 }
 
 $loginsession = '';

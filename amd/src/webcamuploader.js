@@ -355,7 +355,7 @@ define(['jquery'], function($) {
                 if (checkUnsupportedBrowser() || checkUnsupportedOS()) {
                     return;
                 }
-                
+
                 navigator.mediaDevices = navigator.mediaDevices || ((navigator.mozGetUserMedia || navigator.webkitGetUserMedia) ? {
                     getUserMedia: function(c) {
                         return new Promise(function(y, n) {

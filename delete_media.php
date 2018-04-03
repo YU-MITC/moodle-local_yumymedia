@@ -55,8 +55,8 @@ $connection = $kaltura->get_connection(true, KALTURA_SESSION_LENGTH);
 $context = context_user::instance($USER->id);
 
 if (!$connection) {
-    $url = new moodle_url('/admin/settings.php', array('section' => 'local_yukaltura'));
-    print_error('conn_failed', 'local_yukaltura', $url);
+$url = new moodle_url('/admin/settings.php', array('section' => 'local_yukaltura'));
+print_error('conn_failed', 'local_yukaltura', $url);
 }
 
 $loginsession = '';
@@ -107,6 +107,26 @@ if ($media == null or $media->status == KalturaEntryStatus::DELETED) {
             if (strcmp($confirm , 'yet') == 0) {
                 echo $renderer->create_delete_confirm_markup($entryid, $page, $sort, $mymediaurl);
             } else if (strcmp($confirm, 'Drop') == 0) {
+                $flavorassetarray = $connection->flavorAsset->getByEntryId($entryid);
+                foreach ($flavorassetarray as $flavor) {
+                    $connection->flavorAsset->delete($flavor->id);
+                }
+
+                $thumbnailarray = $connection->thumbAsset->getByEntryId($entryid);
+                foreach ($thumbnailarray as $thumbnail) {
+                     $connection->thumbAsset->delete($thumbnail->id);
+                }
+
+                $categoryids = explode(",", $media->categoriesIds);
+                foreach ($categoryids as $categoryid) {
+                    $connection->categoryEntry->delete($entryid, $categoryid);
+                }
+
+                $flavorassetarray = $connection->flavorAsset->getByEntryId($entryid);
+                foreach ($flavorassetarray as $flavor) {
+                    $connection->flavorAsset->delete($flavor->id);
+                }
+
                 $connection->media->delete($entryid);
                 echo $renderer->create_delete_message_markup(get_string('delete_media_complete', 'local_yumymedia'),
                                                              $mymediaurl);
@@ -120,3 +140,4 @@ if ($media == null or $media->status == KalturaEntryStatus::DELETED) {
 $connection->session->end();
 
 echo $OUTPUT->footer();
+

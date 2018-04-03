@@ -40,3 +40,7 @@ Version 1.1.5
 * added a non-supported OS detection mechanism in webcamuploader.js.
 * fixed media delete procedures in delete_media.php.
 
+Version 1.1.5R2
+
+* fixed media delete prodecures int delete_media.php.
+

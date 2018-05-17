@@ -42,5 +42,10 @@ Version 1.1.5
 
 Version 1.1.5R2
 
-* fixed media delete prodecures int delete_media.php.
+* fixed media delete prodecures in delete_media.php.
+
+Version 1.1.6
+
+* fixed some errors in webcamuploader.js
+* fixed statements about "How to use" in README.md.
 

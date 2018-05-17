@@ -222,9 +222,9 @@ define(['jquery'], function($) {
 
                 var os = getOperatingSystem();
 
-                if(os == "iOS" || os == "Android") {
+                if (os == "iOS" || os == "Android") {
                     str = "<p><font color=\"red\">Sorry!!<br>";
-                    str = str + "This uploader don't support your os (" +  os + ").<br>";
+                    str = str + "This uploader don't support your os (" + os + ").<br>";
                     str = str + "Please use normal media uploader for your device.</font></p>";
                     str = str + "<br><input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"Back\" />";
                     $("#upload_info").html(str);
@@ -459,9 +459,8 @@ define(['jquery'], function($) {
                     $("#leftspan").css("display", "inline");
                     $("#rightspan").css("display", "none");
                     $("#status").html("Camera preview.");
-                });
-
-                p.catch(function(err) {
+                })
+                .catch(function(err) {
                     var str = "Your webcamera is not supported, ";
                     str = str + "or it is already used.<br>";
                     str = str += "Please check your webcamera.";

@@ -110,17 +110,69 @@ div#id_media_details_tab.yui3-tabview-content.yui3-widget-content-expanded {
     border-style: none;
 }
 
+div.mymedia.media.entry {
+    display: table-cell;
+    word-wrap: normal;
+    word-break: break-all;
+    white-space: normal;
+}
+
 div.mymedia.media.name {
+    display: table-cell;
     word-wrap: break-word;
     word-break: break-all;
     white-space: normal;
 }
 
-div.mymedia.media.action.bar,
+div.mymedia.media.id,
+div.mymedia.media.created {
+    display: table-cell;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-size: small;
+    white-space: normal;
+}
+
+div.mymedia.media.thumbnail {
+    display: block;
+    white-space: nowrap;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+a.mymedia.media.preview,
+a.mymedia.media.edit,
+a.mymedia.media.access,
+a.mymedia.media.delete,
+a.mymedia.media.download {
+    display: inline;
+    word-wrap: break-word;
+    word-break: break-all;
+    white-space: nowrap;
+}
+
+div.mymedia.media.action.bar {
+    display: block;
+    text-align: center;
+    word-wrap: break-word;
+    white-space: nowrap;
+    margin-top: 0;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+
 div.mymedia.media.preview.container,
 div.mymedia.media.edit.container,
 div.mymedia.media.share.container {
     white-space: nowrap;
+}
+
+nav.mymedia.pagingbar {
+    text-align: center;
+    display: table;
+    margin: 0 auto;
+    text-align: center;
 }
 
 #progress_bar_container {

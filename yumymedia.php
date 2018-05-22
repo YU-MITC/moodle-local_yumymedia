@@ -142,6 +142,12 @@ if (local_yukaltura_get_mymedia_permission()) {
                                         $perpage,
                                         new moodle_url('/local/yumymedia/yumymedia.php', array('sort' => $sort)));
 
+            if (strpos($page, '<nav ') !== false ) {
+                $index = strpos($page, '<nav ');
+                $first = substr($page, 0, $index + 5);
+                $second = substr($page, $index + 5);
+                $page = $first . 'class="mymedia pagingbar"' . $second;
+            }
 
             echo $renderer->create_options_table_upper($page);
 

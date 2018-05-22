@@ -320,7 +320,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     public function create_media_thumbnail_markup($url, $alt) {
 
         $output = '';
-        $attr = array('class' => 'mymedia media thumbnail');
+        $attr = array('class' => 'mymedia media thumbnail', 'align' => 'center');
 
         $output .= html_writer::start_tag('div', $attr);
 
@@ -350,9 +350,14 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         $output = '';
 
-        $content = userdate($date) . '<br>id : ' . $entryid . '<br>plays: ' . $plays . ' / ' . $views;
-
-        $output .= $content;
+        $attr = array('class' => 'mymedia media created');
+        $output .= html_writer::start_tag('div', $attr);
+        $output .= userdate($date);
+        $output .= html_writer::empty_tag('br');
+        $output .= 'id : ' . $entryid;
+        $output .= html_writer::empty_tag('br');
+        $output .= 'plays: ' . $plays . ' / ' . $views;
+        $output .= html_writer::end_tag('div');
 
         return $output;
     }
@@ -366,7 +371,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
      */
     public function create_media_id_markup($entryid, $plays) {
         $output = '';
-        $attr = array('class' => 'mymedia media created',
+        $attr = array('class' => 'mymedia media id',
                       'title' => $entryid);
         $output .= html_writer::start_tag('div', $attr);
         $output .= html_writer::tag('label', 'id : ' . $entryid . '&nbsp;' . '(' . $plays . ')');
@@ -519,7 +524,8 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $output = '';
 
         $attr = array('class' => 'mymedia media entry',
-                      'id' => $entry->id);
+                      'id' => $entry->id,
+                      'align' => 'center');
 
         $output .= html_writer::start_tag('div', $attr);
 
@@ -563,7 +569,8 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $output .= $this->create_media_created_markup($entry->createdAt, $entry->id, $entry->views, $entry->plays);
 
         $attr = array('class' => 'mymedia media action bar',
-                      'id' => $entry->id . '_action');
+                      'id' => $entry->id . '_action',
+                       'align' => 'center');
 
         $output .= html_writer::start_tag('div', $attr);
 
@@ -582,8 +589,10 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $output .= html_writer::end_tag('div');
 
         if (true == $entryready) {
+            $attr = array('class' => 'mymedia media action bar',
+                          'id' => $entry->id . '_action');
 
-            $output .= html_writer::start_tag('div');
+            $output .= html_writer::start_tag('div', $attr);
 
             $output .= $this->create_media_delete_link_markup($entry, $page, $sort);
             $output .= '&nbsp;&nbsp;';

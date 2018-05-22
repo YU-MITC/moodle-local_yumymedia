@@ -35,7 +35,7 @@ require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.ph
  */
 function local_yumymedia_extend_navigation($navigation) {
 
-    global $USER, $PAGE;
+    global $USER;
 
     $mymedia = get_string('nav_mymedia', 'local_yumymedia');
 

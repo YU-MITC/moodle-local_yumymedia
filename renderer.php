@@ -18,7 +18,7 @@
  * YU Kaltura My Media renderer class.
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2017 Yamaguchi University <ghcc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2018 Yamaguchi University <ghcc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -31,7 +31,7 @@ require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.ph
 /**
  * Renderer class of local_yumymedia
  * @package local_yumymedia
- * @copyright  (C) 2016-2017 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class local_yumymedia_renderer extends plugin_renderer_base {

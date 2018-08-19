@@ -41,7 +41,7 @@ table#mymedia_media_metadata_table tr {
 #clear_simple_search_btn,
 #uploader_open,
 #webcam_open {
-    font-size: 1.1em !important;
+    font-size: 1.1em;
 }
 
 .yui-skin-sam .yui-panel .ft {
@@ -49,19 +49,19 @@ table#mymedia_media_metadata_table tr {
 }
 
 #id_media_details_save {
-    font-size: 17px !important;
+    font-size: 17px;
 }
 
 table#mymedia_medias {
-    border: 0 none black !important;
-    table-layout: fixed !important;
-    width: 700px !important;
+    border: 0 none black;
+    table-layout: fixed;
+    width: 700px;
 }
 
 table#mymedia_upper {
-    border: 0 none black !important;
-    table-layout: fixed !important;
-    width: 850px !important;
+    border: 0 none black;
+    table-layout: fixed;
+    width: 850px;
 }
 
 div#id_media_details_tab.yui3-tabview-content.yui3-widget-content-expanded {
@@ -70,44 +70,44 @@ div#id_media_details_tab.yui3-tabview-content.yui3-widget-content-expanded {
 
 .yui3-widget,
 .yui3-tabview .yui3-tabview-content .yui3-tabview-list {
-    margin-right: 5px !important;
-    border-color: #ddd !important;
-    border-width: 0 0 1px !important;
+    margin-right: 5px;
+    border-color: #ddd;
+    border-width: 0 0 1px;
 }
 
 .yui3-skin-sam .yui3-tab-selected .yui3-tab-label,
 .yui3-skin-sam .yui3-tab-selected .yui3-tab-label:focus,
 .yui3-skin-sam .yui3-tab-selected .yui3-tab-label:hover {
-    color: rgb(242, 242, 242) !important;
-    font-family: arial, helvetica, clean, sans-serif !important;
-    font-size: 13px !important;
-    font-size-adjust: none !important;
-    font-stretch: normal !important;
-    font-style: normal !important;
-    font-variant: normal !important;
-    font-weight: normal !important;
-    -moz-border-radius-topright: 5px !important;
-    -moz-border-radius-topleft: 5px !important;
-    -webkit-border-top-right-radius: 5px !important;
-    -webkit-border-top-left-radius: 5px !important;
+    color: rgb(242, 242, 242);
+    font-family: arial, helvetica, clean, sans-serif;
+    font-size: 13px;
+    font-size-adjust: none;
+    font-stretch: normal;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    -moz-border-radius-topright: 5px;
+    -moz-border-radius-topleft: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -webkit-border-top-left-radius: 5px;
 }
 .yui3-skin-sam .yui3-tab-label {
-    font-family: arial, helvetica, clean, sans-serif !important;
-    font-size: 13px !important;
-    font-size-adjust: none !important;
-    font-stretch: normal !important;
-    font-style: normal !important;
-    font-variant: normal !important;
-    font-weight: normal !important;
-    -moz-border-radius-topright: 5px !important;
-    -moz-border-radius-topleft: 5px !important;
-    -webkit-border-top-right-radius: 5px !important;
-    -webkit-border-top-left-radius: 5px !important;
+    font-family: arial, helvetica, clean, sans-serif;
+    font-size: 13px;
+    font-size-adjust: none;
+    font-stretch: normal;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    -moz-border-radius-topright: 5px;
+    -moz-border-radius-topleft: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -webkit-border-top-left-radius: 5px;
 }
 .yui3-widget,
 .yui3-tabview .yui3-tabview-content .yui3-tabview-panel {
-    background: rgb(242, 242, 242) !important;
-    border-style: none !important;
+    background: rgb(242, 242, 242);
+    border-style: none;
 }
 
 div.mymedia.media.entry {
@@ -204,16 +204,16 @@ nav.mymedia.pagingbar {
 }
 
 .yui3-tabview-panel #share {
-    height: 420px !important;
-    width: 490px !important;
+    height: 420px;
+    width: 490px;
     overflow: auto;
 }
 
 .yui3-tabview-panel #metadata,
 .yui3-tabview-panel #preview,
 .yui3-tabview-panel #embed {
-    width: 490px !important;
-    height: 420px !important;
+    width: 490px;
+    height: 420px;
 }
 
 .mymedia .col_0 .paging {
@@ -222,20 +222,20 @@ nav.mymedia.pagingbar {
 }
 
 .yui3-widget.yui3-tabview {
-    width: 500px !important;
-    height: 460px !important;
+    width: 500px;
+    height: 460px;
 }
 
 
 #modal_content {
-    width: 320px !important;
-    height: 240px !important;
-    font-size: 14px !important;
-    margin: 0 !important;
-    padding: 10px 20px !important;
-    border: 2px solid #aaa !important;
-    background: #fff !important;
-    position: fixed !important;
+    width: 320px;
+    height: 240px;
+    font-size: 14px;
+    margin: 0;
+    padding: 10px 20px;
+    border: 2px solid #aaa;
+    background: #fff;
+    position: fixed;
     display: none;
     z-index: 2;
 }
@@ -243,12 +243,12 @@ nav.mymedia.pagingbar {
 #modal_window {
     z-index: 1;
     display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 120% !important;
-    background-color: rgba(0, 0, 0, 0.75) !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 120%;
+    background-color: rgba(0, 0, 0, 0.75);
 }
 
 .button-link {
@@ -273,10 +273,10 @@ nav.mymedia.pagingbar {
 #entry_reset,
 #uploader_back,
 #embed_code {
-    font-size: 14px !important;
+    font-size: 14px;
 }
 
 #entry_warning {
-    font-size: 14px !important;
-    color: red !important;
+    font-size: 14px;
+    color: red;
 }

@@ -54,3 +54,6 @@ Version 1.1.7
 * fixed statements in lib.php, renderer.php, yumymedia.php and yumymedia.css.
 * "My media" supports "Boost" theme of the Moodle. Link to the "My Media" is displayed in the left-side menu of the Boost.
 
+Version 1.1.8
+
+* fixed some statements for support "Boost" theme in yumymedia.css.

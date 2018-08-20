@@ -24,9 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2018082000;
+$plugin->version = 2018082001;
 $plugin->component = 'local_yumymedia';
-$plugin->release = 'YU Kaltura Media Gallery 1.1.8';
+$plugin->release = 'YU Kaltura Media Gallery 1.1.8R2';
 $plugin->requires = 2015051100;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = array(

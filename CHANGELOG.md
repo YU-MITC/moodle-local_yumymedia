@@ -58,3 +58,8 @@ Version 1.1.8
 
 * added statements about "Requirements" in README.md.
 * fixed copyright statements in all scripts.
+
+Version 1.1.8R2
+
+* fixed accessrestriction.js in order to enable iframe-embed and streaming delivery to latest version of Google Chrome.
+

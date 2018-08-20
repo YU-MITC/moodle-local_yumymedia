@@ -314,7 +314,8 @@ define(['jquery'], function($) {
                     str += "/embedIframeJs/uiconf_id/" + uiconfId + "/partner_id/" + partnerId;
                     str += "?iframeembed=true&playerId=kaltura_player_" + now;
                     str += "&entry_id=" + entryId + "\" width=\"560\" height=\"395\" ";
-                    str += "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\"></iframe>";
+                    str += "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\" ";
+                    str += "allow=\"encrypted-media\"></iframe>";
                 } else {
                     str = kalturaHost + "/index.php/extwidget/preview/partner_id/";
                     str += partnerId + "/uiconf_id/" + uiconfId + "/entry_id/" + entryId + "/embed/dynamic?";

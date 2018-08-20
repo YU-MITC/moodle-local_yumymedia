@@ -30,13 +30,13 @@ global $USER, $SESSION, $DB;
 
 defined('MOODLE_INTERNAL') || die();
 
-$entryid   = required_param('entryid', PARAM_TEXT);
+$entryid = required_param('entryid', PARAM_TEXT);
 $page = required_param('page', PARAM_INT);
 $sort = optional_param('sort', 'recent', PARAM_TEXT);
 
 $mymedia = get_string('heading_mymedia', 'local_yumymedia');
 $PAGE->set_context(context_system::instance());
-$header  = format_string($SITE->shortname).": $mymedia";
+$header = format_string($SITE->shortname).": $mymedia";
 
 $PAGE->set_url('/local/yumymedia/access_media.php');
 $PAGE->set_course($SITE);

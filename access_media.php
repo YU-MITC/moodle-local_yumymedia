@@ -100,7 +100,7 @@ if ($media == null or $media->status == KalturaEntryStatus::DELETED) {
                                                    $url, $currentcontrolid);
         echo $renderer->create_embed_code_markup();
 
-        if ($media != null and !is_null($internalcontrol) and !is_null($defaultcontrol)) {
+        if ($media != null && !is_null($internalcontrol) && !is_null($defaultcontrol)) {
                 echo $renderer->create_access_control_markup($defaultcontrol, $internalcontrol, $currentcontrolid);
         }
 

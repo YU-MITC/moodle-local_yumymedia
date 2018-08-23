@@ -141,7 +141,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $old = null;
         $nameasc = null;
         $namedesc = null;
-        $sorturl = new moodle_url('/local/yumymedia/yumymedia.php?sort=');
+        $sorturl = new moodle_url("/local/yumymedia/yumymedia.php?sort");
 
         if (isset($SESSION->mymediasort) && !empty($SESSION->mymediasort)) {
             $sort = $SESSION->mymediasort;
@@ -164,13 +164,13 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $sort .= get_string('sortby', 'local_yumymedia') . ':' . '&nbsp;';
         $sort .= html_writer::start_tag('select', array('id' => 'mymediasort'));
         $sort .= html_writer::tag('option', get_string('mostrecent', 'local_yumymedia'),
-                                  array('value' => $sorturl.'recent', 'selected' => $recent));
+                                  array('value' => $sorturl . '=recent', 'selected' => $recent));
         $sort .= html_writer::tag('option', get_string('oldest', 'local_yumymedia'),
-                                  array('value' => $sorturl.'old', 'selected' => $old));
+                                  array('value' => $sorturl . '=old', 'selected' => $old));
         $sort .= html_writer::tag('option', get_string('medianameasc', 'local_yumymedia'),
-                                  array('value' => $sorturl.'name_asc', 'selected' => $nameasc));
+                                  array('value' => $sorturl . '=name_asc', 'selected' => $nameasc));
         $sort .= html_writer::tag('option', get_string('medianamedesc', 'local_yumymedia'),
-                                  array('value' => $sorturl.'name_desc', 'selected' => $namedesc));
+                                  array('value' => $sorturl . '=name_desc', 'selected' => $namedesc));
         $sort .= html_writer::end_tag('select');
 
         return $sort;

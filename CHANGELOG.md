@@ -63,3 +63,6 @@ Version 1.1.8R2
 
 * fixed accessrestriction.js in order to enable iframe-embed and streaming delivery to latest version of Google Chrome.
 
+Version 1.1.8R3
+
+* fixed renderer.php, in order to solve an issue about sorting of media.

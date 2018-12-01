@@ -43,7 +43,7 @@ Installation will be completed after you log in as an administrator and access t
 How to use
 ------
 
-* User's guide, click [here](http://www.cc.yamaguchi-u.ac.jp/guides/cas/plugins/userguide_version1.1.pdf).
+* User's guide, click [here](http://www.cc.yamaguchi-u.ac.jp/guides/cas/plugins/userguide_version1.2.pdf).
 * Demonstration web page, click [here](http://www.cc.yamaguchi-u.ac.jp/guides/cas/plugins/demo/).
 
 Targeted Moodle versions

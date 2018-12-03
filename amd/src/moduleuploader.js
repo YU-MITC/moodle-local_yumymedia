@@ -471,7 +471,7 @@ define(['jquery'], function($) {
                         idMediaThumbnail.prop("alt", name);
                         idMediaThumbnail.prop("title", name);
                     }
-                    
+
                     var idMediaProperties = $("#id_media_properties", parent.document);
                     if (idMediaProperties !== null) {
                         idMediaProperties.css({visibility: "visible"});
@@ -1026,7 +1026,7 @@ define(['jquery'], function($) {
                     printSuccessMessage(entryId, entryName, entryTags, entryDescription, entryCreatorId);
                     // Update module properties.
                     setModuleProperties(serverHost, entryId, entryName, entryDescription);
-                    
+
                 })
                 .fail(function(xmlData) {
                     if (xmlData !== null) {

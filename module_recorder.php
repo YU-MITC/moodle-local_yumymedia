@@ -112,14 +112,7 @@ if (local_yukaltura_get_mymedia_permission() == false) {  // When mymedia is dis
 
             $output .= html_writer::end_tag('form');
 
-            //$output .= html_writer::empty_tag('hr', null);
-            //$output .= html_writer::empty_tag('br', null);
-
-            //$output .= $renderer->create_upload_cancel_markup();
-
             $output .= html_writer::end_tag('div');
-
-            // $output .= $renderer->create_modal_content_markup();
         }
     }
 }

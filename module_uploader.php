@@ -42,6 +42,7 @@ $PAGE->set_title($header);
 $PAGE->set_heading($header);
 $PAGE->add_body_class('mymedia-index');
 $PAGE->requires->css('/local/yumymedia/css/yumymedia.css');
+$PAGE->requires->css('/local/yumymedia/css/module_uploader.css');
 $PAGE->requires->js_call_amd('local_yumymedia/moduleuploader', 'init', null);
 
 require_login();

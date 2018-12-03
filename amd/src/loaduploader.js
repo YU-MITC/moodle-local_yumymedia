@@ -35,8 +35,6 @@ define(['jquery'], function($) {
          */
         init: function(uploaderUrl) {
 
-            var modalX = 0;
-            var modalY = 0;
             var timer = false;
 
             /**
@@ -52,11 +50,6 @@ define(['jquery'], function($) {
                     return false;
                 }
 
-                // Save scroll position of base window.
-                var dElm = document.documentElement;
-                var dBody = document.body;
-                modalX = dElm.scrollLeft || dBody.scrollLeft; // X value of current position.
-                modalY = dElm.scrollTop || dBody.scrollTop; // Y value of current position.
                 // Print ovaerlay.
                 $("body").append("<div id=\"uploader_content\"></div>");
                 $("body").append("<div id=\"modal_window\"></div>");

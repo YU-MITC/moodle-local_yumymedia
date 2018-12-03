@@ -33,8 +33,6 @@ define(['jquery'], function($) {
          * @param {string} uploaderUrl - url of simple selector page.
          */
         init: function(uploaderUrl) {
-            var modalX = 0;
-            var modalY = 0;
             var timer = false;
 
             /**
@@ -49,11 +47,6 @@ define(['jquery'], function($) {
                     return false;
                 }
 
-                // Records scroll position of window.
-                var dElm = document.documentElement;
-                var dBody = document.body;
-                modalX = dElm.scrollLeft || dBody.scrollLeft; // X position.
-                modalY = dElm.scrollTop || dBody.scrollTop; // Y position.
                 // Print overlay.
                 $("body").append("<div id=\"modal_window\"></div>");
                 $("body").append("<div id=\"uploader_content\"></div>");

@@ -18,7 +18,7 @@
  * YU Kaltura My Media renderer class.
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2018 Yamaguchi University <ghcc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -141,7 +141,8 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $old = null;
         $nameasc = null;
         $namedesc = null;
-        $sorturl = new moodle_url("/local/yumymedia/yumymedia.php?sort");
+        $sorturl = new moodle_url("/local/yumymedia/yumymedia.php");
+        $sorturl .= "?sort=";
 
         if (isset($SESSION->mymediasort) && !empty($SESSION->mymediasort)) {
             $sort = $SESSION->mymediasort;
@@ -164,13 +165,13 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $sort .= get_string('sortby', 'local_yumymedia') . ':' . '&nbsp;';
         $sort .= html_writer::start_tag('select', array('id' => 'mymediasort'));
         $sort .= html_writer::tag('option', get_string('mostrecent', 'local_yumymedia'),
-                                  array('value' => $sorturl . '=recent', 'selected' => $recent));
+                                  array('value' => $sorturl . 'recent', 'selected' => $recent));
         $sort .= html_writer::tag('option', get_string('oldest', 'local_yumymedia'),
-                                  array('value' => $sorturl . '=old', 'selected' => $old));
+                                  array('value' => $sorturl . 'old', 'selected' => $old));
         $sort .= html_writer::tag('option', get_string('medianameasc', 'local_yumymedia'),
-                                  array('value' => $sorturl . '=name_asc', 'selected' => $nameasc));
+                                  array('value' => $sorturl . 'name_asc', 'selected' => $nameasc));
         $sort .= html_writer::tag('option', get_string('medianamedesc', 'local_yumymedia'),
-                                  array('value' => $sorturl . '=name_desc', 'selected' => $namedesc));
+                                  array('value' => $sorturl . 'name_desc', 'selected' => $namedesc));
         $sort .= html_writer::end_tag('select');
 
         return $sort;
@@ -1545,9 +1546,10 @@ class local_yumymedia_renderer extends plugin_renderer_base {
      * @param string $kalturahost - hostname of kaltura server.
      * @param string $rootpath - category path of moodle root category.
      * @param object $control - object of kaltura access control.
+     * @param bool $inmodule - if true, display cancel button in metadata form.
      * @return string - HTML markup of entry's metadata.
      */
-    public function create_entry_metadata_markup($ks, $kalturahost, $rootpath, $control) {
+    public function create_entry_metadata_markup($ks, $kalturahost, $rootpath, $control, $inmodule = false) {
         global $USER;
 
         // Set category of media.
@@ -1656,6 +1658,13 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $attr = array('type' => 'reset', 'name' => 'reset', 'id' => 'entry_reset',
                       'value' => get_string('reset_label', 'local_yumymedia'));
         $output .= html_writer::empty_tag('input', $attr);
+
+        if ($inmodule == true) {
+            $output .= '&nbsp;&nbsp;';
+            $attr = array('type' => 'button', 'name' => 'uploader_cancel', 'id' => 'uploader_cancel',
+                          'value' => get_string('cancel_label', 'local_yumymedia'));
+            $output .= html_writer::empty_tag('input', $attr);
+        }
 
         $output .= html_writer::end_tag('fieldset');
 

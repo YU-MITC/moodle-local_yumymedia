@@ -92,6 +92,7 @@ $string['delete_media_not_exist'] = 'This media no longer exists.';
 // Media Upload.
 $string['simple_upload'] = 'Upload your media';
 $string['webcam_upload'] = 'Upload from web-camera';
+$string['pc_only'] = 'for PC only';
 $string['session_failed'] = 'Unable to start new kaltura session for media uploading.<br>Please contact your site administrator.';
 $string['category_failed'] = 'Cannot set root category of content.';
 $string['category_failed_empty'] = 'Please set root category in setting page.';
@@ -117,7 +118,7 @@ $string['uploading_header'] = 'Uploading';
 $string['ok_label'] = 'OK';
 $string['save_label'] = 'Save';
 $string['upload_label'] = 'Upload';
-$string['cancel_label'] = 'Cancal';
+$string['cancel_label'] = 'Cancel';
 $string['reset_label'] = 'Reset';
 $string['back_label'] = 'Back';
 $string['okdelete_label'] = 'OK, Delete';

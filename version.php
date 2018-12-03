@@ -17,18 +17,18 @@
 /**
  * YU Kaltura Media Gallery version file
  *
- * @package     local_yumymedia
- * @copyright   (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    local_yumymedia
+ * @copyright  (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2018082200;
+$plugin->version = 2018120300;
 $plugin->component = 'local_yumymedia';
-$plugin->release = 'YU Kaltura Media Gallery 1.1.8R3';
+$plugin->release = 'YU Kaltura Media Gallery 1.2.0';
 $plugin->requires = 2015051100;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = array(
-    'local_yukaltura' => 2018082000
+    'local_yukaltura' => 2018120300
 );

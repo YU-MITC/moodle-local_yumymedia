@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * YU Kaltura "My Media" script for simple uploader.
+ * Uploader Script used in resource and activirty modules.
  *
  * @package    local_yumymedia
  * @copyright  (C) 2016-2018 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
@@ -22,7 +22,7 @@
  */
 
 /**
- * @module local_yumymedia/simpleuploader
+ * @module local_yumymedia/moduleuploader
  */
 
 define(['jquery'], function($) {
@@ -36,6 +36,7 @@ define(['jquery'], function($) {
 
             var modalX = 0;
             var modalY = 0;
+            var timer = false;
 
             var fileName = "";
             var fileSize = 0;
@@ -75,20 +76,62 @@ define(['jquery'], function($) {
             };
 
             /**
-             * This function centerizes a modal window.
+             * This function centerize modal window.
+             * @access public
+             * @param {object} contentPanel - HTML element of content panel.
              */
-            function centeringModalSyncer() {
+            function centeringModalSyncer(contentPanel) {
+                if (timer !== false) {
+                    clearTimeout(timer);
+                }
+                timer = setTimeout(function() {
+                    // Get width and height of window.
+                    var w = $(window).width();
+                    var h = $(window).height();
 
-                // Get width and height of window.
-                var w = $(window).width();
-                var h = $(window).height();
+                    // Get width and height of modal content.
+                    var cw = $(contentPanel).outerWidth();
+                    var ch = $(contentPanel).outerHeight();
 
-                // Get width and height of modal_content.
-                var cw = $("#modal_content").outerWidth();
-                var ch = $("#modal_content").outerHeight();
+                    // Execute centering of modal window.
+                    $(contentPanel).css({"left": ((w - cw) / 2) + "px", "top": ((h - ch) / 2) + "px"});
+                }, 200);
+            }
 
-                // Execute centerize.
-                $("#modal_content").css({"left": ((w - cw) / 2) + "px", "top": ((h - ch) / 2) + "px"});
+            /**
+             * This function delete modal window.
+             * @access public
+             */
+            function fadeOutUploaderWindow() {
+
+                // Restore scroll position of base window.
+                window.scrollTo(modalX, modalY);
+
+                // Fade-out and delete modal contet and modal window.
+                $("#modal_window", parent.document).fadeOut("slow");
+                $("#modal_window", parent.document).remove();
+                $("#uploader_content", parent.document).fadeOut("slow");
+                $("#uploader_content", parent.document).remove();
+            }
+
+            /**
+             * This function checks metadata.
+             * @access public
+             */
+            function checkForm() {
+                if ($("#fileData") === null ||
+                    $("#fileData").files === null ||
+                    $("#name").val() === "" ||
+                    $("#tags").val() === "" ||
+                    $("#type").val() === "" ||
+                    $("#type").val() === "N/A") {
+                    // Dsiable upload button.
+                    $("#entry_submit").prop("disabled", true);
+                    $("#entry").val("");
+                } else {
+                    // Enable upload button.
+                    $("#entry_submit").prop("disabled", false);
+                }
             }
 
             /**
@@ -139,136 +182,71 @@ define(['jquery'], function($) {
             }
 
             /**
-             * This function checks metadata.
+             * This function is callback for selection of media file.
              * @access public
              */
-            function checkForm() {
-                if ($("#fileData") === null ||
-                    $("#fileData").files === null ||
-                    $("#name").val() === "" ||
-                    $("#tags").val() === "" ||
-                    $("#type").val() === "" ||
-                    $("#type").val() === "N/A") {
-                    // Dsiable upload button.
-                    $("#entry_submit").prop("disabled", true);
-                    $("#entry").val("");
-                } else {
-                    // Enable upload button.
-                    $("#entry_submit").prop("disabled", false);
+            function handleFileSelect() {
+
+                // There exists selected file.
+                if ($("#fileData")) {
+                    // Get an object of selected file.
+                    var file = $("#fileData").prop("files")[0];
+
+                    fileSize = parseInt(file.size);
+                    var typeResult = checkFileType(encodeURI(file.type));
+                    var sizeResult = checkFileSize();
+                    var alertInfo = "";
+
+                    // When file size is wrong.
+                    if (sizeResult === false) {
+                        alertInfo += "Wrong file size.";
+                    }
+                    // When file is no supported.
+                    if (typeResult == "N/A") {
+                        alertInfo += "Unsupported file type.";
+                    }
+
+                    // When any warning occures.
+                    if (alertInfo !== "") {
+                        window.alert(alertInfo);
+                        $("#file_info").html("");
+                        $("#name").val("");
+                        $("#tags").val("");
+                        $("#description").val("");
+                        $("#type").val("");
+                        $("#fileData").val("");
+                    } else { // When any warning do not occures.
+                        var fileInfo = "";
+                        var sizeStr = "";
+                        var dividedSize = 0;
+
+                        fileName = file.name;
+
+                        if (fileSize > 1024 * 1024 * 1024) { // When file size exceeds 1GB.
+                            dividedSize = fileSize / (1024 * 1024 * 1024);
+                            sizeStr = dividedSize.toFixed(2) + " G";
+                        } else if (fileSize > 1024 * 1024) { // When file size exceeds 1MB.
+                            dividedSize = fileSize / (1024 * 1024);
+                            sizeStr = dividedSize.toFixed(2) + " M";
+                        } else if (fileSize > 1024) { // When file size exceeds 1kB.
+                            dividedSize = fileSize / 1024;
+                            sizeStr = dividedSize.toFixed(2) + " k";
+                        } else { // When file size under 1kB.
+                            sizeStr = fileSize + " ";
+                        }
+
+                        fileInfo += "<div id=metadata_fields>";
+                        fileInfo += "Size: " + sizeStr + "bytes<br>";
+                        fileInfo += "MIME Type: " + encodeURI(file.type) + "<br>";
+                        fileInfo += "</div><hr>";
+
+                        $("#file_info").html(fileInfo);
+                        $("#name").val(fileName);
+                        $("#type").val(typeResult);
+                    }
                 }
-            }
 
-            /**
-             * This function is callback for cancel button.
-             * @access public
-             */
-            function handleCancelClick() {
-                location.href = "./yumymedia.php";
-            }
-
-            /**
-             * This function prints modal window.
-             * @access public
-             * @return {boole} - If modal window open, return true. Otherwise, return false.
-             */
-            function fadeInModalWindow() {
-                // Window Unfocus for avoid duplication.
-                $(this).blur();
-                if ($("#modal_window")[0]) {
-                    return false;
-                }
-
-                // Records scroll position of window.
-                var dElm = document.documentElement;
-                var dBody = document.body;
-                modalX = dElm.scrollLeft || dBody.scrollLeft; // X position.
-                modalY = dElm.scrollTop || dBody.scrollTop; // Y position.
-                // Print overlay.
-                $("body").append("<div id=\"modal_window\"></div>");
-                $("#modal_window").fadeIn("slow");
-
-                // Execure centerrize.
-                centeringModalSyncer();
-                // Fade-in modal window.
-                $("#modal_content").fadeIn("slow");
-
-                return true;
-            }
-
-            /**
-             * This function deletes a modal window.
-             * @access public
-             */
-            function fadeOutModalWindow() {
-                // Rescore scroll position of window.
-                window.scrollTo(modalX, modalY);
-                // Fade-out [#modal_content] and [#modal_window].
-                $("#modal_content,#modal_window").fadeOut("slow", function() {
-                    // Delete [#modal_window].
-                    $("#modal_window").remove();
-                    $("#modal_content").remove();
-                });
-            }
-
-            /**
-             * This function adds back button.
-             * @access public
-             */
-            function addBackButton() {
-                var contentHtml = "<br><input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"Back\" />";
-                $("#modal_content").append(contentHtml);
-
-                $("#backToMymedia").on("click", function() {
-                    handleCancelClick();
-                });
-
-            }
-
-            /**
-             * This function prints error message.
-             * @access public
-             * @param {string} errorMessage - string of error message.
-             * @param {string} ks - session string of kaltura connecion;
-             * @param {string} uploadTokenId - upload token id.
-             */
-            function printErrorMessage(errorMessage, ks, uploadTokenId) {
-                if (ks !== "" && uploadTokenId !== "") {
-                    deleteUploadToken();
-                }
-                $("#modal_content").append("<font color=\"red\">" + errorMessage + "</font><br>");
-                addBackButton();
-            }
-
-            /**
-             * This function prints success message.
-             * @access public
-             * @param {string} id - id of media entry.
-             * @param {string} name - name of media entry.
-             * @param {string} tags - tags of media entry.
-             * @param {string} description - description of media entry.
-             * @param {string} creatorId - username of creator.
-             */
-            function printSuccessMessage(id, name, tags, description, creatorId) {
-                // Delete modal window.
-                fadeOutModalWindow();
-
-                var output = "<h3>Your upload has been suceeded !</h3>";
-
-                output += "<table border=\"2\" cellpadding=\"5\">";
-                output += "<tr><td>entry id</td><td>" + id + "</td></tr>";
-                output += "<tr><td>name</td><td>" + name + "</td></tr>";
-                output += "<tr><td>tags</td><td>" + tags + "</td></tr>";
-                output += "<tr><td>description</td><td>" + description + "</td></tr>";
-                output += "<tr><td>creator id</td><td>" + creatorId + "</td></tr>";
-                output += "</table>";
-                output += "<br>";
-                output += "<input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"Back\" />";
-
-                $("#upload_info").html(output);
-
-                $("#backToMymedia").on("click", function() {
-                    handleCancelClick();
-                });
+                checkForm();
             }
 
             /**
@@ -354,10 +332,170 @@ define(['jquery'], function($) {
                     return false;
                 }
 
-                fadeInModalWindow(); // Prints modal window.
+                $("#entry_submit").prop("disabled", true);
                 executeUploadProcess(); // Executes upload.
 
                 return true;
+            }
+
+            /**
+             * This function close kaltura session.
+             * @access public
+             */
+            function sessionEnd() {
+                var serverHost = $("#kalturahost").val(); // Get hostname of kaltura server.
+                var serviceURL = serverHost + "/api_v3/service/session/action/end";
+
+                // Transmits data.
+                $.ajax({
+                    type: "GET",
+                    url: serviceURL,
+                    cache: false
+                })
+                .done(function(xmlData) {
+                    // Response is not XML.
+                    if (xmlData === null) {
+                        window.console.log("Cannot delete the uploadToken ! (Cannot get a XML response.)");
+                    } else {
+                        window.console.log("Kaltura Session has been deleted.");
+                    }
+                })
+                .fail(function(xmlData) {
+                    window.console.log("Cannot delete the uploadToken ! (Cannot connect to content server.)");
+                    if (xmlData !== null) {
+                        window.console.dir(xmlData);
+                    }
+                });
+            }
+
+            /**
+             * This function prints error message.
+             * @access public
+             * @param {string} errorMessage - string of error message.
+             * @param {string} ks - session string of kaltura connecion;
+             * @param {string} uploadTokenId - upload token id.
+             */
+            function printErrorMessage(errorMessage, ks, uploadTokenId) {
+                if (ks !== "" && uploadTokenId !== "") {
+                    deleteUploadToken();
+                }
+                $("#upload_info").html("");
+                $("#upload_info").append("<font color=\"red\">" + errorMessage + "</font><br>");
+                addBackButton();
+            }
+
+            /**
+             * This function prints success message.
+             * @access public
+             * @param {string} id - id of media entry.
+             * @param {string} name - name of media entry.
+             * @param {string} tags - tags of media entry.
+             * @param {string} description - description of media entry.
+             * @param {string} creatorId - username of creator.
+             */
+            function printSuccessMessage(id, name, tags, description, creatorId) {
+                var output = "<h3>Your upload has been suceeded !</h3>";
+
+                output += "<table border=\"2\" cellpadding=\"5\">";
+                output += "<tr><td>entry id</td><td>" + id + "</td></tr>";
+                output += "<tr><td>name</td><td>" + name + "</td></tr>";
+                output += "<tr><td>tags</td><td>" + tags + "</td></tr>";
+                output += "<tr><td>description</td><td>" + description + "</td></tr>";
+                output += "<tr><td>creator id</td><td>" + creatorId + "</td></tr>";
+                output += "</table>";
+                output += "<br>";
+                output += "<input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"Back\" />";
+
+                $("#upload_info").html(output);
+
+                $("#backToMymedia").on("click", function() {
+                    fadeOutUploaderWindow();
+                });
+            }
+
+            /**
+             * This function set module properties.
+             * @access public
+             * @param {string} id - id of media entry.
+             * @param {string} name - name of media entry.
+             * @param {string} description - description of media entry.
+             */
+            function setModuleProperties(serverHost, id, name, description) {
+                if (id !== null && id !== "") {
+                    if (id !== null) {
+                        $("#entry_id", parent.document).val(id);
+                    }
+
+                    var idName = $("#id_name", parent.document);
+
+                    if (idName !== null) {
+                        idName.val(name);
+                    }
+
+                    if (description !== null) {
+                        description = description.replace(/\n/g, "<br />");
+                    }
+
+                    description = "<p>" + description + "<br /></p>";
+
+                    var editor = $("#id_introeditoreditable", parent.document);
+
+                    if (editor !== null) {
+                        if (description !== null && description !== "") {
+                            editor.html(description);
+                        }
+                        else {
+                            editor.html("");
+                        }
+                    }
+
+                    editor = $("#id_introeditor", parent.document);
+
+                    if (editor !== null) {
+                        if (description !== null && description !== "") {
+                            editor.html(description);
+                        }
+                        else {
+                            editor.html("");
+                        }
+                    }
+
+                    var partnerid = $("#partner_id", parent.document).val();
+
+                    var source = serverHost + "/p/" + partnerid + "/sp/" + partnerid + "00/thumbnail/entry_id/" + id;
+                    source = source + "/width/150/height/100/type/3";
+
+                    var idMediaThumbnail = $("#media_thumbnail", parent.document);
+                    if (idMediaThumbnail !== null) {
+                        idMediaThumbnail.prop("src", source);
+                        idMediaThumbnail.prop("alt", name);
+                        idMediaThumbnail.prop("title", name);
+                    }
+                    
+                    var idMediaProperties = $("#id_media_properties", parent.document);
+                    if (idMediaProperties !== null) {
+                        idMediaProperties.css({visibility: "visible"});
+                    }
+
+                    var submitMedia = $("#submit_media", parent.document);
+                    if (submitMedia !== null) {
+                        submitMedia.prop("disabled", false);
+                    }
+                }
+            }
+
+            /**
+             * This function adds back button.
+             * @access public
+             */
+            function addBackButton() {
+                var contentHtml = "<br><input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"Back\" />";
+                $("#upload_info").append(contentHtml);
+
+                $("#backToMymedia").on("click", function() {
+                    fadeOutUploaderWindow();
+                });
+
             }
 
             /**
@@ -494,7 +632,7 @@ define(['jquery'], function($) {
                     // Entry metadata.
                     setTimeout(function() {
                         createMediaEntry(serverHost, ks, uploadTokenId);
-                    }, 1000);
+                    }, 50);
 
                 })
                 .fail(function(xmlData) {
@@ -660,7 +798,7 @@ define(['jquery'], function($) {
                     // Associate uploaded file with media entry
                     setTimeout(function() {
                         uploadMediaFile(serverHost, ks, uploadTokenId, entryId);
-                    }, 1000);
+                    }, 50);
 
                 })
                 .fail(function(xmlData) {
@@ -685,9 +823,6 @@ define(['jquery'], function($) {
                 var findData;
                 var fd = new FormData();
 
-                $("#modal_content").append("Uploading a media file ...");
-                $("#modal_content").append("<p>Progress: <span id=\"pvalue\" style=\"color:#00b200\">0.00</span> %</p>");
-
                 // Creates form data.
                 fd.append("action", "upload");
                 fd.append("ks", ks);
@@ -711,13 +846,17 @@ define(['jquery'], function($) {
                         var XHR = $.ajaxSettings.xhr();
                         if (XHR.upload) {
                             XHR.upload.addEventListener("progress", function(e) {
-                                var newValue = parseInt(parseInt(e.loaded) / parseInt(e.total) * 10000) / 100;
+                                var newValue = parseInt(e.loaded / e.total * 100);
                                 $("#pvalue").html(parseInt(newValue));
                             }, false);
                         }
                         return XHR;
                     }
                 };
+
+                $("#upload_info").html("");
+                $("#upload_info").append("Uploading a media file ...");
+                $("#upload_info").append("<p>Progress: <span id=\"pvalue\" style=\"color:#00b200\">0.00</span> %</p>");
 
                 var serviceURL = serverHost + "/api_v3/service/uploadToken/action/upload";
 
@@ -760,7 +899,7 @@ define(['jquery'], function($) {
                     } else {
                         window.console.log("Ffile chunk have been transmitted.");
                     }
-                    $("#modal_content").append("Attach uploaded file ...<br>");
+                    $("#upload_info").append("Attach uploaded file ...<br>");
                     // Create media entry.
                     setTimeout(function() {
                         attachUploadedFile(serverHost, ks, uploadTokenId, entryId);
@@ -883,10 +1022,11 @@ define(['jquery'], function($) {
                     // Get a value of creator id.
                     entryCreatorId = findData.text();
 
-                    // Prints back button.
-                    addBackButton();
                     // Prints success message.
                     printSuccessMessage(entryId, entryName, entryTags, entryDescription, entryCreatorId);
+                    // Update module properties.
+                    setModuleProperties(serverHost, entryId, entryName, entryDescription);
+                    
                 })
                 .fail(function(xmlData) {
                     if (xmlData !== null) {
@@ -895,104 +1035,6 @@ define(['jquery'], function($) {
                     deleteUploadToken(serverHost, ks, uploadTokenId);
                     printErrorMessage("Cannot attach uploaded file !<br>(Cannot connect to kaltura server.)");
                     return;
-                });
-            }
-
-            /**
-             * This function is callback for selection of media file.
-             * @access public
-             */
-            function handleFileSelect() {
-
-                // There exists selected file.
-                if ($("#fileData")) {
-                    // Get an object of selected file.
-                    var file = $("#fileData").prop("files")[0];
-
-                    fileSize = parseInt(file.size);
-                    var typeResult = checkFileType(encodeURI(file.type));
-                    var sizeResult = checkFileSize();
-                    var alertInfo = "";
-
-                    // When file size is wrong.
-                    if (sizeResult === false) {
-                        alertInfo += "Wrong file size.";
-                    }
-                    // When file is no supported.
-                    if (typeResult == "N/A") {
-                        alertInfo += "Unsupported file type.";
-                    }
-
-                    // When any warning occures.
-                    if (alertInfo !== "") {
-                        window.alert(alertInfo);
-                        $("#file_info").html("");
-                        $("#name").val("");
-                        $("#tags").val("");
-                        $("#description").val("");
-                        $("#type").val("");
-                        $("#fileData").val("");
-                    } else { // When any warning do not occures.
-                        var fileInfo = "";
-                        var sizeStr = "";
-                        var dividedSize = 0;
-
-                        fileName = file.name;
-
-                        if (fileSize > 1024 * 1024 * 1024) { // When file size exceeds 1GB.
-                            dividedSize = fileSize / (1024 * 1024 * 1024);
-                            sizeStr = dividedSize.toFixed(2) + " G";
-                        } else if (fileSize > 1024 * 1024) { // When file size exceeds 1MB.
-                            dividedSize = fileSize / (1024 * 1024);
-                            sizeStr = dividedSize.toFixed(2) + " M";
-                        } else if (fileSize > 1024) { // When file size exceeds 1kB.
-                            dividedSize = fileSize / 1024;
-                            sizeStr = dividedSize.toFixed(2) + " k";
-                        } else { // When file size under 1kB.
-                            sizeStr = fileSize + " ";
-                        }
-
-                        fileInfo += "<div id=metadata_fields>";
-                        fileInfo += "Size: " + sizeStr + "bytes<br>";
-                        fileInfo += "MIME Type: " + encodeURI(file.type) + "<br>";
-                        fileInfo += "</div><hr>";
-
-                        $("#file_info").html(fileInfo);
-                        $("#name").val(fileName);
-                        $("#type").val(typeResult);
-                    }
-                }
-
-                checkForm();
-            }
-
-            /**
-             * This function close kaltura session.
-             * @access public
-             */
-            function sessionEnd() {
-                var serverHost = $("#kalturahost").val(); // Get hostname of kaltura server.
-                var serviceURL = serverHost + "/api_v3/service/session/action/end";
-
-                // Transmits data.
-                $.ajax({
-                    type: "GET",
-                    url: serviceURL,
-                    cache: false
-                })
-                .done(function(xmlData) {
-                    // Response is not XML.
-                    if (xmlData === null) {
-                        window.console.log("Cannot delete the uploadToken ! (Cannot get a XML response.)");
-                    } else {
-                        window.console.log("Kaltura Session has been deleted.");
-                    }
-                })
-                .fail(function(xmlData) {
-                    window.console.log("Cannot delete the uploadToken ! (Cannot connect to content server.)");
-                    if (xmlData !== null) {
-                        window.console.dir(xmlData);
-                    }
                 });
             }
 
@@ -1007,14 +1049,10 @@ define(['jquery'], function($) {
             });
 
             // This function execute when window is resized.
-            $(window).resize(centeringModalSyncer);
+            $(window).resize(centeringModalSyncer("#uploader_content"));
 
             $("#fileData").on("change", function() {
                 handleFileSelect();
-            });
-
-            $("#uploader_cancel").on("click", function() {
-                handleCancelClick();
             });
 
             $("#name").on("change", function() {
@@ -1029,13 +1067,18 @@ define(['jquery'], function($) {
                 handleSubmitClick();
             });
 
+            $("#uploader_cancel").on("click", function() {
+                fadeOutUploaderWindow();
+            });
+
             $("#entry_reset").on("click", function() {
                 handleResetClick();
             });
 
-            // This function execute when this script is loaded.
-            checkForm();
-
+            $("#fadeout").on("click", function() {
+                fadeOutUploaderWindow();
+            });
         }
     };
 });
+

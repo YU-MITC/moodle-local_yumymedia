@@ -66,3 +66,8 @@ Version 1.1.8R2
 Version 1.1.8R3
 
 * fixed renderer.php, in order to solve an issue about sorting of media.
+
+Version 1.2.0
+
+* added moduleuploader.js, modulerecorder.js, loaduploader.js, and loadrecorder.js, in order to permit user can upload/record new movie in resource moudle (mod_kalmediares) / activity module (mod_kalmediaassign).
+* fixed some statements in webcamuploader.js, in order to respond to changes of WebRTC APIs in the Mozilla firefox.

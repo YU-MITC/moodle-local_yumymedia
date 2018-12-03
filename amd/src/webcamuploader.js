@@ -261,8 +261,9 @@ define(['jquery'], function($) {
              */
             function setPlayingPlayer(url) {
                 var str = "<video id=\"webcam\" width=\"" + defaultWidth + "\" height=\"" + defaultHeight + "\" ";
-                str = str + "src=\"" + url + "\" autoplay=\"false\" oncontextmenu=\"return false;\" controls></video>";
+                str = str + "autoplay=\"false\" oncontextmenu=\"return false;\" controls></video>";
                 $("#videospan").html(str);
+                document.getElementById("webcam").src = url;
                 document.getElementById("webcam").pause();
                 document.getElementById("webcam").currentTime = 0;
             }
@@ -305,7 +306,11 @@ define(['jquery'], function($) {
             function stopRecording() {
                 recorder.ondataavailable = function(evt) {
                     videoBlob = new Blob([evt.data], {type: evt.data.type});
-                    blobUrl = createObjectURL(videoBlob);
+                    if (window.URL && window.URL.createObjectURL) {
+                        blobUrl = window.URL.createObjectURL(videoBlob);
+                    } else {
+                        blobUrl = window.webkitURL.createObjectURL(videoBlob);
+                    }
                     setPlayingPlayer(blobUrl);
                     fileSize = videoBlob.size;
                     var sizeStr = "";
@@ -330,10 +335,21 @@ define(['jquery'], function($) {
                     if (sizeResult === false) {
                         window.alert("Wrong file size.");
                     }
-                    checkForm();
 
+                    checkForm();
                     videoFilename = $("#filename").val() + "." + getFileExtension(videoBlob.type);
                 };
+
+                if (localStream.getTracks !== undefined && localStream.getTracks !== null) {
+                    var tracks = localStream.getTracks();
+                    for (var i = tracks.length - 1; i >= 0; --i) {
+                        tracks[i].stop();
+                    }
+                    if (document.getElementById("webcam").srcObject !== undefined) {
+                        document.getElementById("webcam").srcObject = null;
+                    }
+                }
+
                 recorder.stop();
 
                 $("#leftspan").css("display", "none");
@@ -394,13 +410,30 @@ define(['jquery'], function($) {
                 setPreviewPlayer(null);
 
                 if (blobUrl !== null) {
-                    revokeObjectURL(blobUrl);
+                    if (window.URL && window.URL.revokeObjectURL) {
+                        window.URL.revokeObjectURL(blobUrl);
+                    }
+                    else {
+                        window.webkitURL.revokeObjectURL(blobUrl);
+                    }
                     blobUrl = null;
                     videoBlob = null;
                 }
 
-                if (localStream !== null && localStream.stop !== undefined) {
-                    localStream.stop();
+                if (localStream !== null) {
+                    if (localStream.getTracks !== undefined || localStream.getTracks !== null) {
+                        var tracks = localStream.getTracks();
+                        for (var i = tracks.length - 1; i >= 0; --i) {
+                            tracks[i].stop();
+                        }
+                        if (document.getElementById("webcam").srcObject) {
+                            document.getElementById("webcam").srcObject = null;
+                        }
+
+                    }
+                    else {
+                        localStream.stop();
+                    }
                 }
 
                 fileSize = 0;
@@ -448,13 +481,25 @@ define(['jquery'], function($) {
 
                 p.then(function(stream) {
                     localStream = stream;
-                    blobUrl = createObjectURL(localStream);
-                    $("#webcam").attr("src", blobUrl);
+                    var video = document.getElementById("webcam");
+                    if (video.srcObject !== undefined) {
+                        video.srcObject = localStream;
+                        video.play();
+                    }
+                    else {
+                        if (window.URL && window.URL.createObjectURL) {
+                            blobUrl = window.URL.createObjectURL(blobUrl);
+                        }
+                        else {
+                            blobUrl = window.webkitURL.createObjectURL(blobUrl);
+                        }
+                        $("#webcam").attr("src", blobUrl);
+                    }
                     window.console.log(localStream);
                     recorder = new MediaRecorder(localStream, constraints);
                     $("#recstop").attr("src", $("#recurl").val());
                     $("#recstop").on("click", function() {
-                        startRecording();
+                        startRecording(localStream);
                     });
                     $("#leftspan").css("display", "inline");
                     $("#rightspan").css("display", "none");
@@ -1161,8 +1206,10 @@ define(['jquery'], function($) {
                         var XHR = $.ajaxSettings.xhr();
                         if (XHR.upload) {
                             XHR.upload.addEventListener("progress", function(e) {
-                                var newValue = parseInt(e.loaded / e.total * 10000) / 100;
-                                $("#pvalue").html(parseInt(newValue));
+                                if (e.lengthComputable) {
+                                    var newValue = parseInt(e.loaded / e.total * 100);
+                                    $("#pvalue").html(newValue);
+                                }
                             }, false);
                         }
                         return XHR;
@@ -1395,13 +1442,29 @@ define(['jquery'], function($) {
             // This function execute when window is uloaded.
             $(window).on("unload", function() {
                 if (blobUrl !== null) {
-                    revokeObjectURL(blobUrl);
+                    if (window.URL && window.URL.revokeObjectURL) {
+                        window.URL.revokeObjectURL(blobUrl);
+                    }
+                    else {
+                        window.webkitURL.revokeObjectURL(blobUrl);
+                    }
                     videoBlob = null;
                     blobUrl = null;
                 }
 
                 if (localStream !== null) {
-                    localStream.stop();
+                    if (localStream.getTracks) {
+                        var tracks = localStream.getTracks();
+                        for (var i = tracks.length - 1; i >= 0; --i) {
+                            tracks[i].stop();
+                        }
+                    }
+                    else {
+                        localStream.stop();
+                    }
+                    if (document.getElementById("webcam").srcObject) {
+                        document.getElementById("webcam").srcObject = null;
+                    }
                 }
 
                 sessionEnd();

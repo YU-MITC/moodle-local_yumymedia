@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Simple media uploader script in YU Kaltura My Media Gallery.
+ * Simple media uploader script for resource and activity module.
  *
  * @package    local_yumymedia
  * @copyright  (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
@@ -29,34 +29,30 @@ defined('MOODLE_INTERNAL') || die();
 
 header('Access-Control-Allow-Origin: *');
 
-global $USER, $SESSION;
+global $USER, $SESSION, $COURSE;
 
-$mymedia = get_string('heading_mymedia', 'local_yumymedia');
 $PAGE->set_context(context_system::instance());
 $header = format_string($SITE->shortname). ": " . get_string('uploader_hdr', 'local_yumymedia');
 
-$PAGE->set_url('/local/yumymedia/simple_uploader.php');
-$PAGE->set_course($SITE);
-
-require_login();
-
-$PAGE->set_pagetype('simple-uploader');
-$PAGE->set_pagelayout('standard');
+$PAGE->set_pagetype('module_uploader');
+$PAGE->set_url('/local/yumymedia/module_uploader.php');
+$PAGE->set_course($COURSE);
+$PAGE->set_pagelayout('embedded');
 $PAGE->set_title($header);
 $PAGE->set_heading($header);
 $PAGE->add_body_class('mymedia-index');
 $PAGE->requires->css('/local/yumymedia/css/yumymedia.css');
-$PAGE->requires->js_call_amd('local_yumymedia/simpleuploader', 'init', array());
+$PAGE->requires->js_call_amd('local_yumymedia/moduleuploader', 'init', null);
+
+require_login();
 
 echo $OUTPUT->header();
 
 $context = context_user::instance($USER->id);
-
 require_capability('local/yumymedia:view', $context, $USER);
-
 $renderer = $PAGE->get_renderer('local_yumymedia');
 
-// Star connection to kaltura.
+// Connect to Kaltura server.
 $kaltura = new yukaltura_connection();
 $connection = $kaltura->get_connection(true, KALTURA_SESSION_LENGTH);
 
@@ -71,12 +67,10 @@ if (!$connection) {  // When connection failed.
     $partnerid = local_yukaltura_get_partner_id();
     $control = local_yukaltura_get_default_access_control($connection);
     $expiry = 21600;
-
     $uploadurl = local_yukaltura_get_host() . '/api_v3/service/uploadToken/action/upload';
 
     // Start kaltura session.
     $ks = $connection->session->start($secret, $publishername, KalturaSessionType::ADMIN, $partnerid, $expiry);
-
     // Get the root category path.
     $result = local_yukaltura_get_root_category();
     $rootid = $result['id'];
@@ -105,18 +99,13 @@ if (!$connection) {  // When connection failed.
 
         $output .= $renderer->create_file_selection_markup();
 
-        $output .= $renderer->create_entry_metadata_markup($ks, $kalturahost, $rootpath, $control, false);
+        $output .= $renderer->create_entry_metadata_markup($ks, $kalturahost, $rootpath, $control, true);
 
         $output .= html_writer::end_tag('form');
 
-        $output .= html_writer::empty_tag('hr', null);
-        $output .= html_writer::empty_tag('br', null);
-
-        $output .= $renderer->create_upload_cancel_markup();
+        // $output .= html_writer::empty_tag('hr', null);
 
         $output .= html_writer::end_tag('div');
-
-        $output .= $renderer->create_modal_content_markup();
     }
 
     echo $output;

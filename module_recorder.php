@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Webcam recording and uploader script in YU Kaltura My Media Gallery.
+ * Webcam recording and uploader script for resource and activity module.
  *
  * @package    local_yumymedia
  * @copyright  (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
@@ -29,24 +29,22 @@ defined('MOODLE_INTERNAL') || die();
 
 header('Access-Control-Allow-Origin: *');
 
-global $USER, $SESSION;
+global $USER, $SESSION, $COURSE;
 
-$mymedia = get_string('heading_mymedia', 'local_yumymedia');
 $PAGE->set_context(context_system::instance());
 $header  = format_string($SITE->shortname). ": " . get_string('webcam_hdr', 'local_yumymedia');
 
-$PAGE->set_url('/local/yumymedia/webcam_uploader.php');
-$PAGE->set_course($SITE);
-
-require_login();
-
-$PAGE->set_pagetype('webcam-uploader');
-$PAGE->set_pagelayout('standard');
+$PAGE->set_url('/local/yumymedia/module_uploader.php');
+$PAGE->set_course($COURSE);
+$PAGE->set_pagetype('module_recorder');
+$PAGE->set_pagelayout('embedded');
 $PAGE->set_title($header);
 $PAGE->set_heading($header);
 $PAGE->add_body_class('mymedia-index');
 $PAGE->requires->css('/local/yumymedia/css/yumymedia.css');
-$PAGE->requires->js_call_amd('local_yumymedia/webcamuploader', 'init', array());
+$PAGE->requires->js_call_amd('local_yumymedia/modulerecorder', 'init', null);
+
+require_login();
 
 echo $OUTPUT->header();
 
@@ -110,18 +108,18 @@ if (local_yukaltura_get_mymedia_permission() == false) {  // When mymedia is dis
 
             $output .= $renderer->create_webcam_recording_markup();
 
-            $output .= $renderer->create_entry_metadata_markup($ks, $kalturahost, $rootpath, $control);
+            $output .= $renderer->create_entry_metadata_markup($ks, $kalturahost, $rootpath, $control, true);
 
             $output .= html_writer::end_tag('form');
 
-            $output .= html_writer::empty_tag('hr', null);
-            $output .= html_writer::empty_tag('br', null);
+            //$output .= html_writer::empty_tag('hr', null);
+            //$output .= html_writer::empty_tag('br', null);
 
-            $output .= $renderer->create_upload_cancel_markup();
+            //$output .= $renderer->create_upload_cancel_markup();
 
             $output .= html_writer::end_tag('div');
 
-            $output .= $renderer->create_modal_content_markup();
+            // $output .= $renderer->create_modal_content_markup();
         }
     }
 }

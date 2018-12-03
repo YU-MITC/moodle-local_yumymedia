@@ -103,8 +103,6 @@ if (!$connection) {  // When connection failed.
 
         $output .= html_writer::end_tag('form');
 
-        // $output .= html_writer::empty_tag('hr', null);
-
         $output .= html_writer::end_tag('div');
     }
 

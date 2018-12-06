@@ -1,7 +1,6 @@
-# YU Kaltura Media Gallery
-
-Change log
+Change log of YU Kaltura Media Gallery
 ------
+
 Version 1.1.0
 
 * added a webcam upload form(wecam_uploader.php) and releated javascript(webcamuploader.js).
@@ -71,3 +70,7 @@ Version 1.2.0
 
 * added moduleuploader.js, modulerecorder.js, loaduploader.js, and loadrecorder.js, in order to permit user can upload/record new movie in resource moudle (mod_kalmediares) / activity module (mod_kalmediaassign).
 * fixed some statements in webcamuploader.js, in order to respond to changes of WebRTC APIs in the Mozilla firefox.
+
+Version 1.2.1
+
+* fixed some statements in loaduploader.js, moduleuploader.js, webcamuploader.js, loadrecorder.js, modulerecorder.js, and simpleuploader.js, based on JSDoc warnings.

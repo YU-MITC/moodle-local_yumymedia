@@ -17,7 +17,7 @@
  * Uploader Script used in resource and activirty modules.
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2018 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
+ * @copyright  (C) 2016-2019 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -416,6 +416,7 @@ define(['jquery'], function($) {
             /**
              * This function set module properties.
              * @access public
+             * @param {string} serverHost - URI of server host.
              * @param {string} id - id of media entry.
              * @param {string} name - name of media entry.
              * @param {string} description - description of media entry.
@@ -443,8 +444,7 @@ define(['jquery'], function($) {
                     if (editor !== null) {
                         if (description !== null && description !== "") {
                             editor.html(description);
-                        }
-                        else {
+                        } else {
                             editor.html("");
                         }
                     }
@@ -454,8 +454,7 @@ define(['jquery'], function($) {
                     if (editor !== null) {
                         if (description !== null && description !== "") {
                             editor.html(description);
-                        }
-                        else {
+                        } else {
                             editor.html("");
                         }
                     }
@@ -795,7 +794,7 @@ define(['jquery'], function($) {
                         return;
                     }
 
-                    // Associate uploaded file with media entry
+                    // Associate uploaded file with media entry.
                     setTimeout(function() {
                         uploadMediaFile(serverHost, ks, uploadTokenId, entryId);
                     }, 50);
@@ -804,7 +803,7 @@ define(['jquery'], function($) {
                 .fail(function(xmlData) {
                     if (xmlData !== null) {
                         window.console.dir(xmlData);
-                }
+                    }
                     deleteUploadToken(serverHost, ks, uploadTokenId);
                     printErrorMessage("Cannot create media entry !<br>(Cannot connect to kaltura server.)");
                     return;
@@ -1081,4 +1080,3 @@ define(['jquery'], function($) {
         }
     };
 });
-

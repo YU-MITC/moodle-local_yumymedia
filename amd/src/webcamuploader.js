@@ -17,7 +17,7 @@
  * YU Kaltura "My Media" script for webcam uploader.
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2018 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
+ * @copyright  (C) 2016-2019 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -137,7 +137,7 @@ define(['jquery'], function($) {
              * @access public
              * @return {bool} - true if web browser is the Edge, otherwise false.
              */
-             function isEdge() {
+            function isEdge() {
                 var ua = navigator.userAgent.toLowerCase();
 
                 // Case of Edge.
@@ -152,7 +152,7 @@ define(['jquery'], function($) {
                 var isOpera = (ua.indexOf('opera') > -1);
 
                 return isMsEdge === true && isChrome === false && isFirefox === false && isSafari === false && isOpera === false;
-             }
+            }
 
             /**
              * This function retrieve whether web browser is unsupported.
@@ -412,8 +412,7 @@ define(['jquery'], function($) {
                 if (blobUrl !== null) {
                     if (window.URL && window.URL.revokeObjectURL) {
                         window.URL.revokeObjectURL(blobUrl);
-                    }
-                    else {
+                    } else {
                         window.webkitURL.revokeObjectURL(blobUrl);
                     }
                     blobUrl = null;
@@ -430,8 +429,7 @@ define(['jquery'], function($) {
                             document.getElementById("webcam").srcObject = null;
                         }
 
-                    }
-                    else {
+                    } else {
                         localStream.stop();
                     }
                 }
@@ -485,12 +483,10 @@ define(['jquery'], function($) {
                     if (video.srcObject !== undefined) {
                         video.srcObject = localStream;
                         video.play();
-                    }
-                    else {
+                    } else {
                         if (window.URL && window.URL.createObjectURL) {
                             blobUrl = window.URL.createObjectURL(blobUrl);
-                        }
-                        else {
+                        } else {
                             blobUrl = window.webkitURL.createObjectURL(blobUrl);
                         }
                         $("#webcam").attr("src", blobUrl);
@@ -582,57 +578,57 @@ define(['jquery'], function($) {
                 return "N/A";
             }
 
-             /**
-              * This function return file extension string.
-              * @access public
-              * @param {string} fileType - file type of selected media.
-              * @return {string} - file extension of selected media.
-              */
-             function getFileExtension(fileType) {
-                 if (fileType.indexOf("video/avi") != -1 || fileType.indexOf("video/x-msvideo") != -1) {
-                     return "avi";
-                 }
-                 if (fileType.indexOf("video/mpeg") != -1 || fileType.indexOf("video/mpg") != -1 ||
-                     fileType.indexOf("audio/mpeg") != -1 || fileType.indexOf("audio/mpg") != -1) {
-                     return "mpeg";
-                 }
-                 if (fileType.indexOf("video/mp4") != -1 || fileType.indexOf("video/m4v") != -1 ||
-                     fileType.indexOf("audio/mp4") != -1) {
-                     return "mp4";
-                 }
-                 if (fileType.indexOf("video/ogg") != -1) {
-                     return "ogg";
-                 }
-                 if (fileType.indexOf("video/quicktime") != -1) {
-                     return "mov";
-                 }
-                 if (fileType.indexOf("video/VP8") != -1 || fileType.indexOf("video/VP9") != -1 ||
-                     fileType.indexOf("video/vp8") != -1 || fileType.indexOf("video/vp9") != -1 ||
-                     fileType.indexOf("video/webm") != -1) {
-                     return "webm";
-                 }
-                 if (fileType.indexOf("video/x-flv") != -1 || fileType.indexOf("video/x-f4v") != -1) {
-                     return "flv";
-                 }
-                 if (fileType.indexOf("video/x-matroska") != -1) {
-                     return "mkv";
-                 }
-                 if (fileType.indexOf("video/x-ms-wmv") != -1) {
-                     return "wmv";
-                 }
+            /**
+             * This function return file extension string.
+             * @access public
+             * @param {string} fileType - file type of selected media.
+             * @return {string} - file extension of selected media.
+             */
+            function getFileExtension(fileType) {
+                if (fileType.indexOf("video/avi") != -1 || fileType.indexOf("video/x-msvideo") != -1) {
+                    return "avi";
+                }
+                if (fileType.indexOf("video/mpeg") != -1 || fileType.indexOf("video/mpg") != -1 ||
+                    fileType.indexOf("audio/mpeg") != -1 || fileType.indexOf("audio/mpg") != -1) {
+                    return "mpeg";
+                }
+                if (fileType.indexOf("video/mp4") != -1 || fileType.indexOf("video/m4v") != -1 ||
+                    fileType.indexOf("audio/mp4") != -1) {
+                    return "mp4";
+                }
+                if (fileType.indexOf("video/ogg") != -1) {
+                    return "ogg";
+                }
+                if (fileType.indexOf("video/quicktime") != -1) {
+                    return "mov";
+                }
+                if (fileType.indexOf("video/VP8") != -1 || fileType.indexOf("video/VP9") != -1 ||
+                    fileType.indexOf("video/vp8") != -1 || fileType.indexOf("video/vp9") != -1 ||
+                    fileType.indexOf("video/webm") != -1) {
+                    return "webm";
+                }
+                if (fileType.indexOf("video/x-flv") != -1 || fileType.indexOf("video/x-f4v") != -1) {
+                    return "flv";
+                }
+                if (fileType.indexOf("video/x-matroska") != -1) {
+                    return "mkv";
+                }
+                if (fileType.indexOf("video/x-ms-wmv") != -1) {
+                    return "wmv";
+                }
 
-                 if (fileType.indexOf("audio/ac3") != -1) {
-                     return "ac3";
-                 }
-                 if (fileType.indexOf("audio/ogg") != -1) {
-                     return "ogg";
-                 }
-                 if (fileType.indexOf("audio/wav") != -1) {
-                     return "wav";
-                 }
-                 if (fileType.indexOf("audio/x-ms-wma") != -1) {
-                     return "wma";
-                 }
+                if (fileType.indexOf("audio/ac3") != -1) {
+                    return "ac3";
+                }
+                if (fileType.indexOf("audio/ogg") != -1) {
+                    return "ogg";
+                }
+                if (fileType.indexOf("audio/wav") != -1) {
+                    return "wav";
+                }
+                if (fileType.indexOf("audio/x-ms-wma") != -1) {
+                    return "wma";
+                }
 
                 if (fileType.indexOf("image/gif") != -1) {
                     return "gif";
@@ -1151,7 +1147,7 @@ define(['jquery'], function($) {
                         return;
                     }
 
-                    // Associate uploaded file with media entry
+                    // Associate uploaded file with media entry.
                     setTimeout(function() {
                         uploadMediaFile(serverHost, ks, uploadTokenId, entryId);
                     }, 1000);
@@ -1160,13 +1156,12 @@ define(['jquery'], function($) {
                 .fail(function(xmlData) {
                     if (xmlData !== null) {
                         window.console.dir(xmlData);
-                }
+                    }
                     deleteUploadToken(serverHost, ks, uploadTokenId);
                     printErrorMessage("Cannot create media entry !<br>(Cannot connect to kaltura server.)");
                     return;
                 });
             }
-
 
             /**
              * This function uploads media file.
@@ -1444,8 +1439,7 @@ define(['jquery'], function($) {
                 if (blobUrl !== null) {
                     if (window.URL && window.URL.revokeObjectURL) {
                         window.URL.revokeObjectURL(blobUrl);
-                    }
-                    else {
+                    } else {
                         window.webkitURL.revokeObjectURL(blobUrl);
                     }
                     videoBlob = null;
@@ -1458,8 +1452,7 @@ define(['jquery'], function($) {
                         for (var i = tracks.length - 1; i >= 0; --i) {
                             tracks[i].stop();
                         }
-                    }
-                    else {
+                    } else {
                         localStream.stop();
                     }
                     if (document.getElementById("webcam").srcObject) {

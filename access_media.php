@@ -18,13 +18,16 @@
  * Access restriction setting script in "My Media".
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2019 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.php');
 require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/API/KalturaClient.php');
+
+header('Access-Control-Allow-Origin: *');
+header('Cache-Control: no-cache');
 
 global $USER, $SESSION, $DB;
 
@@ -88,8 +91,8 @@ if ($media == null or $media->status == KalturaEntryStatus::DELETED) {
         echo get_string('access_media_title', 'local_yumymedia');
         echo html_writer::end_tag('h3');
 
-        $internalcontrol = local_yukaltura_get_internal_access_control($connection);
-        $defaultcontrol = local_yukaltura_get_default_access_control($connection);
+        $internalcontrolprofile = local_yukaltura_get_internal_access_control($connection);
+        $defaultcontrolprofile = local_yukaltura_get_default_access_control($connection);
         $currentcontrolid = $media->accessControlId;
         $url = new moodle_url('/local/yumymedia/yumymedia.php', array('page' => $page, 'sort' => $sort));
 
@@ -100,8 +103,9 @@ if ($media == null or $media->status == KalturaEntryStatus::DELETED) {
                                                    $url, $currentcontrolid);
         echo $renderer->create_embed_code_markup();
 
-        if ($media != null && !is_null($internalcontrol) && !is_null($defaultcontrol)) {
-                echo $renderer->create_access_control_markup($defaultcontrol, $internalcontrol, $currentcontrolid);
+        if ($media != null && !is_null($internalcontrolprofile) && !is_null($defaultcontrolprofile)) {
+                echo $renderer->create_access_control_markup($defaultcontrolprofile, $internalcontrolprofile,
+                                                             $currentcontrolid);
         }
 
         echo $renderer->create_access_back_markup($url);

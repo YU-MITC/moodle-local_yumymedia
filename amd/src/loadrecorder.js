@@ -17,7 +17,7 @@
  * YU Kaltura "My Media" script in order to load webcam uploader with modal window.
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2018 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
+ * @copyright  (C) 2016-2019 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -38,7 +38,8 @@ define(['jquery'], function($) {
             /**
              * This function prints modal window.
              * @access public
-             * @return {boole} - If modal window open, return true. Otherwise, return false.
+             * @param {string} url - URL of iframe content.
+             * @return {bool} - If modal window open, return true. Otherwise, return false.
              */
             function fadeInRecorderWindow(url) {
                 // Window Unfocus for avoid duplication.
@@ -70,6 +71,7 @@ define(['jquery'], function($) {
             /**
              * This function centerizes a modal window.
              * @access public
+             * @param {object} contentPanel - HTML element of modal content.
              */
             function centeringModalSyncer(contentPanel) {
                 if (timer !== false) {

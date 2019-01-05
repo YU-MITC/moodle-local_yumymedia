@@ -657,7 +657,7 @@ define(['jquery'], function($) {
                         return;
                     }
 
-                    // Associate uploaded file with media entry
+                    // Associate uploaded file with media entry.
                     setTimeout(function() {
                         uploadMediaFile(serverHost, ks, uploadTokenId, entryId);
                     }, 1000);
@@ -666,7 +666,7 @@ define(['jquery'], function($) {
                 .fail(function(xmlData) {
                     if (xmlData !== null) {
                         window.console.dir(xmlData);
-                }
+                    }
                     deleteUploadToken(serverHost, ks, uploadTokenId);
                     printErrorMessage("Cannot create media entry !<br>(Cannot connect to kaltura server.)");
                     return;

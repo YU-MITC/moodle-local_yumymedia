@@ -61,7 +61,6 @@ Branches
 * MOODLE_32_STABLE -> Moodle3.2 branch
 * MOODLE_33_STABLE -> Moodle3.3 branch
 * MOODLE_34_STABLE -> Moodle3.4 branch
-* MOODLE_35_STABLE -> Moodle3.4 branch
 * MOODLE_35_STABLE -> Moodle3.5 branch
 * MOODLE_36_STABLE -> Moodle3.6 branch
 

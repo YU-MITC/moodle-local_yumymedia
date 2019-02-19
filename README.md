@@ -78,6 +78,10 @@ Warning
 Change log of YU Kaltura Media Gallery
 ------
 
+Version 1.2.2
+
+* fixed some statements in delete_media.php, in order to this plugin corresponds to the Kaltura SaaS edition.
+
 Version 1.2.1
 
 * fixed some statements in loaduploader.js, moduleuploader.js, webcamuploader.js, loadrecorder.js, modulerecorder.js, and simpleuploader.js, based on JSDoc warnings.

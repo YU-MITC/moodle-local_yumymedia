@@ -120,15 +120,19 @@ if ($media == null or $media->status == KalturaEntryStatus::DELETED) {
                      $connection->thumbAsset->delete($thumbnail->id);
                 }
 
-                $categoryids = explode(",", $media->categoriesIds);
-                foreach ($categoryids as $categoryid) {
-                    $connection->categoryEntry->delete($entryid, $categoryid);
-                }
+                try {
+                    $categoryids = explode(",", $media->categoriesIds);
+                    foreach ($categoryids as $categoryid) {
+                        $connection->categoryEntry->delete($entryid, $categoryid);
+                    }
+                } catch (Exception $ex1) {}
 
-                $flavorassetarray = $connection->flavorAsset->getByEntryId($entryid);
-                foreach ($flavorassetarray as $flavor) {
-                    $connection->flavorAsset->delete($flavor->id);
-                }
+                try {
+                    $flavorassetarray = $connection->flavorAsset->getByEntryId($entryid);
+                    foreach ($flavorassetarray as $flavor) {
+                        $connection->flavorAsset->delete($flavor->id);
+                    }
+                } catch (Exception $ex2) {}
 
                 $connection->media->delete($entryid);
                 echo $renderer->create_delete_message_markup(get_string('delete_media_complete', 'local_yumymedia'),

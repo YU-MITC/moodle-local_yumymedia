@@ -151,4 +151,3 @@ if ($media == null or $media->status == KalturaEntryStatus::DELETED) {
 $connection->session->end();
 
 echo $OUTPUT->footer();
-

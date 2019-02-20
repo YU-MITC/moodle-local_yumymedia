@@ -44,8 +44,8 @@ function local_yumymedia_extend_navigation($navigation) {
     $context = context_user::instance($USER->id);
 
     if ($nodehome && has_capability('local/yumymedia:view', $context, $USER)) {
-        $nodemymedia = $nodehome->add($mymedia, new moodle_url('/local/yumymedia/yumymedia.php'),
-                                      navigation_node::NODETYPE_LEAF, $mymedia, 'mymedia');
+        $url = new moodle_url('/local/yumymedia/yumymedia.php');
+        $nodemymedia = $nodehome->add($mymedia, $url, navigation_node::NODETYPE_LEAF, $mymedia, 'mymedia');
         $nodemymedia->showinflatnavigation = true;
     }
 }

@@ -35,17 +35,21 @@ require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.ph
  */
 function local_yumymedia_extend_navigation($navigation) {
 
-    global $USER;
+    global $PAGE, $USER;
 
-    $mymedia = get_string('nav_mymedia', 'local_yumymedia');
-
-    $nodehome = $navigation->get('home');
+    $label = get_string('nav_mymedia', 'local_yumymedia');
+    $link = new moodle_url('/local/yumymedia/yumymedia.php');
 
     $context = context_user::instance($USER->id);
 
-    if ($nodehome && has_capability('local/yumymedia:view', $context, $USER)) {
-        $nodemymedia = $nodehome->add($mymedia, new moodle_url('/local/yumymedia/yumymedia.php'),
-                                      navigation_node::NODETYPE_LEAF, $mymedia, 'mymedia');
+    $parent = $navigation->get('home');
+
+    if (has_capability('local/yumymedia:view', $context, $USER)) {
+        if (empty($parent)) {
+            $parent = $navigation;
+        }
+
+        $nodemymedia = $parent->add($label, $link, navigation_node::NODETYPE_LEAF);
         $nodemymedia->showinflatnavigation = true;
     }
 }

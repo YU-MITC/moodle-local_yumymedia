@@ -32,6 +32,7 @@ Supported themes
 
 * Clean
 * Boost (version 1.1.7 and later)
+* Classic (version 1.3.0 and later)
 
 This plugin package might be able to work with other themes.
 
@@ -44,13 +45,13 @@ Installation will be completed after you log in as an administrator and access t
 How to use
 ------
 
-* User's guide, click [here](http://www.cc.yamaguchi-u.ac.jp/guides/cas/plugins/userguide_version1.2.pdf).
+* User's guide, click [here](http://www.cc.yamaguchi-u.ac.jp/guides/cas/plugins/userguide_version1.3.pdf).
 * Demonstration web page, click [here](http://www.cc.yamaguchi-u.ac.jp/guides/cas/plugins/demo/).
 
 Targeted Moodle versions
 ------
 
-Moodle 2.9, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6
+Moodle 2.9, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3,6, 3.7
 
 Branches
 ------
@@ -63,6 +64,7 @@ Branches
 * MOODLE_34_STABLE -> Moodle3.4 branch
 * MOODLE_35_STABLE -> Moodle3.5 branch
 * MOODLE_36_STABLE -> Moodle3.6 branch
+* MOODLE_37_STABLE -> Moodle3.7 branch
 
 First clone the repository with "git clone", then "git checkout MOODLE_29_STABLE(branch name)" to switch branches.
 
@@ -77,6 +79,11 @@ Warning
 
 Change log of YU Kaltura Media Gallery
 ------
+
+Version 1.3.0
+
+* fixed some statements (about the paging bar) in yumymedia.php and renderer.php, in order to support recently versions of the Moodle 3.x.
+* changed display position of a link to the "My Media", in order to support recently versions of the Moodle 3.x. In some themes, the link of the "My Media" is displayed as a child node of the top of "Navigation" block.
 
 Version 1.2.2
 

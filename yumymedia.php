@@ -138,16 +138,21 @@ if (local_yukaltura_get_mymedia_permission()) {
 
             // Set totalcount, current page number, number of items per page.
             // Remember to check the session if a search has been performed.
-            $page = $OUTPUT->paging_bar($total,
-                                        $page,
-                                        $perpage,
-                                        new moodle_url('/local/yumymedia/yumymedia.php', array('sort' => $sort)));
+            $page = $renderer->paging_bar($total,
+                                          $page,
+                                          $perpage,
+                                          new moodle_url('/local/yumymedia/yumymedia.php', array('sort' => $sort)));
 
-            if (strpos($page, '<nav ') !== false ) {
-                $index = strpos($page, '<nav ');
-                $first = substr($page, 0, $index + 5);
-                $second = substr($page, $index + 5);
-                $page = $first . 'class="mymedia pagingbar"' . $second;
+            $verstr = trim($CFG->release);
+            $num = preg_match('/^[0-9]+/', $verstr, $matches);
+            if ($num >= 1) {
+                $vernum = (int)$matches[0];
+                if ($vernum <= 2 && strpos($page, '<nav ') !== false) {
+                    $index = strpos($page, '<nav ');
+                    $first = substr($page, 0, $index + 5);
+                    $second = substr($page, $index + 5);
+                    $page = $first . 'class="mymedia pagingbar"' . $second;
+                }
             }
 
             echo $renderer->create_options_table_upper($page);

@@ -24,11 +24,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2019050400;
+$plugin->version = 2019051100;
 $plugin->component = 'local_yumymedia';
 $plugin->release = 'YU Kaltura Media Gallery 1.3.0';
 $plugin->requires = 2015051100;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = array(
-    'local_yukaltura' => 2019050400
+    'local_yukaltura' => 2019051100
 );

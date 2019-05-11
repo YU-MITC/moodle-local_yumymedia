@@ -49,10 +49,10 @@ $string['delete_link'] = 'Delete';
 $string['download_link'] = 'Download';
 $string['access_link'] = 'Access';
 
-// Video details panel.
-$string['details'] = 'Video Details';
+// Media details panel.
+$string['details'] = 'Media Details';
 
-// Video details tabs.
+// Media details tabs.
 $string['tab_preview'] = 'Preview';
 $string['tab_metadata'] = 'Edit';
 $string['tab_share'] = 'Share';

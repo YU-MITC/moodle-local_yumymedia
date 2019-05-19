@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'My Media';
+$string['pluginname'] = 'マイメディア';
 
 // Capability strings.
 $string['yumymedia:view'] = 'マイメディアページを表示する。';

@@ -987,7 +987,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         $output .= html_writer::start_tag('tr');
         $output .= html_writer::start_tag('td');
-        $output .= get_string('metadata_media_name', 'local_yumymedia');
+        $output .= get_string('name_header', 'local_yumymedia');
         $output .= html_writer::end_tag('td');
         $output .= html_writer::start_tag('td');
         $output .= $entry->name;
@@ -996,7 +996,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         $output .= html_writer::start_tag('tr');
         $output .= html_writer::start_tag('td');
-        $output .= get_string('metadata_media_created', 'local_yumymedia');
+        $output .= get_string('created_header', 'local_yumymedia');
         $output .= html_writer::end_tag('td');
         $output .= html_writer::start_tag('td');
         $output .= userdate($entry->createdAt);
@@ -1005,7 +1005,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         $output .= html_writer::start_tag('tr');
         $output .= html_writer::start_tag('td');
-        $output .= get_string('metadata_media_tags', 'local_yumymedia');
+        $output .= get_string('tags_header', 'local_yumymedia');
         $output .= html_writer::end_tag('td');
         $output .= html_writer::start_tag('td');
         $output .= $entry->tags;
@@ -1014,7 +1014,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         $output .= html_writer::start_tag('tr');
         $output .= html_writer::start_tag('td');
-        $output .= get_string('metadata_media_desc', 'local_yumymedia');
+        $output .= get_string('desc_header', 'local_yumymedia');
         $output .= html_writer::end_tag('td');
         $output .= html_writer::start_tag('td');
         $output .= $desc;
@@ -1159,7 +1159,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $attr = array('type' => 'button',
                       'id' => 'access_media_save',
                       'name' => 'access_media_save',
-                      'value' => 'Save',
+                      'value' => get_string('save_label', 'local_yumymedia'),
                       'disabled' => 'disabled');
 
         $output .= html_writer::empty_tag('input', $attr);
@@ -1181,7 +1181,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $attr = array('type' => 'button',
                       'id' => 'access_media_back',
                       'name' => 'access_media_back',
-                      'value' => 'Back',
+                      'value' => get_string('back_label', 'local_yumymedia'),
                       'onclick' => 'location.href=\'' . $mymediaurl . '\'');
 
         $output .= html_writer::empty_tag('input', $attr);
@@ -1225,7 +1225,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     public function create_delete_back_button_markup($mymediaurl) {
         $output = '';
         $attr = array('type' => 'button', 'name' => 'delete_media_back',
-                      'value' => 'Back',
+                      'value' => get_string('back_label', 'local_yumymedia'),
                       'onclick' => 'location.href=\'' . $mymediaurl . '\'');
         $output .= html_writer::empty_tag('input', $attr);
 
@@ -1385,9 +1385,10 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
     /**
      * This function output HTML markup of category failed.
+     * @param string $type - type of moudle.
      * @return string - HTML markup for category failed.
      */
-    public function create_category_failed_markup() {
+    public function create_category_failed_markup($type = 'mymedia') {
         $output = '';
         $output .= get_string('category_failed', 'local_yumymedia');
         $output .= html_writer::empty_tag('br');
@@ -1400,24 +1401,30 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         }
         $output .= html_writer::empty_tag('br');
 
-        $attr = array('type' => 'button', 'name' => 'uploader_cancel', 'id' => 'uploader_cancel',
-                      'value' => get_string('back_label', 'local_yumymedia'));
-        $output .= html_writer::empty_tag('input', $attr);
+        if ($type != 'atto') {
+            $attr = array('type' => 'button', 'name' => 'uploader_cancel', 'id' => 'uploader_cancel',
+                          'value' => get_string('back_label', 'local_yumymedia'));
+            $output .= html_writer::empty_tag('input', $attr);
+        }
 
         return $output;
     }
 
     /**
      * This function outputs HTML markup of access ontrol failed.
+     * @param string $type - type of module.
      * @return string - HTML markup of access control failed.
      */
-    public function create_access_control_failed_markup() {
+    public function create_access_control_failed_markup($type = 'mymedia') {
         $output = '';
         $output .= get_string('default_access_control_failed', 'local_yumymedia');
         $output .= html_writer::empty_tag('br');
-        $attr = array('type' => 'button', 'name' => 'uploader_cancel', 'id' => 'uploader_cancel',
-                      'value' => get_string('back_label', 'local_yumymedia'));
-        $output .= html_writer::empty_tag('input', $attr);
+
+        if ($type != 'atto') {
+            $attr = array('type' => 'button', 'name' => 'uploader_cancel', 'id' => 'uploader_cancel',
+                          'value' => get_string('back_label', 'local_yumymedia'));
+            $output .= html_writer::empty_tag('input', $attr);
+        }
 
         return $output;
     }
@@ -1695,6 +1702,54 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $output .= get_string('uploading_header', 'local_yumymedia');
         $output .= html_writer::end_tag('h3');
         $output .= html_writer::end_tag('div');
+        return $output;
+    }
+
+    /**
+     * This function creates HTML markup used to print hidden parameters for atto plugin.
+     *
+     * @return string - HTML markup for atto plugin.
+     */
+    public function create_atto_hidden_markup() {
+        $output = '';
+
+        $kalturahost = local_yukaltura_get_host();
+        $partnerid = local_yukaltura_get_partner_id();
+        $uiconfid = local_yukaltura_get_player_uiconf('player_atto');
+        list($playerwidth, $playerheight) = local_yukaltura_get_atto_player_dimension();
+
+        $attr = array('type' => 'hidden',
+                      'name' => 'partnerid',
+                      'id' => 'partnerid',
+                      'value' => $partnerid
+                     );
+
+        $output .= html_writer::empty_tag('input', $attr);
+
+        $attr = array('type' => 'hidden',
+                      'name' => 'uiconfid',
+                      'id' => 'uiconfid',
+                      'value' => $uiconfid
+                     );
+
+        $output .= html_writer::empty_tag('input', $attr);
+
+        $attr = array('type' => 'hidden',
+                      'name' => 'player_width',
+                      'id' => 'player_width',
+                      'value' => $playerwidth
+                     );
+
+        $output .= html_writer::empty_tag('input', $attr);
+
+        $attr = array('type' => 'hidden',
+                      'name' => 'player_height',
+                      'id' => 'player_height',
+                      'value' => $playerheight
+                     );
+
+        $output .= html_writer::empty_tag('input', $attr);
+
         return $output;
     }
 }

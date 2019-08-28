@@ -111,19 +111,28 @@ define(['jquery'], function($) {
              * This is callback function when access control setting is changed.
              */
             function selectedControl() {
-                var selectedControlId = $("#access_control_select").val();
-                var currentControlId = $("#currentcontrol").val();
+                require(['core/str'], function(str) {
+                    var strings = [
+                        {key: 'heading_access_control', component: 'local_yumymedia'},
+                        {key: 'accesscontrol_changed',component: 'local_yumymedia'}
+                    ];
+                    str.get_strings(strings).then(function (results) {
 
-                var newLabel = "Access Control";
+                        var selectedControlId = $("#access_control_select").val();
+                        var currentControlId = $("#currentcontrol").val();
 
-                if (selectedControlId != currentControlId) {
-                    newLabel = newLabel + " <font color=\"red\">(Changed)</font>";
-                    $("#access_media_save").prop("disabled", false);
-                } else {
-                    $("#access_media_save").prop("disabled", true);
-                }
+                        var newLabel = results[0];
 
-                $("#access_control_label").html(newLabel);
+                        if (selectedControlId != currentControlId) {
+                            newLabel = newLabel + " <font color=\"red\">(" + results[1] + ")</font>";
+                            $("#access_media_save").prop("disabled", false);
+                        } else {
+                            $("#access_media_save").prop("disabled", true);
+                        }
+
+                        $("#access_control_label").html(newLabel);
+                    });
+                });
             }
 
             /**
@@ -228,28 +237,30 @@ define(['jquery'], function($) {
              * @param {string} currentControl - Label of current access control.
              */
             function printSuccessMessage(currentControl) {
-                var mymedia = $("#mymedia").val();
-                $("#access_media_save").prop("disabled", true);
-                $("#currentcontrol").val(currentControl);
+                require(['core/str'], function(str) {
+                    var strings = [
+                        {key: 'accesscontrol_updated', component: 'local_yumymedia'}
+                    ];
+                    str.get_strings(strings).then(function (results) {
 
-                // Create message.
-                var message = "<p>";
-                message += "Access control has been updated!<br>";
-                message += "Now, jump to mymedia page.";
-                message += "</p><br>";
+                        var mymedia = $("#mymedia").val();
+                        $("#access_media_save").prop("disabled", true);
+                        $("#currentcontrol").val(currentControl);
 
-                // View modal window.
-                fadeInModalWindow();
-                // Append message to content area.
-                $("#modal_content").append(message);
-                // Append back button to content area.
-                addBackButton(mymedia);
-                // Close session to kaltura server.
-                sessionEnd();
-                // Jump tp my media page.
-                setTimeout(function() {
-                    window.location.replace(mymedia);
-                }, 1000);
+                        // View modal window.
+                        fadeInModalWindow();
+                        // Append message to content area.
+                        $("#modal_content").append("<p>" + results[0] + "</p><br>");
+                        // Append back button to content area.
+                        addBackButton(mymedia);
+                        // Close session to kaltura server.
+                        sessionEnd();
+                        // Jump tp my media page.
+                        setTimeout(function() {
+                            window.location.replace(mymedia);
+                        }, 1000);
+                    });
+                });
             }
 
             /**

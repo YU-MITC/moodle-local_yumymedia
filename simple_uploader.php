@@ -47,6 +47,7 @@ $PAGE->set_title($header);
 $PAGE->set_heading($header);
 $PAGE->add_body_class('mymedia-index');
 $PAGE->requires->css('/local/yumymedia/css/yumymedia.css');
+
 $PAGE->requires->js_call_amd('local_yumymedia/simpleuploader', 'init', array());
 
 echo $OUTPUT->header();

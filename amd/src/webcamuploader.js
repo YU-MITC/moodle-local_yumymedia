@@ -160,8 +160,6 @@ define(['jquery'], function($) {
              * @return {bool} - true if web browser is unsupported, otherwise false.
              */
             function checkUnsupportedBrowser() {
-                var str = "";
-
                 if (isIE() || isEdge()) {
                     var browser = "";
                     if (isIE()) {
@@ -170,14 +168,11 @@ define(['jquery'], function($) {
                         browser = "Edge";
                     }
 
-                    str = "<p><font color=\"red\">Sorry!!<br>";
-                    str = str + "This uploader don't support your web browser (" + browser + ").<br>";
-                    str = str + "Please use other browser.</font></p>";
-                    str = str + "<br><input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"Back\" />";
-                    $("#upload_info").html(str);
-
-                    $("#backToMymedia").on("click", function() {
-                        handleCancelClick();
+                    require(['core/str'], function(str) {
+                        var message = str.get_string('unsupported_browser', 'local_yumymedia', browser);
+                        $.when(message).done(function(localizedString) {
+                            printInitialErrorMessage(localizedString);
+                        });
                     });
 
                     return true;
@@ -218,19 +213,14 @@ define(['jquery'], function($) {
              * @return {bool} - true if os is unsupported, otherwise false.
              */
             function checkUnsupportedOS() {
-                var str = "";
-
                 var os = getOperatingSystem();
 
                 if (os == "iOS" || os == "Android") {
-                    str = "<p><font color=\"red\">Sorry!!<br>";
-                    str = str + "This uploader don't support your os (" + os + ").<br>";
-                    str = str + "Please use normal media uploader for your device.</font></p>";
-                    str = str + "<br><input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"Back\" />";
-                    $("#upload_info").html(str);
-
-                    $("#backToMymedia").on("click", function() {
-                        handleCancelClick();
+                    require(['core/str'], function(str) {
+                        var message = str.get_string('unsupported_os', 'local_yumymedia', os);
+                        $.when(message).done(function(localizedString) {
+                            printInitialErrorMessage(localizedString);
+                        });
                     });
 
                     return true;
@@ -241,16 +231,22 @@ define(['jquery'], function($) {
             /**
              * This function print initial error message.
              * @access public
-             * @param {string} message - error message.
+             * @param {string} errorMessage - error message.
              */
-            function printInitialErrorMessage(message) {
-                var str = "";
-                str = "<p><font color=\"red\">" + message + "</font></p>";
-                str = str + "<br><input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"Back\" />";
-                $("#upload_info").html(str);
+            function printInitialErrorMessage(errorMessage) {
+                require(['core/str'], function(str) {
+                    var message = str.get_string('back_label', 'local_yumymedia', null);
+                    $.when(message).done(function(localizedString) {
+                        var str = "";
+                        str = "<p><font color=\"red\">" + errorMessage + "</font></p>";
+                        str = str + "<br><input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"";
+                        str = str + localizedString + "\" />";
+                        $("#upload_info").html(str);
 
-                $("#backToMymedia").on("click", function() {
-                    handleCancelClick();
+                        $("#backToMymedia").on("click", function() {
+                            handleCancelClick();
+                        });
+                    });
                 });
             }
 
@@ -296,7 +292,12 @@ define(['jquery'], function($) {
                 $("#webcam").volume = 0.0;
                 recorder.start();
 
-                $("#status").html("<font color=\"red\">Now, recording...</font>");
+                require(['core/str'], function(str) {
+                    var message = str.get_string('now_recording', 'local_yumymedia', null);
+                    $.when(message).done(function(localizedString) {
+                        $("#status").html("<font color=\"red\">" + localizedString + "</font>");
+                    });
+                });
             }
 
             /**
@@ -329,11 +330,24 @@ define(['jquery'], function($) {
                         sizeStr = fileSize + " ";
                     }
 
-                    $("#status").html("<font color=\"green\">Video preview (" + videoBlob.type + ", " + sizeStr + "B).</font>");
+                    require(['core/str'], function(str) {
+                        var message = str.get_string('video_preview', 'local_yumymedia', null);
+                        $.when(message).done(function(localizedString) {
+                            localizedString = "<font color=\"green\">" + localizedString + "(" + videoBlob.type + ", ";
+                            localizedString = localizedString + sizeStr + "B).</font>";
+                            $("#status").html(localizedString);
+                        });
+                    });
+
                     fileType = checkFileType(videoBlob.type);
                     sizeResult = checkFileSize();
                     if (sizeResult === false) {
-                        window.alert("Wrong file size.");
+                        require(['core/str'], function(str) {
+                            var message = str.get_string('wrong_filesize', 'local_yumymedia', null);
+                            $.when(message).done(function(localizedString) {
+                                window.alert(localizedString);
+                            });
+                        });
                     }
 
                     checkForm();
@@ -365,8 +379,6 @@ define(['jquery'], function($) {
              * @access public
              */
             function removeVideo() {
-                var str = "";
-
                 // Print error message and return true if web browser is unsupported.
                 if (checkUnsupportedBrowser() || checkUnsupportedOS()) {
                     return;
@@ -383,26 +395,32 @@ define(['jquery'], function($) {
                 try {
                     if (navigator.mediaDevices === null || navigator.mediaDevices === undefined ||
                         MediaRecorder === null || MediaRecorder === undefined) {
-                        str = "This uploader requires the WebRTC.<br>";
-                        str = str + "Howerver, your web browser don't support the WebRTC.<br>";
-                        str = str + "Please use other browser.";
-                        printInitialErrorMessage(str);
+                        require(['core/str'], function(str) {
+                            var message = str.get_string('disable_webrtc', 'local_yumymedia', null);
+                            $.when(message).done(function(localizedString) {
+                                printInitialErrorMessage(localizedString);
+                            });
+                        });
                         return;
                     }
 
                     if (createObjectURL === null || createObjectURL === undefined ||
                         revokeObjectURL === null || revokeObjectURL === undefined) {
-                        str = "This uploader requires the createObjectURL/revokeObjectURL.<br>";
-                        str = str + "Howerver, your web browser don't support these function.<br>";
-                        str = str + "Please use other browser.";
-                        printInitialErrorMessage(str);
+                        require(['core/str'], function(str) {
+                            var message = str.get_string('disable_objecturl', 'local_yumymedia', null);
+                            $.when(message).done(function(localizedString) {
+                                printInitialErrorMessage(localizedString);
+                            });
+                        });
                         return;
                     }
                 } catch (err) {
-                    str = "This uploader requires the WebRTC.<br>";
-                    str = str + "Howerver, your web browser don't support the WebRTC.<br>";
-                    str = str + "Please use other browser.";
-                    printInitialErrorMessage(str);
+                    require(['core/str'], function(str) {
+                        var message = str.get_string('disable_webrtc', 'local_yumymedia', null);
+                        $.when(message).done(function(localizedString) {
+                            printInitialErrorMessage(localizedString);
+                        });
+                    });
                     window.console.log(err);
                     return;
                 }
@@ -499,13 +517,21 @@ define(['jquery'], function($) {
                     });
                     $("#leftspan").css("display", "inline");
                     $("#rightspan").css("display", "none");
-                    $("#status").html("Camera preview.");
+
+                    require(['core/str'], function(str) {
+                        var message = str.get_string('camera_preview', 'local_yumymedia', null);
+                        $.when(message).done(function(localizedString) {
+                            $("#status").html(localizedString);
+                        });
+                    });
                 })
                 .catch(function(err) {
-                    var str = "Your webcamera is not supported, ";
-                    str = str + "or it is already used.<br>";
-                    str = str += "Please check your webcamera.";
-                    printInitialErrorMessage(str);
+                    require(['core/str'], function(str) {
+                        var message = str.get_string('unsupported_camera', 'local_yumymedia', null);
+                        $.when(message).done(function(localizedString) {
+                            printInitialErrorMessage(localizedString);
+                        });
+                    });
                     window.console.log(err);
                     return;
                 });
@@ -725,13 +751,18 @@ define(['jquery'], function($) {
              * @access public
              */
             function addBackButton() {
-                var contentHtml = "<br><input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"Back\" />";
-                $("#modal_content").append(contentHtml);
+                require(['core/str'], function(str) {
+                    var message = str.get_string('back_label', 'local_yumymedia', null);
+                    $.when(message).done(function(localizedString) {
+                        var contentHtml = "<br><input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"";
+                        contentHtml += localizedString + "\" />";
+                        $("#modal_content").append(contentHtml);
 
-                $("#backToMymedia").on("click", function() {
-                    handleCancelClick();
+                        $("#backToMymedia").on("click", function() {
+                            handleCancelClick();
+                        });
+                    });
                 });
-
             }
 
             /**
@@ -754,25 +785,39 @@ define(['jquery'], function($) {
              * @param {string} creatorId - username of creator.
              */
             function printSuccessMessage(id, name, tags, description, creatorId) {
-                // Delete modal window.
-                fadeOutModalWindow();
 
-                var output = "<h3>Your upload has been suceeded !</h3>";
+                require(['core/str'], function(str) {
+                    var strings = [
+                        {key: 'upload_success', component: 'local_yumymedia'},
+                        {key: 'entryid_header', component: 'local_yumymedia'},
+                        {key: 'name_header',component: 'local_yumymedia'},
+                        {key: 'tags_header', component: 'local_yumymedia'},
+                        {key: 'desc_header', component: 'local_yumymedia'},
+                        {key: 'creatorid_header', component: 'local_yumymedia'},
+                        {key: 'back_label', component: 'local_yumymedia'}
+                    ];
+                    str.get_strings(strings).then(function (results) {
+                        // Delete modal window.
+                        fadeOutModalWindow();
 
-                output += "<table border=\"2\" cellpadding=\"5\">";
-                output += "<tr><td>entry id</td><td>" + id + "</td></tr>";
-                output += "<tr><td>name</td><td>" + name + "</td></tr>";
-                output += "<tr><td>tags</td><td>" + tags + "</td></tr>";
-                output += "<tr><td>description</td><td>" + description + "</td></tr>";
-                output += "<tr><td>creator id</td><td>" + creatorId + "</td></tr>";
-                output += "</table>";
-                output += "<br>";
-                output += "<input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"Back\" />";
+                        var output = '<h3>' + results[0] + '</h3>';
+                        output += "<table border=\"2\" cellpadding=\"5\">";
+                        output += "<tr><td>" + results[1] + "</td><td>" + id + "</td></tr>";
+                        output += "<tr><td>" + results[2] + "</td><td>" + name + "</td></tr>";
+                        output += "<tr><td>" + results[3] + "</td><td>" + tags + "</td></tr>";
+                        output += "<tr><td>" + results[4] + "</td><td>" + description + "</td></tr>";
+                        output += "<tr><td>" + results[5] + "</td><td>" + creatorId + "</td></tr>";
+                        output += "</table>";
+                        output += "<br>";
+                        output += "<input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"";
+                        output += results[6] + "\" />";
+                        $("#upload_info").html(output);
 
-                $("#upload_info").html(output);
+                        $("#backToMymedia").on("click", function() {
+                            handleCancelClick();
+                        });
 
-                $("#backToMymedia").on("click", function() {
-                    handleCancelClick();
+                    });
                 });
             }
 
@@ -825,22 +870,39 @@ define(['jquery'], function($) {
                 var tagsStr = $("#tags").val();
                 var descStr = $("#description").val();
 
+                var flag = true;
+
                 if (checkNameString(nameStr) === false) {
-                    window.alert("There is wrong letter(s) in <Name>.");
-                    return false;
+                    require(['core/str'], function(str) {
+                        var message = str.get_string('wrong_name', 'local_yumymedia', null);
+                        $.when(message).done(function(localizedString) {
+                            window.alert(localizedString);
+                        });
+                    });
+                    flag = false;
                 }
 
                 if (checkTagsString(tagsStr) === false) {
-                    window.alert("There is wrong letter(s) in <Tags>.");
-                    return false;
+                    require(['core/str'], function(str) {
+                        var message = str.get_string('wrong_tags', 'local_yumymedia', null);
+                        $.when(message).done(function(localizedString) {
+                            window.alert(localizedString);
+                        });
+                    });
+                    flag = false;
                 }
 
                 if (checkNameString(descStr) === false) {
-                    window.alert("There is wrong letter(s) in <Description>.");
-                    return false;
+                    require(['core/str'], function(str) {
+                        var message = str.get_string('wrong_desc', 'local_yumymedia', null);
+                        $.when(message).done(function(localizedString) {
+                            window.alert(localizedString);
+                        });
+                    });
+                    flag = false;
                 }
 
-                return true;
+                return flag;
             }
 
             /**
@@ -851,11 +913,16 @@ define(['jquery'], function($) {
             function handleSubmitClick() {
 
                 if (checkMetadata() === false) {
-                    window.alert("Wrong metadata.");
                     return false;
                 }
+
                 if (checkFileSize() === false) {
-                    window.alert("Wrong file size.");
+                    require(['core/str'], function(str) {
+                        var message = str.get_string('wrong_filesize', 'local_yumymedia', null);
+                        $.when(message).done(function(localizedString) {
+                            window.alert(localizedString);
+                        });
+                    });
                     return false;
                 }
 
@@ -1175,97 +1242,108 @@ define(['jquery'], function($) {
                 var findData;
                 var fd = new FormData();
 
-                $("#modal_content").append("Uploading a recorded video ...");
-                $("#modal_content").append("<p>Progress: <span id=\"pvalue\" style=\"color:#00b200\">0.00</span> %</p>");
+                require(['core/str'], function(str) {
+                    var strings = [
+                        {key: 'recorder_uploading', component: 'local_yumymedia'},
+                        {key: 'progress', component: 'local_yumymedia'},
+                        {key: 'attach_file', component: 'local_yumymedia'}
+                    ];
+                    str.get_strings(strings).then(function (results) {
 
-                // Creates form data.
-                fd.append("action", "upload");
-                fd.append("ks", ks);
-                fd.append("uploadTokenId", uploadTokenId);
-                fd.append("fileData", videoBlob, encodeURI(videoFilename), videoBlob.size);
-                fd.append("resume", false);
-                fd.append("finalChunk", true);
-                fd.append("resumeAt", 0);
+                        $("#modal_content").append(results[0] + "<br>");
+                        $("#modal_content").append("<p>" + results[1] + ": <span id=\"pvalue\" style=\"color:#00b200\">0.00</span> %</p>");
 
-                // Creates tnramission data.
-                var postData = {
-                    type: "POST",
-                    data: fd,
-                    cache: false,
-                    async: true,
-                    contentType: false,
-                    scriptCharset: "utf-8",
-                    processData: false,
-                    dataType: "xml",
-                    xhr: function() {
-                        var XHR = $.ajaxSettings.xhr();
-                        if (XHR.upload) {
-                            XHR.upload.addEventListener("progress", function(e) {
-                                if (e.lengthComputable) {
-                                    var newValue = parseInt(e.loaded / e.total * 100);
-                                    $("#pvalue").html(newValue);
+                        // Creates form data.
+                        fd.append("action", "upload");
+                        fd.append("ks", ks);
+                        fd.append("uploadTokenId", uploadTokenId);
+                        fd.append("fileData", videoBlob, encodeURI(videoFilename), videoBlob.size);
+                        fd.append("resume", false);
+                        fd.append("finalChunk", true);
+                        fd.append("resumeAt", 0);
+
+                        // Creates tnramission data.
+                        var postData = {
+                            type: "POST",
+                            data: fd,
+                            cache: false,
+                            async: true,
+                            contentType: false,
+                            scriptCharset: "utf-8",
+                            processData: false,
+                            dataType: "xml",
+                            xhr: function() {
+                                var XHR = $.ajaxSettings.xhr();
+                                if (XHR.upload) {
+                                    XHR.upload.addEventListener("progress", function(e) {
+                                        if (e.lengthComputable) {
+                                            var newValue = parseInt(e.loaded / e.total * 100);
+                                            $("#pvalue").html(newValue);
+                                        }
+                                    }, false);
                                 }
-                            }, false);
-                        }
-                        return XHR;
-                    }
-                };
+                                return XHR;
+                            }
+                        };
 
-                var serviceURL = serverHost + "/api_v3/service/uploadToken/action/upload";
+                        var serviceURL = serverHost + "/api_v3/service/uploadToken/action/upload";
 
-                // Transmits data.
-                $.ajax(
-                    serviceURL, postData
-                )
-                .done(function(xmlData, textStatus, xhr) {
-                    // Response is not XML.
-                    if (xmlData === null) {
-                        deleteUploadToken(serverHost, ks, uploadTokenId);
-                        printErrorMessage("Cannot upload the video !<br>(Cannot get a XML response.)");
-                        return;
-                    }
+                        // Transmits data.
+                        $.ajax(
+                            serviceURL, postData
+                        )
+                        .done(function(xmlData, textStatus, xhr) {
+                            // Response is not XML.
+                            if (xmlData === null) {
+                                deleteUploadToken(serverHost, ks, uploadTokenId);
+                                printErrorMessage("Cannot upload the video !<br>(Cannot get a XML response.)");
+                                return;
+                            }
 
-                    // Get a tag of error code.
-                    findData = $(xmlData).find("code");
-                    // There exists error code.
-                    if (findData !== null && typeof findData !== undefined && findData.text() !== "") {
-                        deleteUploadToken(serverHost, ks, uploadTokenId);
-                        printErrorMessage("Cannot upload the video !<br>(" + findData.text() + ")");
-                        return;
-                    }
+                            // Get a tag of error code.
+                            findData = $(xmlData).find("code");
+                            // There exists error code.
+                            if (findData !== null && typeof findData !== undefined && findData.text() !== "") {
+                                deleteUploadToken(serverHost, ks, uploadTokenId);
+                                printErrorMessage("Cannot upload the video !<br>(" + findData.text() + ")");
+                                return;
+                            }
 
-                    // Get upload token id.
-                    findData = $(xmlData).find("status");
-                    // There not exists upload token id.
-                    if (findData === null || typeof findData === undefined || findData.text() === "") {
-                        deleteUploadToken(serverHost, ks, uploadTokenId);
-                        printErrorMessage("Cannot upload the video !<br>(Cannot get an uploadTokenStatus.)");
-                        return;
-                    }
+                            // Get upload token id.
+                            findData = $(xmlData).find("status");
+                            // There not exists upload token id.
+                            if (findData === null || typeof findData === undefined || findData.text() === "") {
+                                deleteUploadToken(serverHost, ks, uploadTokenId);
+                                printErrorMessage("Cannot upload the video !<br>(Cannot get an uploadTokenStatus.)");
+                                return;
+                            }
 
-                    var uploadTokenStatus = findData.text();
-                    if (uploadTokenStatus != UPLOAD_TOKEN_STATUS.FULL_UPLOAD &&
-                        uploadTokenStatus != UPLOAD_TOKEN_STATUS.PARTIAL_UPLOAD) {
-                        deleteUploadToken(serverHost, ks, uploadTokenId);
-                        printErrorMessage("Cannot upload the video !<br>(UPLOAD_TOKEN_STATUS : " + uploadTokenStatus + ")");
-                        return;
-                    } else {
-                        window.console.log("Ffile chunk have been transmitted.");
-                    }
-                    $("#modal_content").append("Attach uploaded file ...<br>");
-                    // Create media entry.
-                    setTimeout(function() {
-                        attachUploadedFile(serverHost, ks, uploadTokenId, entryId);
-                    }, 1000);
+                            var uploadTokenStatus = findData.text();
+                            if (uploadTokenStatus != UPLOAD_TOKEN_STATUS.FULL_UPLOAD &&
+                                uploadTokenStatus != UPLOAD_TOKEN_STATUS.PARTIAL_UPLOAD) {
+                                deleteUploadToken(serverHost, ks, uploadTokenId);
+                                printErrorMessage("Cannot upload the video !<br>(UPLOAD_TOKEN_STATUS : " + uploadTokenStatus + ")");
+                                return;
+                            } else {
+                                window.console.log("File chunk have been transmitted.");
+                            }
 
-                })
-                .fail(function(xmlData) {
-                    if (xmlData !== null) {
-                        window.console.dir(xmlData);
-                    }
-                    deleteUploadToken(serverHost, ks, uploadTokenId);
-                    printErrorMessage("Cannot upload the file !<br>(Cannot connect to contents server.)");
-                    return;
+                            $("#modal_content").append(results[2] + "<br>");
+
+                            // Create media entry.
+                            setTimeout(function() {
+                                attachUploadedFile(serverHost, ks, uploadTokenId, entryId);
+                            }, 1000);
+                        })
+                        .fail(function(xmlData) {
+                            if (xmlData !== null) {
+                                window.console.dir(xmlData);
+                            }
+                            deleteUploadToken(serverHost, ks, uploadTokenId);
+                            printErrorMessage("Cannot upload the file !<br>(Cannot connect to contents server.)");
+                            return;
+                        });
+                    });
                 });
             }
 

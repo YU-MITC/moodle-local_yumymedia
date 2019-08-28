@@ -186,6 +186,7 @@ define(['jquery'], function($) {
              * @access public
              */
             function handleFileSelect() {
+                var alertInfo = '';
 
                 // There exists selected file.
                 if ($("#fileData")) {
@@ -195,55 +196,64 @@ define(['jquery'], function($) {
                     fileSize = parseInt(file.size);
                     var typeResult = checkFileType(encodeURI(file.type));
                     var sizeResult = checkFileSize();
-                    var alertInfo = "";
 
-                    // When file size is wrong.
-                    if (sizeResult === false) {
-                        alertInfo += "Wrong file size.";
-                    }
-                    // When file is no supported.
-                    if (typeResult == "N/A") {
-                        alertInfo += "Unsupported file type.";
-                    }
+                    require(['core/str'], function(str) {
+                        var strings = [
+                            {key: 'wrong_filesize', component: 'local_yumymedia'},
+                            {key: 'unsupported_filetype', component: 'local_yumymedia'},
+                            {key: 'filesize', component: 'local_yumymedia'},
+                            {key: 'mimetype', component: 'local_yumymedia'}
+                        ];
+                        str.get_strings(strings).then(function (results) {
+                            // When file size is wrong.
+                            if (sizeResult === false) {
+                                alertInfo += results[0];
+                            }
+                            // When file is no supported.
+                            if (typeResult == "N/A") {
+                                alertInfo += results[1];
+                            }
 
-                    // When any warning occures.
-                    if (alertInfo !== "") {
-                        window.alert(alertInfo);
-                        $("#file_info").html("");
-                        $("#name").val("");
-                        $("#tags").val("");
-                        $("#description").val("");
-                        $("#type").val("");
-                        $("#fileData").val("");
-                    } else { // When any warning do not occures.
-                        var fileInfo = "";
-                        var sizeStr = "";
-                        var dividedSize = 0;
+                            // When any warning occures.
+                            if (alertInfo !== "") {
+                                window.alert(alertInfo);
+                                $("#file_info").html("");
+                                $("#name").val("");
+                                $("#tags").val("");
+                                $("#description").val("");
+                                $("#type").val("");
+                                $("#fileData").val("");
+                            } else { // When any warning do not occures.
+                                var fileInfo = "";
+                                var sizeStr = "";
+                                var dividedSize = 0;
 
-                        fileName = file.name;
+                                fileName = file.name;
 
-                        if (fileSize > 1024 * 1024 * 1024) { // When file size exceeds 1GB.
-                            dividedSize = fileSize / (1024 * 1024 * 1024);
-                            sizeStr = dividedSize.toFixed(2) + " G";
-                        } else if (fileSize > 1024 * 1024) { // When file size exceeds 1MB.
-                            dividedSize = fileSize / (1024 * 1024);
-                            sizeStr = dividedSize.toFixed(2) + " M";
-                        } else if (fileSize > 1024) { // When file size exceeds 1kB.
-                            dividedSize = fileSize / 1024;
-                            sizeStr = dividedSize.toFixed(2) + " k";
-                        } else { // When file size under 1kB.
-                            sizeStr = fileSize + " ";
-                        }
+                                if (fileSize > 1024 * 1024 * 1024) { // When file size exceeds 1GB.
+                                    dividedSize = fileSize / (1024 * 1024 * 1024);
+                                    sizeStr = dividedSize.toFixed(2) + " G";
+                                } else if (fileSize > 1024 * 1024) { // When file size exceeds 1MB.
+                                    dividedSize = fileSize / (1024 * 1024);
+                                    sizeStr = dividedSize.toFixed(2) + " M";
+                                } else if (fileSize > 1024) { // When file size exceeds 1kB.
+                                    dividedSize = fileSize / 1024;
+                                    sizeStr = dividedSize.toFixed(2) + " k";
+                                } else { // When file size under 1kB.
+                                    sizeStr = fileSize + " ";
+                                }
 
-                        fileInfo += "<div id=metadata_fields>";
-                        fileInfo += "Size: " + sizeStr + "bytes<br>";
-                        fileInfo += "MIME Type: " + encodeURI(file.type) + "<br>";
-                        fileInfo += "</div><hr>";
+                                fileInfo += "<div id=metadata_fields>";
+                                fileInfo += results[2] + ": " + sizeStr + "bytes<br>";
+                                fileInfo += results[3] + ":" + encodeURI(file.type) + "<br>";
+                                fileInfo += "</div><hr>";
 
-                        $("#file_info").html(fileInfo);
-                        $("#name").val(fileName);
-                        $("#type").val(typeResult);
-                    }
+                                $("#file_info").html(fileInfo);
+                                $("#name").val(fileName);
+                                $("#type").val(typeResult);
+                            }
+                        });
+                    });
                 }
 
                 checkForm();
@@ -298,22 +308,39 @@ define(['jquery'], function($) {
                 var tagsStr = $("#tags").val();
                 var descStr = $("#description").val();
 
+                var flag = true;
+
                 if (checkNameString(nameStr) === false) {
-                    window.alert("There is wrong letter(s) in <Name>.");
-                    return false;
+                    require(['core/str'], function(str) {
+                        var message = str.get_string('wrong_name', 'local_yumymedia', null);
+                        $.when(message).done(function(localizedString) {
+                            window.alert(localizedString);
+                        });
+                    });
+                    flag = false;
                 }
 
                 if (checkTagsString(tagsStr) === false) {
-                    window.alert("There is wrong letter(s) in <Tags>.");
-                    return false;
+                    require(['core/str'], function(str) {
+                        var message = str.get_string('wrong_tags', 'local_yumymedia', null);
+                        $.when(message).done(function(localizedString) {
+                            window.alert(localizedString);
+                        });
+                    });
+                    flag = false;
                 }
 
                 if (checkNameString(descStr) === false) {
-                    window.alert("There is wrong letter(s) in <Description>.");
-                    return false;
+                    require(['core/str'], function(str) {
+                        var message = str.get_string('wrong_desc', 'local_yumymedia', null);
+                        $.when(message).done(function(localizedString) {
+                            window.alert(localizedString);
+                        });
+                    });
+                    flag = false;
                 }
 
-                return true;
+                return flag;
             }
 
             /**
@@ -324,11 +351,15 @@ define(['jquery'], function($) {
             function handleSubmitClick() {
 
                 if (checkMetadata() === false) {
-                    window.alert("Wrong metadata.");
                     return false;
                 }
                 if (checkFileSize() === false) {
-                    window.alert("Wrong file size.");
+                    require(['core/str'], function(str) {
+                        var message = str.get_string('wrong_filesize', 'local_yumymedia', null);
+                        $.when(message).done(function(localizedString) {
+                            window.alert(localizedString);
+                        });
+                    });
                     return false;
                 }
 
@@ -411,6 +442,37 @@ define(['jquery'], function($) {
                 $("#backToMymedia").on("click", function() {
                     fadeOutUploaderWindow();
                 });
+
+                require(['core/str'], function(str) {
+                    var strings = [
+                        {key: 'upload_success', component: 'local_yumymedia'},
+                        {key: 'entryid_header', component: 'local_yumymedia'},
+                        {key: 'name_header', component: 'local_yumymedia'},
+                        {key: 'tags_header', component: 'local_yumymedia'},
+                        {key: 'desc_header', component: 'local_yumymedia'},
+                        {key: 'creatorid_header', component: 'local_yumymedia'},
+                        {key: 'back_label', component: 'local_yumymedia'}
+                    ];
+                    str.get_strings(strings).then(function (results) {
+                        var output = '<h3>' + results[0] + '</h3>';
+                        output += "<table border=\"2\" cellpadding=\"5\">";
+                        output += "<tr><td>" + results[1] + "</td><td>" + id + "</td></tr>";
+                        output += "<tr><td>" + results[2] + "</td><td>" + name + "</td></tr>";
+                        output += "<tr><td>" + results[3] + "</td><td>" + tags + "</td></tr>";
+                        output += "<tr><td>" + results[4] + "</td><td>" + description + "</td></tr>";
+                        output += "<tr><td>" + results[5] + "</td><td>" + creatorId + "</td></tr>";
+                        output += "</table>";
+                        output += "<br>";
+                        output += "<input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"";
+                        output += results[6] + "\" />";
+
+                        $("#upload_info").html(output);
+
+                        $("#backToMymedia").on("click", function() {
+                            fadeOutUploaderWindow();
+                        });
+                    });
+                });
             }
 
             /**
@@ -488,13 +550,18 @@ define(['jquery'], function($) {
              * @access public
              */
             function addBackButton() {
-                var contentHtml = "<br><input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"Back\" />";
-                $("#upload_info").append(contentHtml);
+                require(['core/str'], function(str) {
+                    var message = str.get_string('back_label', 'local_yumymedia', null);
+                    $.when(message).done(function(localizedString) {
+                        var contentHtml = "<br><input type=button id=\"backToMymedia\" name=\"backToMymedia\" value=\"";
+                        contentHtml += localizedString + "\" />";
+                        $("#upload_info").append(contentHtml);
 
-                $("#backToMymedia").on("click", function() {
-                    fadeOutUploaderWindow();
+                        $("#backToMymedia").on("click", function() {
+                            fadeOutUploaderWindow();
+                        });
+                    });
                 });
-
             }
 
             /**
@@ -822,96 +889,109 @@ define(['jquery'], function($) {
                 var findData;
                 var fd = new FormData();
 
-                // Creates form data.
-                fd.append("action", "upload");
-                fd.append("ks", ks);
-                fd.append("uploadTokenId", uploadTokenId);
-                fd.append("fileData", $("input[name='fileData']").prop("files")[0], encodeURI(fileName), fileSize);
-                fd.append("resume", false);
-                fd.append("finalChunk", true);
-                fd.append("resumeAt", 0);
+                require(['core/str'], function(str) {
+                    var strings = [
+                        {key: 'uploader_uploading', component: 'local_yumymedia'},
+                        {key: 'progress', component: 'local_yumymedia'},
+                        {key: 'attach_file', component: 'local_yumymedia'}
+                    ];
+                    str.get_strings(strings).then(function (results) {
 
-                // Creates tnramission data.
-                var postData = {
-                    type: "POST",
-                    data: fd,
-                    cache: false,
-                    async: true,
-                    contentType: false,
-                    scriptCharset: "utf-8",
-                    processData: false,
-                    dataType: "xml",
-                    xhr: function() {
-                        var XHR = $.ajaxSettings.xhr();
-                        if (XHR.upload) {
-                            XHR.upload.addEventListener("progress", function(e) {
-                                var newValue = parseInt(e.loaded / e.total * 100);
-                                $("#pvalue").html(parseInt(newValue));
-                            }, false);
-                        }
-                        return XHR;
-                    }
-                };
+                        // Creates form data.
+                        fd.append("action", "upload");
+                        fd.append("ks", ks);
+                        fd.append("uploadTokenId", uploadTokenId);
+                        fd.append("fileData", $("input[name='fileData']").prop("files")[0], encodeURI(fileName), fileSize);
+                        fd.append("resume", false);
+                        fd.append("finalChunk", true);
+                        fd.append("resumeAt", 0);
 
-                $("#upload_info").html("");
-                $("#upload_info").append("Uploading a media file ...");
-                $("#upload_info").append("<p>Progress: <span id=\"pvalue\" style=\"color:#00b200\">0.00</span> %</p>");
+                        // Creates tnramission data.
+                        var postData = {
+                            type: "POST",
+                            data: fd,
+                            cache: false,
+                            async: true,
+                            contentType: false,
+                            scriptCharset: "utf-8",
+                            processData: false,
+                            dataType: "xml",
+                            xhr: function() {
+                                var XHR = $.ajaxSettings.xhr();
+                                if (XHR.upload) {
+                                    XHR.upload.addEventListener("progress", function(e) {
+                                        var newValue = parseInt(e.loaded / e.total * 100);
+                                        $("#pvalue").html(parseInt(newValue));
+                                    }, false);
+                                }
+                                return XHR;
+                            }
+                        };
 
-                var serviceURL = serverHost + "/api_v3/service/uploadToken/action/upload";
+                        $("#upload_info").html("");
 
-                // Transmits data.
-                $.ajax(
-                    serviceURL, postData
-                )
-                .done(function(xmlData, textStatus, xhr) {
-                    // Response is not XML.
-                    if (xmlData === null) {
-                        deleteUploadToken(serverHost, ks, uploadTokenId);
-                        printErrorMessage("Cannot upload the video !<br>(Cannot get a XML response.)");
-                        return;
-                    }
+                        $("#upload_info").append(results[0] + "<br>");
+                        $("#upload_info").append("<p>" + results[1] + ": <span id=\"pvalue\" style=\"color:#00b200\">0.00</span> %</p>");
 
-                    // Get a tag of error code.
-                    findData = $(xmlData).find("code");
-                    // There exists error code.
-                    if (findData !== null && typeof findData !== undefined && findData.text() !== "") {
-                        deleteUploadToken(serverHost, ks, uploadTokenId);
-                        printErrorMessage("Cannot upload the video !<br>(" + findData.text() + ")");
-                        return;
-                    }
+                        var serviceURL = serverHost + "/api_v3/service/uploadToken/action/upload";
 
-                    // Get upload token id.
-                    findData = $(xmlData).find("status");
-                    // There not exists upload token id.
-                    if (findData === null || typeof findData === undefined || findData.text() === "") {
-                        deleteUploadToken(serverHost, ks, uploadTokenId);
-                        printErrorMessage("Cannot upload the video !<br>(Cannot get an uploadTokenStatus.)");
-                        return;
-                    }
+                        // Transmits data.
+                        $.ajax(
+                            serviceURL, postData
+                        )
+                        .done(function(xmlData, textStatus, xhr) {
+                            // Response is not XML.
+                            if (xmlData === null) {
+                                deleteUploadToken(serverHost, ks, uploadTokenId);
+                                printErrorMessage("Cannot upload the video !<br>(Cannot get a XML response.)");
+                                return;
+                            }
 
-                    var uploadTokenStatus = findData.text();
-                    if (uploadTokenStatus != UPLOAD_TOKEN_STATUS.FULL_UPLOAD &&
-                        uploadTokenStatus != UPLOAD_TOKEN_STATUS.PARTIAL_UPLOAD) {
-                        deleteUploadToken(serverHost, ks, uploadTokenId);
-                        printErrorMessage("Cannot upload the video !<br>(UPLOAD_TOKEN_STATUS : " + uploadTokenStatus + ")");
-                        return;
-                    } else {
-                        window.console.log("Ffile chunk have been transmitted.");
-                    }
-                    $("#upload_info").append("Attach uploaded file ...<br>");
-                    // Create media entry.
-                    setTimeout(function() {
-                        attachUploadedFile(serverHost, ks, uploadTokenId, entryId);
-                    }, 1000);
+                            // Get a tag of error code.
+                            findData = $(xmlData).find("code");
+                            // There exists error code.
+                            if (findData !== null && typeof findData !== undefined && findData.text() !== "") {
+                                deleteUploadToken(serverHost, ks, uploadTokenId);
+                                printErrorMessage("Cannot upload the video !<br>(" + findData.text() + ")");
+                                return;
+                            }
 
-                })
-                .fail(function(xmlData) {
-                    if (xmlData !== null) {
-                        window.console.dir(xmlData);
-                    }
-                    deleteUploadToken(serverHost, ks, uploadTokenId);
-                    printErrorMessage("Cannot upload the file !<br>(Cannot connect to contents server.)");
-                    return;
+                            // Get upload token id.
+                            findData = $(xmlData).find("status");
+                            // There not exists upload token id.
+                            if (findData === null || typeof findData === undefined || findData.text() === "") {
+                                deleteUploadToken(serverHost, ks, uploadTokenId);
+                                printErrorMessage("Cannot upload the video !<br>(Cannot get an uploadTokenStatus.)");
+                                return;
+                            }
+
+                            var uploadTokenStatus = findData.text();
+                            if (uploadTokenStatus != UPLOAD_TOKEN_STATUS.FULL_UPLOAD &&
+                                uploadTokenStatus != UPLOAD_TOKEN_STATUS.PARTIAL_UPLOAD) {
+                                deleteUploadToken(serverHost, ks, uploadTokenId);
+                                printErrorMessage("Cannot upload the video !<br>(UPLOAD_TOKEN_STATUS : " + uploadTokenStatus + ")");
+                                return;
+                            } else {
+                                window.console.log("File chunk have been transmitted.");
+                            }
+
+                            $("#upload_info").append(results[2] + "<br>");
+
+                            // Create media entry.
+                            setTimeout(function() {
+                                attachUploadedFile(serverHost, ks, uploadTokenId, entryId);
+                            }, 1000);
+
+                        })
+                        .fail(function(xmlData) {
+                            if (xmlData !== null) {
+                                window.console.dir(xmlData);
+                            }
+                            deleteUploadToken(serverHost, ks, uploadTokenId);
+                            printErrorMessage("Cannot upload the file !<br>(Cannot connect to contents server.)");
+                            return;
+                        });
+                    });
                 });
             }
 

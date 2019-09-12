@@ -114,10 +114,9 @@ define(['jquery'], function($) {
                 require(['core/str'], function(str) {
                     var strings = [
                         {key: 'heading_access_control', component: 'local_yumymedia'},
-                        {key: 'accesscontrol_changed',component: 'local_yumymedia'}
+                        {key: 'accesscontrol_changed', component: 'local_yumymedia'}
                     ];
-                    str.get_strings(strings).then(function (results) {
-
+                    str.get_strings(strings).then(function(results) {
                         var selectedControlId = $("#access_control_select").val();
                         var currentControlId = $("#currentcontrol").val();
 
@@ -131,7 +130,9 @@ define(['jquery'], function($) {
                         }
 
                         $("#access_control_label").html(newLabel);
+                        return 0;
                     });
+                    return 0;
                 });
             }
 
@@ -241,8 +242,7 @@ define(['jquery'], function($) {
                     var strings = [
                         {key: 'accesscontrol_updated', component: 'local_yumymedia'}
                     ];
-                    str.get_strings(strings).then(function (results) {
-
+                    str.get_strings(strings).then(function(results) {
                         var mymedia = $("#mymedia").val();
                         $("#access_media_save").prop("disabled", true);
                         $("#currentcontrol").val(currentControl);
@@ -259,7 +259,9 @@ define(['jquery'], function($) {
                         setTimeout(function() {
                             window.location.replace(mymedia);
                         }, 1000);
+                        return 0;
                     });
+                    return 0;
                 });
             }
 

@@ -524,6 +524,8 @@ define(['jquery'], function($) {
                             $("#status").html(localizedString);
                         });
                     });
+
+                    return 0;
                 })
                 .catch(function(err) {
                     require(['core/str'], function(str) {
@@ -790,13 +792,13 @@ define(['jquery'], function($) {
                     var strings = [
                         {key: 'upload_success', component: 'local_yumymedia'},
                         {key: 'entryid_header', component: 'local_yumymedia'},
-                        {key: 'name_header',component: 'local_yumymedia'},
+                        {key: 'name_header', component: 'local_yumymedia'},
                         {key: 'tags_header', component: 'local_yumymedia'},
                         {key: 'desc_header', component: 'local_yumymedia'},
                         {key: 'creatorid_header', component: 'local_yumymedia'},
                         {key: 'back_label', component: 'local_yumymedia'}
                     ];
-                    str.get_strings(strings).then(function (results) {
+                    str.get_strings(strings).then(function(results) {
                         // Delete modal window.
                         fadeOutModalWindow();
 
@@ -816,7 +818,7 @@ define(['jquery'], function($) {
                         $("#backToMymedia").on("click", function() {
                             handleCancelClick();
                         });
-
+                        return 0;
                     });
                 });
             }
@@ -1248,10 +1250,11 @@ define(['jquery'], function($) {
                         {key: 'progress', component: 'local_yumymedia'},
                         {key: 'attach_file', component: 'local_yumymedia'}
                     ];
-                    str.get_strings(strings).then(function (results) {
-
+                    str.get_strings(strings).then(function(results) {
                         $("#modal_content").append(results[0] + "<br>");
-                        $("#modal_content").append("<p>" + results[1] + ": <span id=\"pvalue\" style=\"color:#00b200\">0.00</span> %</p>");
+                        var message = "<p>" + results[1];
+                        message = message + ": <span id=\"pvalue\" style=\"color:#00b200\">0.00</span> %</p>";
+                        $("#modal_content").append(message);
 
                         // Creates form data.
                         fd.append("action", "upload");
@@ -1343,6 +1346,8 @@ define(['jquery'], function($) {
                             printErrorMessage("Cannot upload the file !<br>(Cannot connect to contents server.)");
                             return;
                         });
+
+                        return 0;
                     });
                 });
             }

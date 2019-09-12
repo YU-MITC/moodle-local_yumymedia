@@ -265,7 +265,7 @@ define(['jquery'], function($) {
                         {key: 'creatorid_header', component: 'local_yumymedia'},
                         {key: 'back_label', component: 'local_yumymedia'}
                     ];
-                    str.get_strings(strings).then(function (results) {
+                    str.get_strings(strings).then(function(results) {
                         // Delete modal window.
                         fadeOutModalWindow();
 
@@ -285,6 +285,7 @@ define(['jquery'], function($) {
                             handleCancelClick();
                         });
 
+                        return 0;
                     });
                 });
             }
@@ -732,10 +733,11 @@ define(['jquery'], function($) {
                         {key: 'progress', component: 'local_yumymedia'},
                         {key: 'attach_file', component: 'local_yumymedia'}
                     ];
-                    str.get_strings(strings).then(function (results) {
-
+                    str.get_strings(strings).then(function(results) {
                         $("#modal_content").append(results[0] + "<br>");
-                        $("#modal_content").append("<p>" + results[1] + ": <span id=\"pvalue\" style=\"color:#00b200\">0.00</span> %</p>");
+                        var message = "<p>" + results[1];
+                        message = message + ": <span id=\"pvalue\" style=\"color:#00b200\">0.00</span> %</p>";
+                        $("#modal_content").append(message);
                         // Creates form data.
                         fd.append("action", "upload");
                         fd.append("ks", ks);
@@ -974,7 +976,7 @@ define(['jquery'], function($) {
                             {key: 'filesize', component: 'local_yumymedia'},
                             {key: 'mimetype', component: 'local_yumymedia'}
                         ];
-                        str.get_strings(strings).then(function (results) {
+                        str.get_strings(strings).then(function(results) {
                             // When file size is wrong.
                             if (sizeResult === false) {
                                 alertInfo += results[0];
@@ -1022,6 +1024,7 @@ define(['jquery'], function($) {
                                 $("#name").val(fileName);
                                 $("#type").val(typeResult);
                             }
+                            return 0;
                         });
                     });
                 }

@@ -26,8 +26,6 @@ defined('MOODLE_INTERNAL') || die();
 
 define('MYMEDIA_ITEMS_PER_PAGE', '9');
 
-require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.php');
-
 /**
  * This function adds my media links to the navigation block.
  * @param object $navigation - object of Moodle "Navigation" block.
@@ -40,17 +38,19 @@ function local_yumymedia_extend_navigation($navigation) {
     $label = get_string('nav_mymedia', 'local_yumymedia');
     $link = new moodle_url('/local/yumymedia/yumymedia.php');
 
-    $context = context_user::instance($USER->id);
+    if ($USER->id !== 0) {
+        $context = context_user::instance($USER->id);
 
-    $parent = $navigation->get('home');
+        $parent = $navigation->get('home');
 
-    if (has_capability('local/yumymedia:view', $context, $USER)) {
-        if (empty($parent)) {
-            $parent = $navigation;
+        if (has_capability('local/yumymedia:view', $context, $USER)) {
+            if (empty($parent)) {
+                $parent = $navigation;
+            }
+
+            $nodemymedia = $parent->add($label, $link, navigation_node::NODETYPE_LEAF);
+            $nodemymedia->showinflatnavigation = true;
         }
-
-        $nodemymedia = $parent->add($label, $link, navigation_node::NODETYPE_LEAF);
-        $nodemymedia->showinflatnavigation = true;
     }
 }
 
@@ -62,6 +62,7 @@ function local_yumymedia_extend_navigation($navigation) {
  */
 function local_yumymedia_check_capability($capability) {
     global $DB, $USER;
+
     $result = false;
 
     // Site admins can do anything.

@@ -81,6 +81,11 @@ Warning
 Change log of YU Kaltura Media Gallery
 ------
 
+Version 1.3.2
+
+* fixed some statements in accessrestriction.js, modulerecorder.js, moduleuploader.js, simpleuploader.js, and webcamuploader.js, in order to according to the Moodle coding style.
+* fixed lib.php, and yumymedia.php, in order to fix a logout issue.
+
 Version 1.3.1
 
 * fixed some statements in  delete_media.php and renderer.php, in order to use language strings.

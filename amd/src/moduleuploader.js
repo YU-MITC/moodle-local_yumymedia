@@ -933,7 +933,7 @@ define(['jquery'], function($) {
                         $("#upload_info").append(results[0] + "<br>");
 
                         var message = "<p>" + results[1];
-                        message = message + ": <span id=\"pvalue\" style=\"color:#00b200\">0.00</span> %</p>"
+                        message = message + ": <span id=\"pvalue\" style=\"color:#00b200\">0.00</span> %</p>";
 
                         $("#upload_info").append(message);
 

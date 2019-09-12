@@ -204,7 +204,7 @@ define(['jquery'], function($) {
                             {key: 'filesize', component: 'local_yumymedia'},
                             {key: 'mimetype', component: 'local_yumymedia'}
                         ];
-                        str.get_strings(strings).then(function (results) {
+                        str.get_strings(strings).then(function(results) {
                             // When file size is wrong.
                             if (sizeResult === false) {
                                 alertInfo += results[0];
@@ -252,11 +252,11 @@ define(['jquery'], function($) {
                                 $("#name").val(fileName);
                                 $("#type").val(typeResult);
                             }
+                            checkForm();
+                            return 0;
                         });
                     });
                 }
-
-                checkForm();
             }
 
             /**
@@ -453,7 +453,7 @@ define(['jquery'], function($) {
                         {key: 'creatorid_header', component: 'local_yumymedia'},
                         {key: 'back_label', component: 'local_yumymedia'}
                     ];
-                    str.get_strings(strings).then(function (results) {
+                    str.get_strings(strings).then(function(results) {
                         var output = '<h3>' + results[0] + '</h3>';
                         output += "<table border=\"2\" cellpadding=\"5\">";
                         output += "<tr><td>" + results[1] + "</td><td>" + id + "</td></tr>";
@@ -471,6 +471,7 @@ define(['jquery'], function($) {
                         $("#backToMymedia").on("click", function() {
                             fadeOutUploaderWindow();
                         });
+                        return 0;
                     });
                 });
             }
@@ -895,8 +896,7 @@ define(['jquery'], function($) {
                         {key: 'progress', component: 'local_yumymedia'},
                         {key: 'attach_file', component: 'local_yumymedia'}
                     ];
-                    str.get_strings(strings).then(function (results) {
-
+                    str.get_strings(strings).then(function(results) {
                         // Creates form data.
                         fd.append("action", "upload");
                         fd.append("ks", ks);
@@ -931,7 +931,11 @@ define(['jquery'], function($) {
                         $("#upload_info").html("");
 
                         $("#upload_info").append(results[0] + "<br>");
-                        $("#upload_info").append("<p>" + results[1] + ": <span id=\"pvalue\" style=\"color:#00b200\">0.00</span> %</p>");
+
+                        var message = "<p>" + results[1];
+                        message = message + ": <span id=\"pvalue\" style=\"color:#00b200\">0.00</span> %</p>"
+
+                        $("#upload_info").append(message);
 
                         var serviceURL = serverHost + "/api_v3/service/uploadToken/action/upload";
 
@@ -991,6 +995,8 @@ define(['jquery'], function($) {
                             printErrorMessage("Cannot upload the file !<br>(Cannot connect to contents server.)");
                             return;
                         });
+
+                        return 0;
                     });
                 });
             }

@@ -187,3 +187,7 @@ $string['uploader_uploading'] = 'Uploading a media file ...';
 $string['recorder_uploading'] = 'Uploading a recorded video ...';
 $string['progress'] = 'Progress';
 $string['attach_file'] = 'Attach uploaded file ...';
+
+// Privacy strings.
+$string['privacy:metadata'] = 'The YU Kaltura Media Gallery does not store any personal data.';
+

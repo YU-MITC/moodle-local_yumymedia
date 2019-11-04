@@ -22,8 +22,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 
+defined('MOODLE_INTERNAL') || die();
 define('MYMEDIA_ITEMS_PER_PAGE', '9');
 
 /**
@@ -39,11 +40,14 @@ function local_yumymedia_extend_navigation($navigation) {
     $link = new moodle_url('/local/yumymedia/yumymedia.php');
 
     if ($USER->id !== 0) {
+
+        require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.php');
+
         $context = context_user::instance($USER->id);
 
         $parent = $navigation->get('home');
 
-        if (has_capability('local/yumymedia:view', $context, $USER)) {
+        if (has_capability('local/yumymedia:view', $context, $USER) && local_yukaltura_get_mymedia_permission()) {
             if (empty($parent)) {
                 $parent = $navigation;
             }

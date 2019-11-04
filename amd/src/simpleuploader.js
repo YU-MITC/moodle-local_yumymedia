@@ -255,7 +255,7 @@ define(['jquery'], function($) {
              */
             function printSuccessMessage(id, name, tags, description, creatorId) {
 
-                require(['core/str'], function(str) {
+                require(['core/str', 'core/notification'], function(str, notification) {
                     var strings = [
                         {key: 'upload_success', component: 'local_yumymedia'},
                         {key: 'entryid_header', component: 'local_yumymedia'},
@@ -284,9 +284,8 @@ define(['jquery'], function($) {
                         $("#backToMymedia").on("click", function() {
                             handleCancelClick();
                         });
-
                         return 0;
-                    });
+                    }).fail(notification.exception);
                 });
             }
 
@@ -727,7 +726,7 @@ define(['jquery'], function($) {
                 var findData;
                 var fd = new FormData();
 
-                require(['core/str'], function(str) {
+                require(['core/str', 'core/notification'], function(str, notification) {
                     var strings = [
                         {key: 'uploader_uploading', component: 'local_yumymedia'},
                         {key: 'progress', component: 'local_yumymedia'},
@@ -775,7 +774,7 @@ define(['jquery'], function($) {
                         $.ajax(
                             serviceURL, postData
                         )
-                        .done(function(xmlData, textStatus, xhr) {
+                        .done(function(xmlData) {
                             // Response is not XML.
                             if (xmlData === null) {
                                 deleteUploadToken(serverHost, ks, uploadTokenId);
@@ -827,7 +826,8 @@ define(['jquery'], function($) {
                             printErrorMessage("Cannot upload the file !<br>(Cannot connect to contents server.)");
                             return;
                         });
-                    });
+                        return 0;
+                    }).fail(notification.exception);
                 });
             }
 
@@ -969,7 +969,7 @@ define(['jquery'], function($) {
                     var typeResult = checkFileType(encodeURI(file.type));
                     var sizeResult = checkFileSize();
 
-                    require(['core/str'], function(str) {
+                    require(['core/str', 'core/notification'], function(str, notification) {
                         var strings = [
                             {key: 'wrong_filesize', component: 'local_yumymedia'},
                             {key: 'unsupported_filetype', component: 'local_yumymedia'},
@@ -1025,7 +1025,7 @@ define(['jquery'], function($) {
                                 $("#type").val(typeResult);
                             }
                             return 0;
-                        });
+                        }).fail(notification.exception);
                     });
                 }
 

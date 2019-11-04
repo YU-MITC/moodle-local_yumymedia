@@ -386,9 +386,9 @@ define(['jquery'], function($) {
 
                 navigator.mediaDevices = navigator.mediaDevices || ((navigator.mozGetUserMedia || navigator.webkitGetUserMedia) ? {
                     getUserMedia: function(c) {
-                        return new Promise(function(y, n) {
+                        return function(y, n) {
                             (navigator.mozGetUserMedia || navigator.webkitGetUserMedia).call(navigator, c, y, n);
-                        });
+                        };
                     }
                 } : null);
 
@@ -788,7 +788,7 @@ define(['jquery'], function($) {
              */
             function printSuccessMessage(id, name, tags, description, creatorId) {
 
-                require(['core/str'], function(str) {
+                require(['core/str', 'core/notification'], function(str, notification) {
                     var strings = [
                         {key: 'upload_success', component: 'local_yumymedia'},
                         {key: 'entryid_header', component: 'local_yumymedia'},
@@ -819,7 +819,7 @@ define(['jquery'], function($) {
                             handleCancelClick();
                         });
                         return 0;
-                    });
+                    }).fail(notification.exception);
                 });
             }
 
@@ -1244,7 +1244,7 @@ define(['jquery'], function($) {
                 var findData;
                 var fd = new FormData();
 
-                require(['core/str'], function(str) {
+                require(['core/str', 'core/notification'], function(str, notification) {
                     var strings = [
                         {key: 'recorder_uploading', component: 'local_yumymedia'},
                         {key: 'progress', component: 'local_yumymedia'},
@@ -1295,7 +1295,7 @@ define(['jquery'], function($) {
                         $.ajax(
                             serviceURL, postData
                         )
-                        .done(function(xmlData, textStatus, xhr) {
+                        .done(function(xmlData) {
                             // Response is not XML.
                             if (xmlData === null) {
                                 deleteUploadToken(serverHost, ks, uploadTokenId);
@@ -1348,7 +1348,7 @@ define(['jquery'], function($) {
                         });
 
                         return 0;
-                    });
+                    }).fail(notification.exception);
                 });
             }
 

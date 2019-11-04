@@ -111,7 +111,7 @@ define(['jquery'], function($) {
              * This is callback function when access control setting is changed.
              */
             function selectedControl() {
-                require(['core/str'], function(str) {
+                require(['core/str', 'core/notification'], function(str, notification) {
                     var strings = [
                         {key: 'heading_access_control', component: 'local_yumymedia'},
                         {key: 'accesscontrol_changed', component: 'local_yumymedia'}
@@ -131,8 +131,7 @@ define(['jquery'], function($) {
 
                         $("#access_control_label").html(newLabel);
                         return 0;
-                    });
-                    return 0;
+                    }).fail(notification.exception);
                 });
             }
 
@@ -238,7 +237,7 @@ define(['jquery'], function($) {
              * @param {string} currentControl - Label of current access control.
              */
             function printSuccessMessage(currentControl) {
-                require(['core/str'], function(str) {
+                require(['core/str', 'core/notification'], function(str, notification) {
                     var strings = [
                         {key: 'accesscontrol_updated', component: 'local_yumymedia'}
                     ];
@@ -260,8 +259,7 @@ define(['jquery'], function($) {
                             window.location.replace(mymedia);
                         }, 1000);
                         return 0;
-                    });
-                    return 0;
+                    }).fail(notification.exception);
                 });
             }
 

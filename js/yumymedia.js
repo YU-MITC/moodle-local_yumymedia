@@ -311,6 +311,7 @@ M.local_yumymedia = {
                 tabView.selectChild(2);
             }
 
+            return '';
         }, 'a');
 
         var mymediasort = Y.one("#mymediasort");

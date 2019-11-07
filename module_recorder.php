@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 header('Access-Control-Allow-Origin: *');
 header('Cache-Control: no-cache');
 
-global $USER, $SESSION, $COURSE;
+global $USER, $COURSE;
 
 $PAGE->set_context(context_system::instance());
 $header  = format_string($SITE->shortname). ": " . get_string('webcam_hdr', 'local_yumymedia');
@@ -62,17 +62,7 @@ if (local_yukaltura_get_mymedia_permission() == false) {  // When mymedia is dis
     $output .= get_string('webcam_disable', 'local_yumymedia');
 } else {
     $renderer = $PAGE->get_renderer('local_yumymedia');
-
-    // Star connection to kaltura.
-    $kaltura = new yukaltura_connection();
-    $connection = $kaltura->get_connection(true, KALTURA_SESSION_LENGTH);
-
-    if (!$connection) {  // When connection failed.
-        $url = new moodle_url('/admin/settings.php', array('section' => 'local_yukaltura'));
-        print_error('conn_failed', 'local_yukaltura', $url);
-    } else {  // When connection succeed.
-        $output .= $renderer->create_uploader_markup($connection, 'webcam', 'module');
-    }
+    $output .= $renderer->create_uploader_markup('webcam', 'module');
 }
 
 echo $output;

@@ -1755,43 +1755,95 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
     /**
      * This function create uploader HTML markup.
-     * @param string $ks - session string for Kaltura session.
-     * @param string $rootpath - path of root category.
-     * @param string $uploadurl - URL of upload cgi on Kaltura server.
-     * @param string $kalturahost - hostname of kaltura server.
-     * @param object $control - Kaltura Access Control object.
-     * @param string $mode - upload mode (file/webcam).
+     * @param object $connection - connnection object to Kaltura server.
+     * @param string $source - media source (file/webcam).
+     * @param string $mode - uploarder mode (flat/modal/atto);
      * @return string - HTML markup to display upload form.
      */
-    public function create_atto_uploader_markup($ks, $rootpath, $uploadurl, $kalturahost, $control, $mode) {
+    public function create_uploader_markup($connection, $source, $mode) {
         $output = '';
+
+        // Get publisher name and secret.
+        $publishername = local_yukaltura_get_publisher_name();
+        $secret = local_yukaltura_get_admin_secret();
+        $kalturahost = local_yukaltura_get_host();
+        $partnerid = local_yukaltura_get_partner_id();
+        $control = local_yukaltura_get_default_access_control($connection);
+        $expiry = UPLOAD_SESSION_LENGTH;
+
+        $uploadurl = local_yukaltura_get_host() . '/api_v3/service/uploadToken/action/upload';
+
+        // Start kaltura session.
+        $ks = $connection->session->start($secret, $publishername,
+                                          KalturaSessionType::ADMIN,
+                                          $partnerid, $expiry);
+
+        // Get the root category path.
+        $result = local_yukaltura_get_root_category();
+        $rootid = $result['id'];
+        $rootpath = $result['name'];
+
+        $type = null;
+
+        if ($mode == 'atto') {
+            $type = 'atto';
+        }
 
         if ($ks == null) { // Session failed.
             $output .= $this->create_session_failed_markup($ks);
         } else if (get_config(KALTURA_PLUGIN_NAME, 'rootcategory') == null ||
                  get_config(KALTURA_PLUGIN_NAME, 'rootcategory') == '' || empty($rootpath)) {
-            $output .= $this->create_category_failed_markup('atto');
+            $output .= $this->create_category_failed_markup($type);
         } else if ($control == null) {
-            $output .= $this->create_access_control_failed_markup('atto');
+            $output .= $this->create_access_control_failed_markup($type);
         } else { // Session started.
             $attr = array('id' => 'upload_info', 'name' => 'upload_info');
             $output .= html_writer::start_tag('div', $attr);
+
+            if (strcmp($mode, 'flat') == 0 || strcmp($mode, 'module') == 0) {
+                $header = '';
+               if (strcmp($source, 'file') == 0) {
+                $header = get_string('upload_form_hdr', 'local_yumymedia');
+                } else {
+                    $header = get_string('webcam_form_hdr', 'local_yumymedia');
+                }
+
+                $output .= html_writer::start_tag('h2'. null);
+                $output .= $header;
+                $output .= html_writer::end_tag('h2');
+            }
 
             $attr = array('method' => 'post', 'name' => 'entry_form', 'enctype' => 'multipart/form-data',
                           'action' => $uploadurl . '" autocomplete="off"');
             $output .= html_writer::start_tag('form', $attr);
 
-            if (strcmp($mode, 'webcam') == 0) {
+            if (strcmp($source, 'webcam') == 0) {
                 $output .= $this->create_webcam_recording_markup();
             } else {
                 $output .= $this->create_file_selection_markup();
             }
 
-            $output .= $this->create_entry_metadata_markup($ks, $kalturahost, $rootpath, $control, false);
+            if (strcmp($mode, 'flat') == 0 || strcmp($mode, 'atto') == 0) {
+                $output .= $this->create_entry_metadata_markup($ks, $kalturahost, $rootpath, $control, false);
+            } else {
+                $output .= $this->create_entry_metadata_markup($ks, $kalturahost, $rootpath, $control, true);
+            }
 
             $output .= html_writer::end_tag('form');
 
-            $output .= $this->create_atto_hidden_markup();
+            if (strcmp($mode, 'flat') == 0) {
+                $output .= html_writer::empty_tag('hr', null);
+                $output .= html_writer::empty_tag('br', null);
+                $output .= $this->create_upload_cancel_markup();
+            }
+
+            if (strcmp($mode, 'atto') == 0) {
+                $output .= $this->create_atto_hidden_markup();
+            }
+
+            if (strcmp($mode, 'flat') == 0) {
+                $output .= $this->create_modal_content_markup();
+            }
 
             $output .= html_writer::end_tag('div');
         }

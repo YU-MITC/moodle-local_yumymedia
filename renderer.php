@@ -1752,4 +1752,50 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         return $output;
     }
+
+    /**
+     * This function create uploader HTML markup.
+     * @param string $ks - session string for Kaltura session.
+     * @param string $rootpath - path of root category.
+     * @param string $uploadurl - URL of upload cgi on Kaltura server.
+     * @param string $kalturahost - hostname of kaltura server.
+     * @param object $control - Kaltura Access Control object.
+     * @param string $mode - upload mode (file/webcam).
+     * @return string - HTML markup to display upload form.
+     */
+    public function create_atto_uploader_markup($ks, $rootpath, $uploadurl, $kalturahost, $control, $mode) {
+        $output = '';
+
+        if ($ks == null) { // Session failed.
+            $output .= $this->create_session_failed_markup($ks);
+        } else if (get_config(KALTURA_PLUGIN_NAME, 'rootcategory') == null ||
+                 get_config(KALTURA_PLUGIN_NAME, 'rootcategory') == '' || empty($rootpath)) {
+            $output .= $this->create_category_failed_markup('atto');
+        } else if ($control == null) {
+            $output .= $this->create_access_control_failed_markup('atto');
+        } else { // Session started.
+            $attr = array('id' => 'upload_info', 'name' => 'upload_info');
+            $output .= html_writer::start_tag('div', $attr);
+
+            $attr = array('method' => 'post', 'name' => 'entry_form', 'enctype' => 'multipart/form-data',
+                          'action' => $uploadurl . '" autocomplete="off"');
+            $output .= html_writer::start_tag('form', $attr);
+
+            if (strcmp($mode, 'webcam') == 0) {
+                $output .= $this->create_webcam_recording_markup();
+            } else {
+                $output .= $this->create_file_selection_markup();
+            }
+
+            $output .= $this->create_entry_metadata_markup($ks, $kalturahost, $rootpath, $control, false);
+
+            $output .= html_writer::end_tag('form');
+
+            $output .= $this->create_atto_hidden_markup();
+
+            $output .= html_writer::end_tag('div');
+        }
+
+        return $output;
+    }
 }

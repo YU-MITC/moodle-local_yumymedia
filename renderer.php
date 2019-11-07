@@ -1755,97 +1755,105 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
     /**
      * This function create uploader HTML markup.
-     * @param object $connection - connnection object to Kaltura server.
      * @param string $source - media source (file/webcam).
      * @param string $mode - uploarder mode (flat/modal/atto);
      * @return string - HTML markup to display upload form.
      */
-    public function create_uploader_markup($connection, $source, $mode) {
+    public function create_uploader_markup($source, $mode) {
         $output = '';
+        
+        // Start connection to kaltura.
+        $kaltura = new yukaltura_connection();
+        $connection = $kaltura->get_connection(true, UPLOAD_SESSION_LENGTH);
 
-        // Get publisher name and secret.
-        $publishername = local_yukaltura_get_publisher_name();
-        $secret = local_yukaltura_get_admin_secret();
-        $kalturahost = local_yukaltura_get_host();
-        $partnerid = local_yukaltura_get_partner_id();
-        $control = local_yukaltura_get_default_access_control($connection);
-        $expiry = UPLOAD_SESSION_LENGTH;
+        if (!$connection) {  // When connection failed.
+            $url = new moodle_url('/admin/settings.php', array('section' => 'local_yukaltura'));
+            print_error('conn_failed', 'local_yukaltura', $url);
+        } else {  // When connection succeed.
+            // Get publisher name and secret.
+            $publishername = local_yukaltura_get_publisher_name();
+            $secret = local_yukaltura_get_admin_secret();
+            $kalturahost = local_yukaltura_get_host();
+            $partnerid = local_yukaltura_get_partner_id();
+            $control = local_yukaltura_get_default_access_control($connection);
+            $expiry = UPLOAD_SESSION_LENGTH;
 
-        $uploadurl = local_yukaltura_get_host() . '/api_v3/service/uploadToken/action/upload';
+            $uploadurl = local_yukaltura_get_host() . '/api_v3/service/uploadToken/action/upload';
 
-        // Start kaltura session.
-        $ks = $connection->session->start($secret, $publishername,
-                                          KalturaSessionType::ADMIN,
-                                          $partnerid, $expiry);
+            // Start kaltura session.
+            $ks = $connection->session->start($secret, $publishername,
+                                              KalturaSessionType::ADMIN,
+                                              $partnerid, $expiry);
 
-        // Get the root category path.
-        $result = local_yukaltura_get_root_category();
-        $rootid = $result['id'];
-        $rootpath = $result['name'];
+            // Get the root category path.
+            $result = local_yukaltura_get_root_category();
+            $rootid = $result['id'];
+            $rootpath = $result['name'];
 
-        $type = null;
+            $type = null;
 
-        if ($mode == 'atto') {
-            $type = 'atto';
-        }
+            if ($mode == 'atto') {
+                $type = 'atto';
+            }
 
-        if ($ks == null) { // Session failed.
-            $output .= $this->create_session_failed_markup($ks);
-        } else if (get_config(KALTURA_PLUGIN_NAME, 'rootcategory') == null ||
-                 get_config(KALTURA_PLUGIN_NAME, 'rootcategory') == '' || empty($rootpath)) {
-            $output .= $this->create_category_failed_markup($type);
-        } else if ($control == null) {
-            $output .= $this->create_access_control_failed_markup($type);
-        } else { // Session started.
-            $attr = array('id' => 'upload_info', 'name' => 'upload_info');
-            $output .= html_writer::start_tag('div', $attr);
+            if ($ks == null) { // Session failed.
+                $output .= $this->create_session_failed_markup($ks);
+            } else if (get_config(KALTURA_PLUGIN_NAME, 'rootcategory') == null ||
+                     get_config(KALTURA_PLUGIN_NAME, 'rootcategory') == '' || empty($rootpath)) {
+                $output .= $this->create_category_failed_markup($type);
+            } else if ($control == null) {
+                $output .= $this->create_access_control_failed_markup($type);
+            } else { // Session started.
+                $attr = array('id' => 'upload_info', 'name' => 'upload_info');
+                $output .= html_writer::start_tag('div', $attr);
 
-            if (strcmp($mode, 'flat') == 0 || strcmp($mode, 'module') == 0) {
-                $header = '';
-               if (strcmp($source, 'file') == 0) {
-                $header = get_string('upload_form_hdr', 'local_yumymedia');
-                } else {
-                    $header = get_string('webcam_form_hdr', 'local_yumymedia');
+                if (strcmp($mode, 'flat') == 0 || strcmp($mode, 'module') == 0) {
+                    $header = '';
+                    if (strcmp($source, 'file') == 0) {
+                        $header = get_string('upload_form_hdr', 'local_yumymedia');
+                    } else {
+                        $header = get_string('webcam_form_hdr', 'local_yumymedia');
+                    }
+
+                    $output .= html_writer::start_tag('h2'. null);
+                    $output .= $header;
+                    $output .= html_writer::end_tag('h2');
                 }
 
-                $output .= html_writer::start_tag('h2'. null);
-                $output .= $header;
-                $output .= html_writer::end_tag('h2');
+                $attr = array('method' => 'post', 'name' => 'entry_form', 'enctype' => 'multipart/form-data',
+                              'action' => $uploadurl . '" autocomplete="off"');
+                $output .= html_writer::start_tag('form', $attr);
+
+                if (strcmp($source, 'webcam') == 0) {
+                    $output .= $this->create_webcam_recording_markup();
+                } else {
+                    $output .= $this->create_file_selection_markup();
+                }
+
+                if (strcmp($mode, 'flat') == 0 || strcmp($mode, 'atto') == 0) {
+                    $output .= $this->create_entry_metadata_markup($ks, $kalturahost, $rootpath, $control, false);
+                } else {
+                    $output .= $this->create_entry_metadata_markup($ks, $kalturahost, $rootpath, $control, true);
+                }
+
+                $output .= html_writer::end_tag('form');
+
+                if (strcmp($mode, 'flat') == 0) {
+                    $output .= html_writer::empty_tag('hr', null);
+                    $output .= html_writer::empty_tag('br', null);
+                    $output .= $this->create_upload_cancel_markup();
+                }
+
+                if (strcmp($mode, 'atto') == 0) {
+                    $output .= $this->create_atto_hidden_markup();
+                }
+
+                if (strcmp($mode, 'flat') == 0) {
+                    $output .= $this->create_modal_content_markup();
+                }
+
+                $output .= html_writer::end_tag('div');
             }
-
-            $attr = array('method' => 'post', 'name' => 'entry_form', 'enctype' => 'multipart/form-data',
-                          'action' => $uploadurl . '" autocomplete="off"');
-            $output .= html_writer::start_tag('form', $attr);
-
-            if (strcmp($source, 'webcam') == 0) {
-                $output .= $this->create_webcam_recording_markup();
-            } else {
-                $output .= $this->create_file_selection_markup();
-            }
-
-            if (strcmp($mode, 'flat') == 0 || strcmp($mode, 'atto') == 0) {
-                $output .= $this->create_entry_metadata_markup($ks, $kalturahost, $rootpath, $control, false);
-            } else {
-                $output .= $this->create_entry_metadata_markup($ks, $kalturahost, $rootpath, $control, true);
-            }
-
-            $output .= html_writer::end_tag('form');
-
-            if (strcmp($mode, 'flat') == 0) {
-                $output .= html_writer::empty_tag('hr', null);
-                $output .= html_writer::empty_tag('br', null);
-                $output .= $this->create_upload_cancel_markup();
-            }
-
-            if (strcmp($mode, 'atto') == 0) {
-                $output .= $this->create_atto_hidden_markup();
-            }
-
-            if (strcmp($mode, 'flat') == 0) {
-                $output .= $this->create_modal_content_markup();
-            }
-
-            $output .= html_writer::end_tag('div');
         }
 
         return $output;

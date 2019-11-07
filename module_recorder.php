@@ -35,7 +35,7 @@ global $USER, $SESSION, $COURSE;
 $PAGE->set_context(context_system::instance());
 $header  = format_string($SITE->shortname). ": " . get_string('webcam_hdr', 'local_yumymedia');
 
-$PAGE->set_url('/local/yumymedia/module_uploader.php');
+$PAGE->set_url('/local/yumymedia/module_recorder.php');
 $PAGE->set_course($COURSE);
 $PAGE->set_pagetype('module_recorder');
 $PAGE->set_pagelayout('embedded');
@@ -71,51 +71,7 @@ if (local_yukaltura_get_mymedia_permission() == false) {  // When mymedia is dis
         $url = new moodle_url('/admin/settings.php', array('section' => 'local_yukaltura'));
         print_error('conn_failed', 'local_yukaltura', $url);
     } else {  // When connection succeed.
-        // Get publisher name and secret.
-        $publishername = local_yukaltura_get_publisher_name();
-        $secret = local_yukaltura_get_admin_secret();
-        $kalturahost = local_yukaltura_get_host();
-        $partnerid = local_yukaltura_get_partner_id();
-        $control = local_yukaltura_get_default_access_control($connection);
-        $expiry = 21600;
-
-        $uploadurl = local_yukaltura_get_host() . '/api_v3/service/uploadToken/action/upload';
-
-        // Start kaltura session.
-        $ks = $connection->session->start($secret, $publishername, KalturaSessionType::ADMIN, $partnerid, $expiry);
-
-        // Get the root category path.
-        $result = local_yukaltura_get_root_category();
-        $rootid = $result['id'];
-        $rootpath = $result['name'];
-
-        if ($ks == null) { // Session failed.
-            $output .= $renderer->create_session_failed_markup($ks);
-        } else if (get_config(KALTURA_PLUGIN_NAME, 'rootcategory') == null ||
-            get_config(KALTURA_PLUGIN_NAME, 'rootcategory') == '' || empty($rootpath)) {
-            $output .= $renderer->create_category_failed_markup();
-        } else if ($control == null) {
-            $output .= $renderer->create_access_control_failed_markup();
-        } else { // Session started.
-            $attr = array('id' => 'upload_info', 'name' => 'upload_info');
-            $output .= html_writer::start_tag('div', $attr);
-
-            $output .= html_writer::start_tag('h2'. null);
-            $output .= get_string('webcam_form_hdr', 'local_yumymedia');
-            $output .= html_writer::end_tag('h2');
-
-            $attr = array('method' => 'post', 'name' => 'entry_form', 'enctype' => 'multipart/form-data',
-                          'action' => $uploadurl . '" autocomplete="off"');
-            $output .= html_writer::start_tag('form', $attr);
-
-            $output .= $renderer->create_webcam_recording_markup();
-
-            $output .= $renderer->create_entry_metadata_markup($ks, $kalturahost, $rootpath, $control, true);
-
-            $output .= html_writer::end_tag('form');
-
-            $output .= html_writer::end_tag('div');
-        }
+        $output .= $renderer->create_uploader_markup($connection, 'webcam', 'module');
     }
 }
 

@@ -1761,7 +1761,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
      */
     public function create_uploader_markup($source, $mode) {
         $output = '';
-        
+
         // Start connection to kaltura.
         $kaltura = new yukaltura_connection();
         $connection = $kaltura->get_connection(true, UPLOAD_SESSION_LENGTH);

@@ -72,29 +72,7 @@ if (local_yukaltura_get_mymedia_permission() == false) {  // When mymedia is dis
         $url = new moodle_url('/admin/settings.php', array('section' => 'local_yukaltura'));
         print_error('conn_failed', 'local_yukaltura', $url);
     } else {  // When connection succeed.
-        // Get publisher name and secret.
-        $publishername = local_yukaltura_get_publisher_name();
-        $secret = local_yukaltura_get_admin_secret();
-        $kalturahost = local_yukaltura_get_host();
-        $partnerid = local_yukaltura_get_partner_id();
-        $control = local_yukaltura_get_default_access_control($connection);
-        $expiry = 21600;
-
-        $uploadurl = local_yukaltura_get_host() . '/api_v3/service/uploadToken/action/upload';
-
-        // Start kaltura session.
-        $ks = $connection->session->start($secret, $publishername,
-                                          KalturaSessionType::ADMIN,
-                                          $partnerid, $expiry);
-
-        // Get the root category path.
-        $result = local_yukaltura_get_root_category();
-        $rootid = $result['id'];
-        $rootpath = $result['name'];
-
-        $output .= $renderer-> create_uploader_markup($ks, $rootpath, $uploadurl,
-                                                      $kalturahost, $control,
-                                                      'webcam', 'flat');
+        $output .= $renderer->create_uploader_markup($connection, 'webcam', 'flat');
     }
 }
 

@@ -29,7 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 
 header('Access-Control-Allow-Origin: *');
 
-global $USER, $SESSION, $COURSE;
+global $USER, $COURSE;
 
 $PAGE->set_context(context_system::instance());
 $header = format_string($SITE->shortname). ": " . get_string('uploader_hdr', 'local_yumymedia');
@@ -55,19 +55,6 @@ require_capability('local/yumymedia:view', $context, $USER);
 
 $renderer = $PAGE->get_renderer('local_yumymedia');
 
-// Connect to Kaltura server.
-$kaltura = new yukaltura_connection();
-$connection = $kaltura->get_connection(true, KALTURA_SESSION_LENGTH);
-
-if (!$connection) {  // When connection failed.
-    $url = new moodle_url('/admin/settings.php', array('section' => 'local_yukaltura'));
-    print_error('conn_failed', 'local_yukaltura', $url);
-} else {  // When connection succeed.
-    $output = '';
-
-    $output .= $renderer->create_uploader_markup($connection, 'file', 'module');
-
-    echo $output;
-}
+echo $renderer->create_uploader_markup('file', 'module');
 
 echo $OUTPUT->footer();

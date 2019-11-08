@@ -415,7 +415,6 @@ define(['jquery'], function($) {
                         return;
                     }
                 } catch (err) {
-                    window.alert("Error!!");
                     require(['core/str'], function(str) {
                         var message = str.get_string('disable_webrtc', 'local_yumymedia', null);
                         $.when(message).done(function(localizedString) {

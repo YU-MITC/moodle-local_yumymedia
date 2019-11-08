@@ -462,12 +462,14 @@ define(['jquery'], function($) {
 
                 var mimeOption = "";
 
+                var WebcamRecorder = MediaSource || MediaRecorder;
+
                 // Prefer camera resolution nearest to 1280x720.
-                if (MediaRecorder.isTypeSupported("video/webm;codecs=vp8")) {
+                if (WebcamRecorder.isTypeSupported("video/webm;codecs=vp8")) {
                     mimeOption = "video/webm; codecs=vp8";
-                } else if (MediaRecorder.isTypeSupported("video/webm;codecs=vp9")) {
+                } else if (WebcamRecorder.isTypeSupported("video/webm;codecs=vp9")) {
                     mimeOption = "video/webm; codecs=vp9";
-                } else if (MediaRecorder.isTypeSupported("video/webm")) {
+                } else if (WebcamRecorder.isTypeSupported("video/webm")) {
                     mimeOption = "video/webm";
                 } else {
                     mimeOption = "video/mp4";
@@ -510,7 +512,13 @@ define(['jquery'], function($) {
                         $("#webcam").attr("src", blobUrl);
                     }
                     window.console.log(localStream);
-                    recorder = new MediaRecorder(localStream, constraints);
+
+                    if (MediaSource !== null || MediaSource !== undefined) {
+                        recorder = new MediaRecorder(localStream);
+                    } else {
+                        recorder = new MediaRecorder(localStream, constraints);
+                    }
+
                     $("#recstop").attr("src", $("#recurl").val());
                     $("#recstop").on("click", function() {
                         startRecording();

@@ -415,6 +415,7 @@ define(['jquery'], function($) {
                         return;
                     }
                 } catch (err) {
+                    window.alert("Error!!");
                     require(['core/str'], function(str) {
                         var message = str.get_string('disable_webrtc', 'local_yumymedia', null);
                         $.when(message).done(function(localizedString) {
@@ -462,12 +463,14 @@ define(['jquery'], function($) {
 
                 var mimeOption = "";
 
+                var WebcamRecorder = MediaSource || MediaRecorder;
+
                 // Prefer camera resolution nearest to 1280x720.
-                if (MediaRecorder.isTypeSupported("video/webm;codecs=vp8")) {
+                if (WebcamRecorder.isTypeSupported("video/webm;codecs=vp8")) {
                     mimeOption = "video/webm; codecs=vp8";
-                } else if (MediaRecorder.isTypeSupported("video/webm;codecs=vp9")) {
+                } else if (WebcamRecorder.isTypeSupported("video/webm;codecs=vp9")) {
                     mimeOption = "video/webm; codecs=vp9";
-                } else if (MediaRecorder.isTypeSupported("video/webm")) {
+                } else if (WebcamRecorder.isTypeSupported("video/webm")) {
                     mimeOption = "video/webm";
                 } else {
                     mimeOption = "video/mp4";
@@ -509,8 +512,13 @@ define(['jquery'], function($) {
                         }
                         $("#webcam").attr("src", blobUrl);
                     }
-                    window.console.log(localStream);
-                    recorder = new MediaRecorder(localStream, constraints);
+
+                    if (MediaSource !== null || MediaSource !== undefined) {
+                        recorder = new MediaRecorder(localStream);
+                    } else {
+                        recorder = new MediaRecorder(localStream, constraints);
+                    }
+
                     $("#recstop").attr("src", $("#recurl").val());
                     $("#recstop").on("click", function() {
                         startRecording(localStream);

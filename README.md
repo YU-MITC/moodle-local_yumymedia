@@ -87,6 +87,7 @@ Version 1.3.3
 * fixed some statements in lib.php, in order to accurately reflect access restrictions to the "My Media".
 * fixed javascript files based on JSDoc warnings.
 * added privacy functions ans strings to comply with GDPR.
+* fixed webcam_uploader.js and module_recorder.js, in order to support Safari 12.x/13.x on macOS.
 
 Version 1.3.2
 

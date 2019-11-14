@@ -16,6 +16,7 @@ YU Kaltura Media Gallery for Moodle
 ------
 
 This plugin provides media gallery (called "My Media") for users. Through the "My Media", users can upload media files, record a movie using web-camera, preview and delete their medias, and edit metadata of each media. Also, users can set enable/disable access restriction to their own media. Moreover, user can record a video by using PC's web-camera, and can upload the video to Kaltura server.
+Users can get playback page URL and embed code for each media.
 This plugin is updated with stable releases. To follow active development on GitHub, click [here](https://github.com/YU-MITC/moodle-local_yumymedia/).
 
 Requirements
@@ -23,7 +24,7 @@ Requirements
 
 * PHP5.3 or greater.
 * Web browsers must support the JavaScript and HTML5.
-* System administrators must use the same communication protocol for all routes (between the web browser and the Moodle, between the Moodle and the Kaltura, and between the web browser and the Kaltura). It is better to use HTTPS as the communication protocol.
+* System administrators must use the HTTPS protocol for their Moodle site and Kaltura server.
 * Administrators must not delete "Default" access control profile from their Kaltura server. If they delete the "Default" profile, they must create new profile named "Default" before install our plugins.
 * These plugins do not support Flash players. Therefore, please use HTML5 players.
 * "local_yukaltura" plugin.
@@ -82,12 +83,13 @@ Warning
 Change log of YU Kaltura Media Gallery
 ------
 
-Version 1.3.3
+Version 1.4.0
 
 * fixed some statements in lib.php, in order to accurately reflect access restrictions to the "My Media".
 * fixed javascript files based on JSDoc warnings.
 * added privacy functions ans strings to comply with GDPR.
 * fixed webcam_uploader.js and module_recorder.js, in order to support Safari 12.x/13.x on macOS.
+* fixed "Requirements" in README.md.
 
 Version 1.3.2
 

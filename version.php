@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * YU Kaltura Media Gallery version file
+ * YU Kaltura Media Gallery version file.
  *
  * @package    local_yumymedia
  * @copyright  (C) 2016-2019 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
@@ -25,10 +25,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_yumymedia';
-$plugin->version = 2019110800;
-$plugin->release = '1.3.3';
+$plugin->version = 2019111400;
+$plugin->release = '1.4.0';
 $plugin->maturity = MATURITY_STABLE;
 $plugin->requires = 2015051100;
 $plugin->dependencies = array(
-    'local_yukaltura' => 2019110800
+    'local_yukaltura' => 2019111400
 );

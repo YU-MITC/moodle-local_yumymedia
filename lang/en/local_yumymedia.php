@@ -168,6 +168,7 @@ $string['accesscontrol_changed'] = 'Changed';
 $string['filesize'] = 'Size';
 $string['mimetype'] = 'MIME Type';
 $string['camera_preview'] = 'Camera preview.';
+$string['require_https'] = 'This uploader requires HTTPS.<br>Please contact your system administrator.';
 $string['unsupported_camera'] = 'Your webcamera is not supported, or it is already used.<br>Please check your webcamera.';
 $string['unsupported_browser'] = 'This uploader don\'t support your web browser ({$a}).<br>Please use other browser.';
 $string['unsupported_os'] = 'This uploader don\'t support your os ({$a}).<br>Please use normal media uploader for your device.';

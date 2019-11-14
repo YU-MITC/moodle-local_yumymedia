@@ -229,6 +229,18 @@ define(['jquery'], function($) {
             }
 
             /**
+             *  * This function checks scheme of URL.
+             *   * @return {bool} - If scheme is https, returns true. Otherwise, returns false.
+             *    */
+            function isHttps() {
+                var str = window.location.protocol;
+                if (str.indexOf('https') != -1) {
+                    return true;
+                }
+                return false;
+            }
+
+            /**
              * This function print initial error message.
              * @access public
              * @param {string} errorMessage - error message.
@@ -379,6 +391,16 @@ define(['jquery'], function($) {
              * @access public
              */
             function removeVideo() {
+                if (!isHttps()) {
+                    require(['core/str'], function(str) {
+                        var message = str.get_string('require_https', 'local_yumymedia');
+                        $.when(message).done(function(localizedString) {
+                            printInitialErrorMessage(localizedString);
+                        });
+                    });
+                    return;
+                }
+
                 // Print error message and return true if web browser is unsupported.
                 if (checkUnsupportedBrowser() || checkUnsupportedOS()) {
                     return;

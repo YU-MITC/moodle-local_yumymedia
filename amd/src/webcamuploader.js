@@ -229,9 +229,9 @@ define(['jquery'], function($) {
             }
 
             /**
-             *  * This function checks scheme of URL.
-             *   * @return {bool} - If scheme is https, returns true. Otherwise, returns false.
-             *    */
+             * This function checks scheme of URL.
+             * @return {bool} - If scheme is https, returns true. Otherwise, returns false.
+             */
             function isHttps() {
                 var str = window.location.protocol;
                 if (str.indexOf('https') != -1) {
@@ -486,17 +486,22 @@ define(['jquery'], function($) {
 
                 var WebcamRecorder = MediaSource || MediaRecorder;
 
-                // Prefer camera resolution nearest to 1280x720.
-                if (WebcamRecorder.isTypeSupported("video/webm;codecs=vp8")) {
-                    mimeOption = "video/webm; codecs=vp8";
-                } else if (WebcamRecorder.isTypeSupported("video/webm;codecs=vp9")) {
-                    mimeOption = "video/webm; codecs=vp9";
-                } else if (WebcamRecorder.isTypeSupported("video/webm")) {
+                // Selection of video codec.
+                if (WebcamRecorder.isTypeSupported("video/webm")) {
                     mimeOption = "video/webm";
-                } else {
+                } else if (WebcamRecorder.isTypeSupported("video/mp4")) {
                     mimeOption = "video/mp4";
+                } else if (WebcamRecorder.isTypeSupported("video/webm;codecs=vp8,opus")) {
+                    mimeOption = "video/webm; codecs=vp8,opus";
+                } else if (WebcamRecorder.isTypeSupported("video/webm;codecs=vp9,opus")) {
+                    mimeOption = "video/webm; codecs=vp9,opus";
+                } else if (WebcamRecorder.isTypeSupported("video/webm;codecs=vp8")) {
+                    mimeOption = "video/webm; codecs=vp8";
+                } else {
+                    mimeOption = "video/webm; codecs=vp9";
                 }
 
+                // Prefer camera resolution nearest to 1280x720.
                 constraints = {
                     audioBitsPerSecond: 128000,
                     videoBitsPerSecond: 1500000,

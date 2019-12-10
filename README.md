@@ -83,6 +83,10 @@ Warning
 Change log of YU Kaltura Media Gallery
 ------
 
+Version 1.4.0R2
+
+* fixed video codec selection scheme in modulerecorder.js and webcamuploader.js.
+
 Version 1.4.0
 
 * fixed some statements in lib.php, in order to accurately reflect access restrictions to the "My Media".

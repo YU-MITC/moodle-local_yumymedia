@@ -85,7 +85,7 @@ Change log of YU Kaltura Media Gallery
 
 Version 1.4.0R2
 
-* fixed video codec selection scheme in modulerecorder.js and webcamuploader.js.
+* fixed video codec selection scheme in modulerecorder.js and webcamuploader.js, in order to support the recent versions of Mozilla Firefox.
 
 Version 1.4.0
 

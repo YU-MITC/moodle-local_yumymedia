@@ -83,6 +83,10 @@ Warning
 Change log of YU Kaltura Media Gallery
 ------
 
+Version 1.4.0R3
+
+* fixed some statements in renderer.php, and yumymedia.php, in order to resolve an issue about search keyword handling.
+
 Version 1.4.0R2
 
 * fixed video codec selection scheme in modulerecorder.js and webcamuploader.js, in order to support the recent versions of Mozilla Firefox.

@@ -84,13 +84,13 @@ if ($data = data_submitted() and confirm_sesskey()) {
         $data->simple_search_name = clean_param($data->simple_search_name, PARAM_NOTAGS);
 
         if (isset($data->simple_search_btn_name)) {
-            $SESSION->mymedia = $data->simple_search_name;
+            $SESSION->local_yumymedia->selector = $data->simple_search_name;
         } else if (isset($data->clear_simple_search_btn_name)) {
-            $SESSION->mymedia = '';
+            $SESSION->local_yumymedia->selector = '';
         }
     } else {
         // Clear the session variable in case the user's permissions were revoked during a search.
-        $SESSION->mymedia = '';
+        $SESSION->local_yumymedia->selector = '';
     }
 }
 
@@ -112,7 +112,7 @@ if (local_yukaltura_get_mymedia_permission()) {
             $perpage = MYMEDIA_ITEMS_PER_PAGE;
         }
 
-        $SESSION->mymediasort = $sort;
+        $SESSION->local_yumymedia->mymediasort = $sort;
 
         $medias = null;
 
@@ -120,8 +120,9 @@ if (local_yukaltura_get_mymedia_permission()) {
 
         try {
             // Check if the sesison data is set.
-            if (isset($SESSION->mymedia) && !empty($SESSION->mymedia)) {
-                $medias = local_yukaltura_search_mymedia_medias($connection, $SESSION->mymedia, $page + 1, $perpage, $sort);
+            if (isset($SESSION->local_yumymedia->selector) && !empty($SESSION->local_yumymedia->selector)) {
+                $medias = local_yukaltura_search_mymedia_medias($connection, $SESSION->local_yumymedia->selector,
+                                                                $page + 1, $perpage, $sort);
             } else {
                 $medias = local_yukaltura_search_mymedia_medias($connection, '', $page + 1, $perpage, $sort);
             }
@@ -155,14 +156,14 @@ if (local_yukaltura_get_mymedia_permission()) {
                 }
             }
 
-            echo $renderer->create_options_table_upper($page);
+            echo $renderer->create_options_table_upper($page, $SESSION->local_yumymedia->selector, $sort);
 
             echo $renderer->create_medias_table($medias, $pagenum, $sort, $accesscontrol);
 
             echo $renderer->create_options_table_lower($page);
 
         } else {
-            echo $renderer->create_options_table_upper($page);
+            echo $renderer->create_options_table_upper($page, $SESSION->local_yumymedia->selector, $sort);
 
             echo '<center>'. get_string('no_medias', 'local_yumymedia') . '</center>';
 

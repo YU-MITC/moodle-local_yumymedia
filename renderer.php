@@ -131,10 +131,10 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
     /**
      * This function creates HTML markup used to sort the media listing.
-     *
+     * @param string $sort - sorting option.
      * @return string - HTML markup for sorting pulldown.
      */
-    public function create_sort_option() {
+    public function create_sort_option($sort = 'recent') {
         global $SESSION;
 
         $recent = null;
@@ -144,8 +144,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $sorturl = new moodle_url("/local/yumymedia/yumymedia.php");
         $sorturl .= "?sort=";
 
-        if (isset($SESSION->mymediasort) && !empty($SESSION->mymediasort)) {
-            $sort = $SESSION->mymediasort;
+        if (isset($sort) && !empty($sort)) {
             if ($sort == 'recent') {
                 $recent = "selected";
             } else if ($sort == 'old') {
@@ -180,9 +179,11 @@ class local_yumymedia_renderer extends plugin_renderer_base {
     /**
      * This function create options table printed at upper of media table.
      * @param string $page - HTML markup of paging bar.
+     * @param string $searchkeyword - search keyword.
+     * @param string $sort - sorting option.
      * @return string - HTML markup of options.
      */
-    public function create_options_table_upper($page) {
+    public function create_options_table_upper($page, $searchkeyword = '', $sort = 'recent') {
         global $USER;
 
         $output = '';
@@ -220,7 +221,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $output .= html_writer::end_tag('tr');
 
         if (has_capability('local/yumymedia:search', $context, $USER)) {
-            $simplesearch .= $this->create_search_markup();
+            $simplesearch .= $this->create_search_markup($searchkeyword);
         }
 
         $attr = array('class' => 'mymedia upper row_1 upload search');
@@ -244,7 +245,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $output .= html_writer::start_tag('td', $attr);
 
         if (!empty($page)) {
-            $output .= $this->create_sort_option();
+            $output .= $this->create_sort_option($sort);
             $output .= $page;
         }
 
@@ -829,12 +830,10 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
     /**
      * This function outputs the media search.
-     *
+     * @param string $searchkeyword - search keyword.
      * @return string - HTML markup of media search.
      */
-    public function create_search_markup() {
-        global $SESSION;
-
+    public function create_search_markup($searchkeyword = '') {
         $attr = array('id' => 'simple_search_container',
                       'class' => 'mymedia simple search container');
 
@@ -846,7 +845,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         $output .= html_writer::start_tag('form', $attr);
 
-        $defaultvalue = (isset($SESSION->mymedia) && !empty($SESSION->mymedia)) ? $SESSION->mymedia : '';
+        $defaultvalue = (isset($searchkeyword) && !empty($searchkeyword)) ? $searchkeyword : '';
         $attr = array('type' => 'text',
                       'id' => 'simple_search',
                       'class' => 'mymedia simple search',

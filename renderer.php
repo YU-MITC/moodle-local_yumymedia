@@ -18,7 +18,7 @@
  * YU Kaltura My Media renderer class.
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2019 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -31,7 +31,7 @@ require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.ph
 /**
  * Renderer class of local_yumymedia
  * @package local_yumymedia
- * @copyright  (C) 2016-2019 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class local_yumymedia_renderer extends plugin_renderer_base {
@@ -1763,7 +1763,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         // Start connection to kaltura.
         $kaltura = new yukaltura_connection();
-        $connection = $kaltura->get_connection(true, UPLOAD_SESSION_LENGTH);
+        $connection = $kaltura->get_connection(false, true, UPLOAD_SESSION_LENGTH);
 
         if (!$connection) {  // When connection failed.
             $url = new moodle_url('/admin/settings.php', array('section' => 'local_yukaltura'));
@@ -1772,12 +1772,12 @@ class local_yumymedia_renderer extends plugin_renderer_base {
             // Get publisher name and secret.
             $publishername = local_yukaltura_get_publisher_name();
             $secret = local_yukaltura_get_admin_secret();
-            $kalturahost = local_yukaltura_get_host();
+            $kalturahost = local_yukaltura_get_upload_host();
             $partnerid = local_yukaltura_get_partner_id();
             $control = local_yukaltura_get_default_access_control($connection);
             $expiry = UPLOAD_SESSION_LENGTH;
 
-            $uploadurl = local_yukaltura_get_host() . '/api_v3/service/uploadToken/action/upload';
+            $uploadurl = local_yukaltura_get_upload_host() . '/api_v3/service/uploadToken/action/upload';
 
             // Start kaltura session.
             $ks = $connection->session->start($secret, $publishername,

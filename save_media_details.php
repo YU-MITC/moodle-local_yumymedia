@@ -18,7 +18,7 @@
  * Saves information about the YU Kaltura media and returns a status.
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2019 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -60,7 +60,7 @@ $entries = new KalturaStaticEntries();
 
 try {
     // Create a Kaltura connection object.
-    $clientobj = local_yukaltura_login(true, '');
+    $clientobj = local_yukaltura_login(false, true, '');
 
     if (!$clientobj) {
         $errormessage = 'Connection failed when saving';

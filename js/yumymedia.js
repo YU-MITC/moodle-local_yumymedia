@@ -17,7 +17,7 @@
  * YU Kaltura "My Media" callback script.
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2019 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
+ * @copyright  (C) 2016-2020 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -285,7 +285,7 @@ M.local_yumymedia = {
             // Disable the submit button while the asynchronous call is being processed.
             Y.one('#id_media_details_save').set('disabled', true);
 
-            Y.io(conversionScript + entryid + "&" + "width=400&" + "height=400&" + "uiconfid=" + uiconfid, previewCfg);
+            Y.io(conversionScript + entryid + "&" + "width=400&" + "height=400&" + "uiconf_id=" + uiconfid, previewCfg);
 
             // Display the panel and display the tab.
             detailsPanel.show();

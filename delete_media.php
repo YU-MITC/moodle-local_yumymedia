@@ -18,7 +18,7 @@
  * Media deletion script of "My Media".
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2019 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -54,7 +54,7 @@ $PAGE->add_body_class('yumymedia-index');
 $PAGE->requires->css('/local/yumymedia/css/yumymedia.css');
 
 $kaltura = new yukaltura_connection();
-$connection = $kaltura->get_connection(true, KALTURA_SESSION_LENGTH);
+$connection = $kaltura->get_connection(false, true, KALTURA_SESSION_LENGTH);
 $context = context_user::instance($USER->id);
 
 if (!$connection) {

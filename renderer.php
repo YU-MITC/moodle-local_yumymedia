@@ -1700,7 +1700,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $output .= html_writer::start_tag('h3', $attr);
         $output .= get_string('uploading_header', 'local_yumymedia');
         $output .= html_writer::end_tag('h3');
-	$output .= html_writer::end_tag('div');
+        $output .= html_writer::end_tag('div');
         return $output;
     }
 

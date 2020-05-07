@@ -83,6 +83,10 @@ Warning
 Change log of YU Kaltura Media Gallery
 ------
 
+Version 1.4.1R2
+
+* fixed some statements in renderer.php, in order to properly separate upload URI and server URI.
+
 Version 1.4.1
 
 * fixed some statements in check_conversion.php, in order to properly reflect "My Media" player settings.

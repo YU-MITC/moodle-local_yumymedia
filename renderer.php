@@ -1763,7 +1763,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         // Start connection to kaltura.
         $kaltura = new yukaltura_connection();
-        $connection = $kaltura->get_connection(false, true, UPLOAD_SESSION_LENGTH);
+        $connection = $kaltura->get_connection(true, true, UPLOAD_SESSION_LENGTH);
 
         if (!$connection) {  // When connection failed.
             $url = new moodle_url('/admin/settings.php', array('section' => 'local_yukaltura'));

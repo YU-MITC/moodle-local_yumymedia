@@ -84,6 +84,10 @@ Warning
 Change log of YU Kaltura Media Gallery
 ------
 
+Version 1.4.2R2
+
+* fixed yumymedia.js, in order to corresponding to Moodle coding style.
+
 Version 1.4.2
 
 * fixed README.md, in order to support the Moodle 3.9.

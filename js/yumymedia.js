@@ -112,7 +112,6 @@ M.local_yumymedia = {
             metadata = Y.one('#metadata_media_desc');
             metadata.set('value', '');
 
-            window.location.href = window.location.href;
         });
 
         var checkConversionStatus = {

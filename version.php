@@ -25,10 +25,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_yumymedia';
-$plugin->version = 2020061400;
-$plugin->release = '1.4.2R2';
+$plugin->version = 2020110200;
+$plugin->release = '1.5.0';
 $plugin->maturity = MATURITY_STABLE;
 $plugin->requires = 2015051100;
 $plugin->dependencies = array(
-    'local_yukaltura' => 2020060600
+    'local_yukaltura' => 2020110200
 );

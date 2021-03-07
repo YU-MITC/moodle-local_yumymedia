@@ -17,7 +17,7 @@
  * YU Kaltura "My Media" script for acecss restriction setting.
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2020 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
+ * @copyright  (C) 2016-2021 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -316,17 +316,28 @@ define(['jquery'], function($) {
                 var kalturaHost = $("#kalturahost").val();
                 var partnerId = $("#partnerid").val();
                 var uiconfId = $("#uiconfid").val();
+                var playerstudio = $("#playerstudio").val();
                 var entryId = $("#entryid").val();
                 var now = Date.now();
                 var str = "";
 
                 if (selectedId == "0") {
-                    str = "<iframe src=\"" + kalturaHost + "/p/" + partnerId + "/sp/" + partnerId + "00";
-                    str += "/embedIframeJs/uiconf_id/" + uiconfId + "/partner_id/" + partnerId;
-                    str += "?iframeembed=true&playerId=kaltura_player_" + now;
-                    str += "&entry_id=" + entryId + "\" width=\"560\" height=\"395\" ";
-                    str += "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\" ";
-                    str += "allow=\"encrypted-media\"></iframe>";
+                    if (playerstudio == "ovp") {
+                        str += '<iframe type="text/javascript" src="' + kalturaHost + '/p/' + partnerId;
+                        str += '/embedPlaykitJs/uiconfid/' + uiconfId;
+                        str += '?iframeembed=true&entry_id=' + entryId + '" ';
+                        str += 'style="width: 560px; height: 395px" ';
+                        str += 'allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder="0" ';
+                        str += 'allow="encrypted-media">';
+                        str += "</iframe>";
+                    } else {
+                        str += '<iframe src="' + kalturaHost + '/p/' + partnerId + '/sp/' + partnerId + '00';
+                        str += '/embedIframeJs/uiconf_id/' + uiconfId + '/partner_id/' + partnerId;
+                        str += '?iframeembed=true&playerId=kaltura_player_' + now;
+                        str += '&entry_id=' + entryId + '" width="560" height="395" ';
+                        str += 'allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder="0" ';
+                        str += 'allow="encrypted-media"></iframe>';
+                    }
                 } else {
                     str = kalturaHost + "/index.php/extwidget/preview/partner_id/";
                     str += partnerId + "/uiconf_id/" + uiconfId + "/entry_id/" + entryId + "/embed/dynamic?";

@@ -1058,7 +1058,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $output .= html_writer::empty_tag('input', $attr);
 
         $attr = array('type' => 'hidden', 'name' => 'uiconfid', 'id' => 'uiconfid', 'value' => $uiconfid);
-	$output .= html_writer::empty_tag('input', $attr);
+        $output .= html_writer::empty_tag('input', $attr);
 
         $attr = array('type' => 'hidden', 'name' => 'playerstudio', 'id' => 'playerstudio', 'value' => $playerstudio);
         $output .= html_writer::empty_tag('input', $attr);
@@ -1719,7 +1719,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $kalturahost = local_yukaltura_get_host();
         $partnerid = local_yukaltura_get_partner_id();
         $uiconfid = local_yukaltura_get_player_uiconf('player_atto');
-	list($playerwidth, $playerheight) = local_yukaltura_get_atto_player_dimension();
+        list($playerwidth, $playerheight) = local_yukaltura_get_atto_player_dimension();
 
         $playerstudio = "html5";
         $playertype = local_yukaltura_get_player_type($uiconfid, $clientobj);

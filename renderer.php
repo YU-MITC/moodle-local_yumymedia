@@ -18,7 +18,7 @@
  * YU Kaltura My Media renderer class.
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -31,7 +31,7 @@ require_once(dirname(dirname(dirname(__FILE__))) . '/local/yukaltura/locallib.ph
 /**
  * Renderer class of local_yumymedia
  * @package local_yumymedia
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class local_yumymedia_renderer extends plugin_renderer_base {
@@ -1035,11 +1035,12 @@ class local_yumymedia_renderer extends plugin_renderer_base {
      * @param string $entryid - id of media entyry.
      * @param int $partnerid - id of partner (kaltura user).
      * @param int $uiconfid - id of embeded player.
+     * @param string $playerstudio - kind of player's studio.
      * @param string $url - URL of "My Media".
      * @param int $currentcontrolid - current controlid of the media.
      * @return string - HTML markup of hidden input.
      */
-    public function create_hidden_input_markup($kalturahost, $ks, $entryid, $partnerid, $uiconfid,
+    public function create_hidden_input_markup($kalturahost, $ks, $entryid, $partnerid, $uiconfid, $playerstudio,
                                                $url, $currentcontrolid) {
 
         $output = '';
@@ -1057,6 +1058,9 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $output .= html_writer::empty_tag('input', $attr);
 
         $attr = array('type' => 'hidden', 'name' => 'uiconfid', 'id' => 'uiconfid', 'value' => $uiconfid);
+        $output .= html_writer::empty_tag('input', $attr);
+
+        $attr = array('type' => 'hidden', 'name' => 'playerstudio', 'id' => 'playerstudio', 'value' => $playerstudio);
         $output .= html_writer::empty_tag('input', $attr);
 
         $attr = array('type' => 'hidden', 'name' => 'mymedia', 'id' => 'mymedia', 'value' => $url);
@@ -1706,16 +1710,22 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
     /**
      * This function creates HTML markup used to print hidden parameters for atto plugin.
-     *
+     * @param object $clientobj - Kaltura client object.
      * @return string - HTML markup for atto plugin.
      */
-    public function create_atto_hidden_markup() {
+    public function create_atto_hidden_markup($clientobj) {
         $output = '';
 
         $kalturahost = local_yukaltura_get_host();
         $partnerid = local_yukaltura_get_partner_id();
         $uiconfid = local_yukaltura_get_player_uiconf('player_atto');
         list($playerwidth, $playerheight) = local_yukaltura_get_atto_player_dimension();
+
+        $playerstudio = "html5";
+        $playertype = local_yukaltura_get_player_type($uiconfid, $clientobj);
+        if ($playertype == KALTURA_TV_PLATFORM_STUDIO) {
+            $playerstudio = "ovp";
+        }
 
         $attr = array('type' => 'hidden',
                       'name' => 'partnerid',
@@ -1729,6 +1739,14 @@ class local_yumymedia_renderer extends plugin_renderer_base {
                       'name' => 'uiconfid',
                       'id' => 'uiconfid',
                       'value' => $uiconfid
+                     );
+
+        $output .= html_writer::empty_tag('input', $attr);
+
+        $attr = array('type' => 'hidden',
+                      'name' => 'player_studio',
+                      'id' => 'player_studio',
+                      'value' => $playerstudio
                      );
 
         $output .= html_writer::empty_tag('input', $attr);
@@ -1767,7 +1785,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         if (!$connection) {  // When connection failed.
             $url = new moodle_url('/admin/settings.php', array('section' => 'local_yukaltura'));
-            print_error('conn_failed', 'local_yukaltura', $url);
+            throw new moodle_exception('conn_failed', 'local_yukaltura', $url);
         } else {  // When connection succeed.
             // Get publisher name and secret.
             $publishername = local_yukaltura_get_publisher_name();
@@ -1844,7 +1862,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
                 }
 
                 if (strcmp($mode, 'atto') == 0) {
-                    $output .= $this->create_atto_hidden_markup();
+                    $output .= $this->create_atto_hidden_markup($connection);
                 }
 
                 if (strcmp($mode, 'flat') == 0) {

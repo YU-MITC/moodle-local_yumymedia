@@ -18,7 +18,7 @@
  * Conversion check script in "My Media".
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -75,7 +75,7 @@ if (0 == strcmp($widget, 'kdp')) {
         // Create the user Kaltura session.
         $session  = local_yukaltura_generate_kaltura_session(true, array($entryobj->id));
 
-        $data->markup = local_yukaltura_get_iframeembed_code($entryobj, $uiconfid, $session);
+        $data->markup = local_yukaltura_get_iframeembed_code($entryobj, $uiconfid, $connection, $session);
 
         if (local_yukaltura_has_mobile_flavor_enabled() && local_yukaltura_get_enable_html5()) {
             $data->script = 'kAddedScript = false; kCheckAddScript();';

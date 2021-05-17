@@ -18,7 +18,7 @@
  * Saves information about the YU Kaltura media and returns a status.
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -42,15 +42,13 @@ $context = context_user::instance($USER->id);
 require_capability('local/yumymedia:view', $context, $USER);
 
 if (empty($entryid)) {
-    $errormessage = 'Update media details - media entry id empty, entry id - ' . $entryid;
-    print_error($errormessage, 'local_yumymedia');
+    throw new moodle_exception('no_medias', 'local_yumymedia');
     echo 'n';
     die();
 }
 
 if (empty($name)) {
-    $errormessage = 'Name is empty';
-    print_error($errormessage, 'local_yumymedia');
+    throw new moodle_exception('no_name', 'local_yumymedia');
     echo 'n';
     die();
 }
@@ -63,8 +61,7 @@ try {
     $clientobj = local_yukaltura_login(false, true, '');
 
     if (!$clientobj) {
-        $errormessage = 'Connection failed when saving';
-        print_error($errormessage, 'local_yumymedia');
+        throw new moodle_exception('conn_failed_alt', 'local_yukaltura');
     }
 
     // Start a multi request.
@@ -96,31 +93,27 @@ try {
 
     // Verify returned data.
     if (!is_array($result)) {
-        $errormessage = 'Connection failed when saving';
-        print_error($errormessage, 'local_yumymedia');
+        throw new moodle_exception('conn_failed_alt', 'local_yukaltura');
         echo 'n';
         die();
     }
 
     // Verify the first API call.
     if (!array_key_exists(0, $result) || !$result[0] instanceof KalturaMediaEntry) {
-        $errormessage = 'view - media->get,' . $result[0]['mesasge'];
-        print_error($errormessage, 'local_yumymedia');
+        throw new moodle_exception('no_medias', 'local_yumymedia');
         echo 'n';
         die();
     }
 
     // Verify that the user is the owner of the requested media.
     if (0 != strcmp($result[0]->userId, $USER->username)) {
-        $errormessage = 'update - media details, User is not the owner of media';
-        print_error($errormessage, 'local_yumymedia');
+        throw new moodle_exception('error_not_owner', 'local_yumymedia');
         echo 'n';
         die();
     }
 
     if (!array_key_exists(1, $result) || !$result[1] instanceof KalturaMediaEntry) {
-        $errormessage = 'update - media->update,' . $result[1]['message'];
-        prnt_error($errormessage, 'local_yumymedia');
+        throw new moodle_exception('error_saving', 'local_yumymedia');
         echo 'n';
         die();
     }
@@ -133,9 +126,8 @@ try {
     echo 'y';
 
 } catch (Exception $ex) {
-    $errormessage = 'Error - exception caught(' . $ex->getMessage() . ')';
-    print_error($errormessage, 'local_yumymedia');
-    echo 'n' . $ex->getMessage();
+    throw new moodle_exception('media_error', 'local_yumymedia');
+    echo 'n';
 }
 
 die();

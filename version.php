@@ -18,17 +18,17 @@
  * YU Kaltura Media Gallery version file.
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_yumymedia';
-$plugin->version = 2020110500;
-$plugin->release = '1.5.0';
+$plugin->version = 2021051700;
+$plugin->release = '2.0.0';
 $plugin->maturity = MATURITY_STABLE;
 $plugin->requires = 2015051100;
 $plugin->dependencies = array(
-    'local_yukaltura' => 2020110500
+    'local_yukaltura' => 2021051700
 );

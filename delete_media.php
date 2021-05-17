@@ -18,7 +18,7 @@
  * Media deletion script of "My Media".
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -59,7 +59,7 @@ $context = context_user::instance($USER->id);
 
 if (!$connection) {
     $url = new moodle_url('/admin/settings.php', array('section' => 'local_yukaltura'));
-    print_error('conn_failed', 'local_yukaltura', $url);
+    throw new moodle_exception('conn_failed', 'local_yukaltura', $url);
 }
 
 $loginsession = '';

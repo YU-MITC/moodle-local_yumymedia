@@ -18,7 +18,7 @@
  * Access restriction setting script in "My Media".
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -60,7 +60,7 @@ $context = context_user::instance($USER->id);
 
 if (!$connection) {
     $url = new moodle_url('/admin/settings.php', array('section' => 'local_yukaltura'));
-    print_error('conn_failed', 'local_yukaltura', $url);
+    throw new moodle_exeption('conn_failed', 'local_yukaltura', $url);
 }
 
 // Get publiser name, admin secret, hostname, parter id.
@@ -70,6 +70,12 @@ $kalturahost = local_yukaltura_get_host();
 $partnerid = local_yukaltura_get_partner_id();
 $uiconfid = local_yukaltura_get_player_uiconf('player_mymedia');
 $expiry = KALTURA_SESSION_LENGTH;
+
+$playerstudio = "html5";
+$playertype = local_yukaltura_get_player_type($uiconfid, $connection);
+if ($playertype == KALTURA_TV_PLATFORM_STUDIO) {
+       $playerstudio = "ovp";
+}
 
 echo $OUTPUT->header();
 
@@ -85,7 +91,7 @@ if ($media == null or $media->status == KalturaEntryStatus::DELETED) {
 
     if ($ks == null or $ks == '') {
         $url = new moodle_url('/local/yumymedia/access_media.php', array('entryid' => $entryid));
-        print_error('kaltura_session_failed', 'local_yukaltura', $url);
+         throw new moodle_exception('kaltura_session_failed', 'local_yukaltura', $url);
     } else {
         echo html_writer::start_tag('h3');
         echo get_string('access_media_title', 'local_yumymedia');
@@ -100,7 +106,7 @@ if ($media == null or $media->status == KalturaEntryStatus::DELETED) {
 
         echo $renderer->create_media_details_table_markup($media);
         echo $renderer->create_hidden_input_markup($kalturahost, $ks, $entryid, $partnerid, $uiconfid,
-                                                   $url, $currentcontrolid);
+                                                   $playerstudio, $url, $currentcontrolid);
         echo $renderer->create_embed_code_markup();
 
         if ($media != null && !is_null($internalcontrolprofile) && !is_null($defaultcontrolprofile)) {

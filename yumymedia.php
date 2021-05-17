@@ -18,7 +18,7 @@
  * YU Kaltura My Media Gallery main page
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -61,17 +61,20 @@ $connection = $kaltura->get_connection(false, true, KALTURA_SESSION_LENGTH);
 
 if (!$connection) {
     $url = new moodle_url('/admin/settings.php', array('section' => 'local_yukaltura'));
-    print_error('conn_failed', 'local_yukaltura', $url);
+    throw new moodle_exception('conn_failed', 'local_yukaltura', $url);
 }
 
 $courseid = $COURSE->id;
 
 if (local_yukaltura_has_mobile_flavor_enabled() && local_yukaltura_get_enable_html5()) {
     $uiconfid = local_yukaltura_get_player_uiconf('player_mymedia');
-    $url = new moodle_url(local_yukaltura_html5_javascript_url($uiconfid));
+    $playertype = local_yukaltura_get_player_type($uiconfid, $connection);
+    $url = new moodle_url(local_yukaltura_html5_javascript_url($uiconfid, $playertype));
     $PAGE->requires->js($url, true);
-    $url = new moodle_url('/local/yukaltura/js/frameapi.js');
-    $PAGE->requires->js($url, true);
+    if ($playertype == KALTURA_UNIVERSAL_STUDIO) {
+        $url = new moodle_url('/local/yukaltura/js/frameapi.js');
+        $PAGE->requires->js($url, true);
+    }
 }
 
 echo $OUTPUT->header();
@@ -219,11 +222,7 @@ if (local_yukaltura_get_mymedia_permission()) {
 
         $connection->session->end();
     } catch (Exception $ex) {
-        $errormessage = 'View - error main page(' .  $ex->getMessage() . ')';
-        print_error($errormessage, 'local_yumymedia');
-
-        echo get_string('problem_viewing', 'local_yumymedia') . '<br>';
-        echo $ex->getMessage();
+        throw new moodle_exception('problem_viewing', 'local_yumymedia');
     }
 
 } else {

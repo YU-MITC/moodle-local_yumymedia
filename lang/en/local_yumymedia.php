@@ -18,7 +18,7 @@
  * Language file for "My Media".
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -135,6 +135,7 @@ $string['search_text_tooltip'] = 'Enter media name or tags';
 // Trouble.
 $string['problem_viewing'] = 'There is a problem displaying the page.  Please try again or contact your site administrator';
 $string['no_medias'] = 'No media found';
+$string['no_name'] = 'Name of media is empty';
 $string['permission_disable'] = 'You don\'t have permission to use kaltura my-media.';
 $string['webcam_disable'] = 'You don\'t have permission to use webcamera.';
 

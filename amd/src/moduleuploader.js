@@ -16,7 +16,6 @@
 /**
  * Uploader Script used in resource and activirty modules.
  *
- * @package    local_yumymedia
  * @copyright  (C) 2016-2022 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

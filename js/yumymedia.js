@@ -17,7 +17,7 @@
  * YU Kaltura "My Media" callback script.
  *
  * @package    local_yumymedia
- * @copyright  (C) 2016-2021 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
+ * @copyright  (C) 2016-2022 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

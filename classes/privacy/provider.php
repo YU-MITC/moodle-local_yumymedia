@@ -24,8 +24,6 @@
 
 namespace local_yumymedia\privacy;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Privacy Subsystem for local_yumymedia implementing null_provider.
  *

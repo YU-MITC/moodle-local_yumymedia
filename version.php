@@ -25,8 +25,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_yumymedia';
-$plugin->version = 2023011601;
-$plugin->release = '2.1.0BETA2';
+$plugin->version = 2023011602;
+$plugin->release = '2.1.0BETA3';
 $plugin->maturity = MATURITY_BETA;
 $plugin->requires = 2022041900;
 $plugin->supported = [400, 401];

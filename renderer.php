@@ -68,7 +68,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
      *
      * @return string  HTML markup
      */
-    public function create_medias_table($medialist = array(), $page, $sort, $accesscontrol) {
+    public function create_medias_table($medialist = array(), $page = '', $sort = '', $accesscontrol = null) {
 
         $output = '';
         $maxcolumns = 3;

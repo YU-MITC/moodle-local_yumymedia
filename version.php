@@ -31,5 +31,5 @@ $plugin->maturity = MATURITY_STABLE;
 $plugin->requires = 2023100900;
 $plugin->supported = [403, 405];
 $plugin->dependencies = array(
-    'local_yukaltura' => 2025010200
+    'local_yukaltura' => 2025010200,
 );

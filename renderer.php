@@ -392,7 +392,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         $attr = array('class' => 'mymedia media preview',
                       'href' => '#',
-                      'title' => get_string('preview_link', 'local_yumymedia')
+                      'title' => get_string('preview_link', 'local_yumymedia'),
                      );
 
         $output .= html_writer::start_tag('a', $attr);
@@ -413,7 +413,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         $attr = array('class' => 'mymedia media edit',
                       'href' => '#',
-                      'title' => get_string('edit_link', 'local_yumymedia')
+                      'title' => get_string('edit_link', 'local_yumymedia'),
                       );
 
         $output .= html_writer::start_tag('a', $attr);
@@ -436,7 +436,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         $attr   = array('class' => 'mymedia media access',
                         'href' => new moodle_url('/local/yumymedia/access_media.php',
-                        array('entryid' => $entry->id, 'page' => $page, 'sort' => $sort))
+                        array('entryid' => $entry->id, 'page' => $page, 'sort' => $sort)),
                         );
 
         $output .= html_writer::start_tag('a', $attr);
@@ -460,7 +460,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         $attr = array('class' => 'mymedia media delete',
                       'href' => new moodle_url('/local/yumymedia/delete_media.php',
-                      array('entryid' => $entry->id, 'confirm' => 'yet', 'page' => $page, 'sort' => $sort))
+                      array('entryid' => $entry->id, 'confirm' => 'yet', 'page' => $page, 'sort' => $sort)),
                       );
 
         $output .= html_writer::start_tag('a', $attr);
@@ -497,7 +497,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
             }
 
             $attr = array('class' => 'mymedia media download',
-                       'href' => $modifiedlink
+                       'href' => $modifiedlink,
                      );
             $output .= html_writer::start_tag('a', $attr);
             $output .= get_string('download_link', 'local_yumymedia');
@@ -1094,7 +1094,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
                       'id' => 'code_type_select');
 
         $array = array(0 => get_string('label_embed_code', 'local_yumymedia'),
-                       1 => get_string('label_page_url', 'local_yumymedia')
+                       1 => get_string('label_page_url', 'local_yumymedia'),
                       );
         $selected = 0;
 
@@ -1108,7 +1108,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
                       'rows' => '9',
                       'wrap' => 'soft',
                       'spellcheck' => 'false',
-                      'readonly' => ''
+                      'readonly' => '',
                     );
 
         $output .= html_writer::start_tag('textarea', $attr);
@@ -1337,7 +1337,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $output .= html_writer::start_tag('form', $attr);
 
         $attr = array('type' => 'submit', 'name' => 'delete_media_ok',
-                      'value' => get_string("okdelete_label", "local_yumymedia")
+                      'value' => get_string("okdelete_label", "local_yumymedia"),
                      );
 
         $output .= html_writer::start_tag('input', $attr);
@@ -1350,7 +1350,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
 
         $attr = array('type' => 'button', 'name' => 'delete_media_cancel',
                       'value' => get_string("cancel_label", "local_yumymedia"),
-                      'onclick' => 'location.href=\'' . $mymediaurl . '\''
+                      'onclick' => 'location.href=\'' . $mymediaurl . '\'',
                      );
 
         $output .= html_writer::start_tag('input', $attr);
@@ -1751,7 +1751,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $attr = array('type' => 'hidden',
                       'name' => 'partnerid',
                       'id' => 'partnerid',
-                      'value' => $partnerid
+                      'value' => $partnerid,
                      );
 
         $output .= html_writer::empty_tag('input', $attr);
@@ -1759,7 +1759,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $attr = array('type' => 'hidden',
                       'name' => 'uiconfid',
                       'id' => 'uiconfid',
-                      'value' => $uiconfid
+                      'value' => $uiconfid,
                      );
 
         $output .= html_writer::empty_tag('input', $attr);
@@ -1767,7 +1767,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $attr = array('type' => 'hidden',
                       'name' => 'player_studio',
                       'id' => 'player_studio',
-                      'value' => $playerstudio
+                      'value' => $playerstudio,
                      );
 
         $output .= html_writer::empty_tag('input', $attr);
@@ -1775,7 +1775,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $attr = array('type' => 'hidden',
                       'name' => 'player_width',
                       'id' => 'player_width',
-                      'value' => $playerwidth
+                      'value' => $playerwidth,
                      );
 
         $output .= html_writer::empty_tag('input', $attr);
@@ -1783,7 +1783,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $attr = array('type' => 'hidden',
                       'name' => 'player_height',
                       'id' => 'player_height',
-                      'value' => $playerheight
+                      'value' => $playerheight,
                      );
 
         $output .= html_writer::empty_tag('input', $attr);
@@ -1791,7 +1791,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $attr = array('type' => 'hidden',
                       'name' => 'audio_uiconfid',
                       'id' => 'audio_uiconfid',
-                      'value' => $audiouiconfid
+                      'value' => $audiouiconfid,
                      );
 
         $output .= html_writer::empty_tag('input', $attr);
@@ -1799,7 +1799,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $attr = array('type' => 'hidden',
                       'name' => 'audio_studio',
                       'id' => 'audio_studio',
-                      'value' => $audiostudio
+                      'value' => $audiostudio,
                      );
 
         $output .= html_writer::empty_tag('input', $attr);
@@ -1807,7 +1807,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $attr = array('type' => 'hidden',
                       'name' => 'audio_width',
                       'id' => 'audio_width',
-                      'value' => $audiowidth
+                      'value' => $audiowidth,
                      );
 
         $output .= html_writer::empty_tag('input', $attr);
@@ -1815,7 +1815,7 @@ class local_yumymedia_renderer extends plugin_renderer_base {
         $attr = array('type' => 'hidden',
                       'name' => 'audio_height',
                       'id' => 'audio_height',
-                      'value' => $audioheight
+                      'value' => $audioheight,
         );
 
         $output .= html_writer::empty_tag('input', $attr);

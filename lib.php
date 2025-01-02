@@ -90,7 +90,7 @@ function local_yumymedia_check_capability($capability) {
         $params = array(
             'userid' => $USER->id,
             'capability' => $capability,
-            'permission' => CAP_ALLOW
+            'permission' => CAP_ALLOW,
         );
 
         if ($DB->record_exists_sql($sql, $params)) {

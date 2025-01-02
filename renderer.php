@@ -1846,8 +1846,8 @@ class local_yumymedia_renderer extends plugin_renderer_base {
             $kalturahost = local_yukaltura_get_upload_host();
             $partnerid = local_yukaltura_get_partner_id();
             $control = local_yukaltura_get_default_access_control($connection);
-	    $expiry = UPLOAD_SESSION_LENGTH;
-	    $maximumdatasize = local_yukaltura_get_maximum_data_size();
+            $expiry = UPLOAD_SESSION_LENGTH;
+            $maximumdatasize = local_yukaltura_get_maximum_data_size();
 
             $uploadurl = local_yukaltura_get_upload_host() . '/api_v3/service/uploadToken/action/upload';
 

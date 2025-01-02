@@ -115,9 +115,9 @@ if (local_yukaltura_get_mymedia_permission()) {
 
         $perpage = get_config(KALTURA_PLUGIN_NAME, 'mymedia_items_per_page');
 
-	if (empty($perpage)) {
+        if (empty($perpage)) {
             $perpage = MYMEDIA_ITEMS_PER_PAGE;
-	}
+        }
 
         $SESSION->local_yumymedia->mymediasort = $sort;
 

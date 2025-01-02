@@ -201,8 +201,8 @@ if (local_yukaltura_get_mymedia_permission()) {
                                array('success_saving_hdr', 'local_yumymedia'),
                                array('upload_success_hdr', 'local_yumymedia'),
                                array('upload_success',     'local_yumymedia'),
-                               array('continue',           'local_yumymedia')
-                               )
+                               array('continue',           'local_yumymedia'),
+                               ),
 
             );
 

@@ -30,55 +30,55 @@ $capabilities = array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_USER,
         'archetypes' => array(
-            'user' => CAP_ALLOW
-        )
+            'user' => CAP_ALLOW,
+        ),
     ),
 
     'local/yumymedia:search' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_USER,
         'archetypes' => array(
-            'user' => CAP_ALLOW
-        )
+            'user' => CAP_ALLOW,
+        ),
     ),
 
     'local/yumymedia:editmetadata' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_USER,
         'archetypes' => array(
-            'user' => CAP_ALLOW
-        )
+            'user' => CAP_ALLOW,
+        ),
     ),
 
     'local/yumymedia:upload' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_USER,
         'archetypes' => array(
-            'user' => CAP_ALLOW
-        )
+            'user' => CAP_ALLOW,
+        ),
     ),
 
     'local/yumymedia:delete' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_USER,
         'archetypes' => array(
-            'user' => CAP_ALLOW
-        )
+            'user' => CAP_ALLOW,
+        ),
     ),
 
     'local/yumymedia:download' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_USER,
         'archetypes' => array(
-            'user' => CAP_ALLOW
-        )
+            'user' => CAP_ALLOW,
+        ),
     ),
 
     'local/yumymedia:clip' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_USER,
         'archetypes' => array(
-            'user' => CAP_ALLOW
-        )
-    )
+            'user' => CAP_ALLOW,
+        ),
+    ),
 );
